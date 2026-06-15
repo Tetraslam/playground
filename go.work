@@ -1,0 +1,8 @@
+// Go workspace for the playground. Add a Go toy by creating a module under
+// toys/<name>/ (with its own go.mod) and appending `use ./toys/<name>` here.
+// See https://go.dev/ref/mod#workspaces
+go 1.26.3
+
+use (
+	./toys/glyphgen
+)

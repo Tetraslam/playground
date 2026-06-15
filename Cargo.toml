@@ -1,0 +1,14 @@
+# Rust workspace for the playground. One Cargo.lock at the root; each Rust toy
+# is a member crate under toys/. Add a crate, then list it here (or rely on the
+# glob). Build everything with `cargo build`, run a toy with `cargo run -p <name>`.
+[workspace]
+resolver = "2"
+members = ["toys/*/rust", "toys/*"]
+exclude = []
+
+[workspace.package]
+edition = "2021"
+authors = ["Shresht Bhowmick <bhowmickshresht@gmail.com>"]
+
+[profile.dev]
+opt-level = 0

@@ -1,0 +1,29 @@
+[project]
+name = "playground"
+version = "0.1.0"
+description = "A monorepo playground for tetraslam and the claudes to build fun things."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+# uv workspace: one lockfile at the root, members live under toys/ and lib/py.
+# Add a new member by creating a dir with its own pyproject.toml and listing it
+# (or rely on the glob). Run `uv sync` from the repo root.
+[tool.uv.workspace]
+members = ["toys/*", "lib/py/*"]
+
+[tool.uv]
+# Keep the root virtualenv at .venv (activated by .envrc).
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+# Sensible-but-not-annoying defaults for a playground.
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]  # line length handled by formatter; don't fail builds in a play space
+
+[tool.ruff.format]
+quote-style = "double"

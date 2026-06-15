@@ -1,0 +1,7 @@
+# One JS workspace for the whole playground — a single lockfile at the root,
+# mirroring uv.lock for Python. Members are an explicit allowlist of paths.
+# Add a TS/JS toy by creating a dir with package.json and listing it here.
+packages:
+  - "toys/*"
+  - "lib/ts/*"
+  - "tools/*"

@@ -1,0 +1,15 @@
+{
+  "name": "playground",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": { "left-pad": "^1.0.0" },
+  "description": "Monorepo playground root. JS/TS toys live under toys/, shared libs under lib/ts.",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.32.1",
+  "scripts": {
+    "lint": "oxlint",
+    "format": "prettier --write ."
+  }
+}

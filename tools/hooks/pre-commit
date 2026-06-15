@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Repo pre-commit hook. Installed via tools/install-hooks.sh
+# (git config core.hooksPath tools/hooks).
+set -euo pipefail
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+exec "$REPO_ROOT/tools/check-deps.sh"
