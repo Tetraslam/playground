@@ -64,6 +64,12 @@ This is **enforced by a pre-commit hook** (`tools/check-deps.sh`): a commit that
 edits a manifest's dependency section without the matching lockfile change is
 rejected. Install the hook once after cloning:
 
+**Images:** small assets are fine to commit, but **don't commit images > 5 MB**
+(git history keeps every byte forever). Generated/scratch images go in
+`scratch/` (gitignored). The pre-commit hook (`tools/check-images.sh`) blocks
+oversized images; `magick` is installed, so downscale if needed:
+`magick big.png -resize 50% -strip out.png`. (Override: `ALLOW_BIG_IMAGES=1`.)
+
 ```bash
 tools/install-hooks.sh
 ```

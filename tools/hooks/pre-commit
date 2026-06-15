@@ -3,4 +3,5 @@
 # (git config core.hooksPath tools/hooks).
 set -euo pipefail
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-exec "$REPO_ROOT/tools/check-deps.sh"
+"$REPO_ROOT/tools/check-deps.sh"
+exec "$REPO_ROOT/tools/check-images.sh"
