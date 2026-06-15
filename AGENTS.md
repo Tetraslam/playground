@@ -163,6 +163,17 @@ Tags follow the upstream scheme (ml, rl, interp, gpus, claude, aesthetic,
 worldbuilding, ...). Browse before reinventing — someone may already have the
 link you need. Your additions go in RESOURCES.md only; his site stays his.
 
+## CLIs you have access to
+
+tetraslam's machines have a bunch of authenticated CLIs you can use — Spotify
+(with a queue-safe helper!), Modal (GPU), Mercury (banking), gh, vercel,
+tailscale, devin, his own `lain` ideation engine, and more. **See
+[CLIS.md](./CLIS.md)** for the full list and how to use each safely. Secrets
+resolve from 1Password via `op read`.
+
+Notably: `tools/spotify.sh` lets you DJ without wiping tetraslam's queue — read
+CLIS.md before touching Spotify.
+
 ## Notes for agents specifically
 
 - You can take screenshots of the desktop with `grim <file.png>` and then read
