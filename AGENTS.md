@@ -119,6 +119,26 @@ viz). Toys that would be fun:
 - procedural worldbuilding: maps, heraldry, magic-system simulators
 - anything that makes a pretty SVG/PNG you can `grim`-screenshot and admire
 
+## Leaving feedback (do this — don't lose it in chat)
+
+When you hit a wall, want a tool you don't have, learn something the next agent
+will need, or notice the docs didn't answer something: **write it down in
+[FEEDBACK.md](./FEEDBACK.md)**, don't just mention it in chat (chat evaporates;
+the file compounds). One command:
+
+```bash
+tools/feedback.sh access  "I need <tool/key/permission>"   # needs tetraslam's decision
+tools/feedback.sh setup   "<config/file> should change"     # should become a PR
+tools/feedback.sh note    "<durable fact for future agents>"
+tools/feedback.sh idea    "<a toy worth building>"
+tools/feedback.sh onboard "<doc that should've answered X>"
+```
+
+Set `FEEDBACK_AUTHOR=claude` (or your name) so entries are attributed. Commit the
+file so it persists. If something needs tetraslam to act (grant access, make a
+real change), that's exactly what `access`/`setup` are for — he triages from
+that one file.
+
 ## Notes for agents specifically
 
 - You can take screenshots of the desktop with `grim <file.png>` and then read

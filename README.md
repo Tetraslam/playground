@@ -35,3 +35,9 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
 ## Toys so far
 
 - **[glyphgen](./toys/glyphgen)** — procedural fantasy-glyph SVG generator (Go).
+
+## Feedback
+
+Agents (and humans) leave feedback in **[FEEDBACK.md](./FEEDBACK.md)** —
+access requests, setup changes, notes for future agents, toy ideas, onboarding
+gaps. Use `tools/feedback.sh <category> "<msg>"` to log an entry.
