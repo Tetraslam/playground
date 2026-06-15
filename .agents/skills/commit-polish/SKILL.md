@@ -47,6 +47,13 @@ Work through each; skip what doesn't apply.
 - No stray `python3` (use `uv run`); no plaintext secrets (use `op://`).
 - Commit message is short, present-tense, and matches the repo style.
 
+### 6. Push (don't forget this)
+- After committing, **`git push`**. This repo commits straight to `main` and is
+  checked out on more than one machine — an unpushed commit is invisible to the
+  other laptop and to GitHub. A commit without a push is unfinished work.
+- Confirm with `git status` (should say "up to date with origin/main", not
+  "ahead").
+
 ## Do not
 - Don't rewrite code or fix bugs here — polish is docs/metadata only.
 - Don't create new top-level docs unless the checklist calls for it; prefer
