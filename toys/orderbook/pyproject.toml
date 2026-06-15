@@ -1,0 +1,6 @@
+[project]
+name = "orderbook"
+version = "0.1.0"
+description = "A tiny market-microstructure / order-book simulator, rendered as SVG."
+requires-python = ">=3.12"
+dependencies = []
