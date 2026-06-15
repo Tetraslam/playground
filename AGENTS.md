@@ -195,6 +195,15 @@ tools/lain-toy.sh scaffold ~/idea.db root-1 --lang py   # -> toys/<slug>/
 The scaffolded toy gets a README carrying the full idea + a runnable stub +
 workspace wiring. Then you build it. (`toys/phonoscape` was made this way.)
 
+## Before you commit: polish
+
+Before every `git commit`, run through the **commit-polish** skill
+(`.agents/skills/commit-polish/SKILL.md`) — a short checklist to keep docs and
+metadata in sync with your code: new toys wired into the workspace + listed in
+the README, new tools mentioned in AGENTS.md/CLIS.md, conventions documented,
+durable learnings logged to FEEDBACK.md. You commit straight to `main` here, so
+polish is part of the same change, not a follow-up.
+
 ## Notes for agents specifically
 
 - You can take screenshots of the desktop with `grim <file.png>` and then read
