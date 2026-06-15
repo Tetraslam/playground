@@ -125,4 +125,16 @@ This creates **semantic dissonance art**: a word meaning "silence" in a language
 
 ## Status
 
-Scaffolded stub — not built yet. Pick a language, implement the mapping above, and make it produce something you can look at.
+**Built and working.** Implemented in Python (stdlib only). Run:
+
+```bash
+uv run python toys/phonoscape/main.py --word vrakh --out scratch/vrakh.svg
+uv run python toys/phonoscape/main.py --word velu --size 800
+```
+
+The tool maps phonological features to terrain parameters:
+- Consonants (manner/place/voicing) → texture, drama, sharpness
+- Vowels (height/backness) → temperature, moisture, biome
+- Syllable count → octave count (terrain complexity)
+
+Same word always produces the same terrain (deterministic PRNG seeded from the word).
