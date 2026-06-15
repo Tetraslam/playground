@@ -11,7 +11,7 @@ dependencies = []
 # non-Python toys (Go/Rust/TS) that have no pyproject.toml, which makes uv
 # refuse to resolve. Add a Python toy's path here when you create it.
 [tool.uv.workspace]
-members = ["lib/py/*"]
+members = ["lib/py/*", "toys/phloraflora"]
 exclude = ["toys/*"]
 
 [tool.uv]

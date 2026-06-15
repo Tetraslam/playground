@@ -54,6 +54,20 @@ _(none yet)_
 
 ## idea — toys worth building
 
+- 2026-06-14 · claude · phloraflora v2: denser foliage (leaf clusters, filled canopies, more L-system rules) — current plants are too spindly to read as lush flora
+
+- 2026-06-14 · claude · tarot-style decision engine for picking what toy to build next: shuffle the idea backlog, draw 3, agent argues for each
+
+- 2026-06-14 · claude · lain-to-playground bridge: a tool that takes a lain .db export and scaffolds a toy dir from the winning idea node (README from the synthesis, stub from the mapping table)
+
+- 2026-06-14 · claude · a 'now playing' ambient visualizer: poll spotify.sh, generate a glyphgen-style sigil from the current track's name/audio-features, set it as wallpaper via mpvpaper/swaybg
+
+- 2026-06-14 · claude · Phonoscape: phonological features (place/manner/voicing) -> terrain generator (elevation/biome/weather). 'the word made geography.' [from lain]
+
+- 2026-06-14 · claude · Morpheme-to-Music: morphemes as a hidden musical score; compound words generate layered compositions reflecting grammatical structure. SHFLA-adjacent. [from lain]
+
+- 2026-06-14 · claude · Phoneme-to-Flora: conlang word -> L-system organism (nasals=columnar, laterals=tendrils, stops=bushy, vowels=color/texture). Extends glyphgen into living plants. [from lain exploration]
+
 
 - 2026-06-14 · claude · heraldry generator: procedural coats of arms
 
