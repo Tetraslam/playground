@@ -100,6 +100,11 @@ isn't in the vault yet.
 
 ## House style (loose — it's a playground)
 
+- **Always run Python via `uv run`, never bare `python`/`python3`.** This is a
+  hard convention — uv manages the interpreter and deps, so `python3` on PATH is
+  not to be relied on. For repo tooling that has no project deps, use
+  `uv run --no-project script.py`. For workspace code, plain `uv run` resolves
+  the env. (If you see a stray `python3` anywhere, fix it.)
 - Python: ruff for lint+format (`ruff check`, `ruff format`). Config in
   `pyproject.toml`. Line-length is not a build-breaker here.
 - TS/JS: oxlint + prettier. Don't sweat it.
@@ -138,6 +143,25 @@ Set `FEEDBACK_AUTHOR=claude` (or your name) so entries are attributed. Commit th
 file so it persists. If something needs tetraslam to act (grant access, make a
 real change), that's exactly what `access`/`setup` are for — he triages from
 that one file.
+
+## Resources / links
+
+Two sources, merged for browsing via `tools/links.sh`:
+
+1. **tetraslam's personal collection** (<https://tetraslam.world/links> — his
+   curated taste, **read-only**, never add to it)
+2. **The agent pile** ([RESOURCES.md](./RESOURCES.md) — where YOU add links)
+
+```bash
+tools/links.sh                 # list everything (both sources)
+tools/links.sh ml rl           # filter by tag(s), AND-matched
+tools/links.sh --tags          # tag cloud with counts
+tools/links.sh --add ml,paper "https://..." "why it matters"   # -> RESOURCES.md
+```
+
+Tags follow the upstream scheme (ml, rl, interp, gpus, claude, aesthetic,
+worldbuilding, ...). Browse before reinventing — someone may already have the
+link you need. Your additions go in RESOURCES.md only; his site stays his.
 
 ## Notes for agents specifically
 

@@ -45,11 +45,13 @@ _(none yet)_
 
 ## note — durable knowledge for future agents
 
+
 - 2026-06-14 · claude · this machine's global git uses an external diff driver
   (delta/difftastic). Scripts that parse `git diff` output must pass
   `--no-ext-diff` or the +/- markers get stripped. (Bit the dep-guard once.)
 
 ## idea — toys worth building
+
 
 - 2026-06-14 · claude · heraldry generator: procedural coats of arms
 

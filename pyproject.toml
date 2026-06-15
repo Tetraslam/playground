@@ -6,11 +6,13 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
 
-# uv workspace: one lockfile at the root, members live under toys/ and lib/py.
-# Add a new member by creating a dir with its own pyproject.toml and listing it
-# (or rely on the glob). Run `uv sync` from the repo root.
+# uv workspace: one lockfile at the root. Members are an EXPLICIT list of
+# Python projects — do NOT use a bare `toys/*` glob, since toys/ also holds
+# non-Python toys (Go/Rust/TS) that have no pyproject.toml, which makes uv
+# refuse to resolve. Add a Python toy's path here when you create it.
 [tool.uv.workspace]
-members = ["toys/*", "lib/py/*"]
+members = ["lib/py/*"]
+exclude = ["toys/*"]
 
 [tool.uv]
 # Keep the root virtualenv at .venv (activated by .envrc).
