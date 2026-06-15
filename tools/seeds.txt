@@ -1,0 +1,68 @@
+# Seed bank for playground explorations — drawn from tetraslam's "what I want to
+# learn" list (tetraslam.world/blog/what_i_want_to_learn). Format: domain<TAB>seed.
+# The seeds are framed to spark *makeable toys*, not just name a topic. Used by
+# tools/seeds.sh to feed broad, non-repetitive ideas into lain. Add freely.
+
+finance	a visual order-book simulator showing market microstructure in motion
+finance	a prediction-market toy where you bet on toy events and see the implied probability
+finance	a tiny options-pricing playground that draws the payoff diagram as you drag strikes
+finance	a SAFE/term-sheet dilution calculator that animates the cap table over rounds
+finance	an energy-market clearing simulator (supply/demand curves meet, price emerges)
+finance	a risk-of-ruin gambler's-ruin visualizer for different bet sizings
+ai	a tiny game-playing RL agent you can watch learn in the terminal
+ai	a from-scratch diffusion toy that denoises a 2D point cloud into a shape
+ai	a state-space-model (SSM) sequence visualizer — watch the hidden state evolve
+ai	a mechanistic-interp toy: probe a tiny net and color neurons by what they fire on
+ai	a world-model toy that learns the dynamics of a 1D bouncing ball
+ai	an HNSW / vector-search visualizer showing the graph navigation to a query
+bio	a protein-folding toy: a tiny HP-lattice model finding low-energy folds
+bio	a synthetic gene-circuit simulator (toggle switch, repressilator) you can perturb
+bio	a spiking-neuron population-code visualizer (Izhikevich neurons firing)
+bio	a reaction-diffusion (Turing pattern) generator — grow spots and stripes
+bio	a fermentation-kinetics toy modeling yeast growth + alcohol over time
+bio	a connectome toy: a tiny brain graph you can lesion and watch behavior change
+cs-math	a topological-data-analysis toy that finds holes in a point cloud (persistence)
+cs-math	a dynamical-systems chaos explorer (Lorenz attractor, double pendulum)
+cs-math	an LSM-tree visualizer showing compaction and reads/writes
+cs-math	an optimal-transport toy moving one distribution onto another, animated
+cs-math	a cache/memory-hierarchy simulator showing hits and misses as you stride an array
+cs-math	a lock-free queue race visualizer (watch threads contend on a ring buffer)
+cs-math	an information-geometry toy drawing the manifold of a coin's bias
+cs-math	a memory-allocator playground (buddy/slab) visualizing fragmentation
+robotics	a PID-controller playground — tune gains, watch a cart settle (or oscillate)
+robotics	a Kalman-filter toy tracking a noisy 2D target, showing the uncertainty ellipse
+robotics	a 2-link arm inverse-kinematics solver you can drag the end-effector around
+robotics	a SLAM toy: a robot maps a 2D room from noisy range scans
+robotics	a motion-planning visualizer (RRT/A*) finding paths through obstacles
+robotics	a legged-locomotion toy: a 2D hopper learning to balance
+philosophy	a game-theory tournament arena (prisoner's dilemma strategies compete)
+philosophy	a formal-logic playground that checks proofs in propositional calculus
+security	a ZK-proof toy demonstrating "I know x" without revealing x, visually
+security	a tiny elliptic-curve point-addition visualizer over a small field
+security	an OAuth/OIDC flow simulator showing the token dance between parties
+security	a side-channel timing-attack demo (guess a secret by measuring compare time)
+energy	a tokamak plasma-confinement toy (magnetic field shapes a 2D plasma)
+energy	a power-grid frequency-control simulator (load changes, generators respond)
+energy	a battery-discharge-curve toy across chemistries and loads
+energy	a heat-engine cycle visualizer (Carnot/Otto on a PV diagram)
+hardware	a logic-gate / digital-circuit playground you wire up and simulate
+hardware	a signal-integrity toy showing reflections on an unterminated transmission line
+hardware	an IMU sensor-fusion toy (complementary filter on noisy accel+gyro)
+graphics	a software rasterizer that draws a spinning wireframe cube from scratch
+graphics	a tiny audio-codec toy (DCT a sound, quantize, hear the artifacts)
+graphics	a digital-cartography toy projecting a globe with different map projections
+graphics	a color-science playground converting between gamuts and showing the shift
+social	a behavioral-econ toy demonstrating a cognitive bias with interactive choices
+social	an incentive-design simulator (mechanism design: auctions that elicit truth)
+weather	a meteorology toy simulating a 2D convection cell (warm air rises, rolls)
+weather	a nonlinear-dynamics bifurcation diagram explorer (logistic map cascade)
+design	a typographic-hierarchy playground (sizes/weights -> visual rhythm)
+design	a motion-design easing-curve studio you can author and preview
+design	a generative-architecture toy growing Gothic tracery from rules
+language	a historical-linguistics sound-change engine (apply Grimm's law to words)
+language	a narrative-structure toy mapping a story onto the hero's-journey beats
+misc	a text-adventure engine with a tiny parser and a few rooms
+misc	an urban-planning toy: zone a grid, watch traffic and land value emerge
+misc	a supply-chain simulator (the beer game) showing the bullwhip effect
+control	a state-estimation particle-filter toy localizing a robot in 1D
+control	a model-predictive-control toy steering a vehicle around a track

@@ -180,15 +180,29 @@ resolve from 1Password via `op read`.
 Notably: `tools/spotify.sh` lets you DJ without wiping tetraslam's queue — read
 CLIS.md before touching Spotify.
 
-## Ideation → toy: the lain bridge
+## Ideation → toy: seeds + the lain bridge
 
-`lain` is tetraslam's ideation engine. You can turn its explorations into toys —
-`tools/lain-toy.sh` treats lain as a black box (calls only `lain export`, reads
-its markdown; no coupling to lain internals):
+**Pick a BROAD seed.** The toys tend to collapse toward one theme (worldbuilding
+/ conlang) if seeds keep coming from the same place. `tools/seeds.sh` is a seed
+bank drawn from tetraslam's "what I want to learn" list — ~65 makeable-toy
+prompts across ~18 domains (finance, ai, bio, cs-math, robotics, security,
+energy, graphics, ...). Use it to stay broad:
 
 ```bash
-lain "your seed idea" -n 3 -m 1 --db ~/idea.db   # explore (generates ideas)
-tools/lain-toy.sh list ~/idea.db                 # see the idea nodes
+tools/seeds.sh                    # one random seed
+tools/seeds.sh -n 5               # 5 seeds across distinct domains
+tools/seeds.sh --domain robotics  # a seed from a specific domain
+tools/seeds.sh --domains          # list domains + counts
+tools/seeds.sh --lain             # explore a random seed in lain right now
+```
+
+Then turn an exploration into a toy. `lain` is tetraslam's ideation engine;
+`tools/lain-toy.sh` treats it as a black box (calls only `lain export`, reads
+its markdown — no coupling to lain internals):
+
+```bash
+tools/seeds.sh --domain bio --lain                # seed -> explore -> ~/idea.db
+tools/lain-toy.sh list ~/idea.db                  # see the idea nodes
 tools/lain-toy.sh scaffold ~/idea.db root-1 --lang py   # -> toys/<slug>/
 ```
 
