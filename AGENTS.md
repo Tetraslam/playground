@@ -180,6 +180,21 @@ resolve from 1Password via `op read`.
 Notably: `tools/spotify.sh` lets you DJ without wiping tetraslam's queue — read
 CLIS.md before touching Spotify.
 
+## Ideation → toy: the lain bridge
+
+`lain` is tetraslam's ideation engine. You can turn its explorations into toys —
+`tools/lain-toy.sh` treats lain as a black box (calls only `lain export`, reads
+its markdown; no coupling to lain internals):
+
+```bash
+lain "your seed idea" -n 3 -m 1 --db ~/idea.db   # explore (generates ideas)
+tools/lain-toy.sh list ~/idea.db                 # see the idea nodes
+tools/lain-toy.sh scaffold ~/idea.db root-1 --lang py   # -> toys/<slug>/
+```
+
+The scaffolded toy gets a README carrying the full idea + a runnable stub +
+workspace wiring. Then you build it. (`toys/phonoscape` was made this way.)
+
 ## Notes for agents specifically
 
 - You can take screenshots of the desktop with `grim <file.png>` and then read

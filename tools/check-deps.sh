@@ -47,12 +47,17 @@ err() { echo "✗ $*" >&2; fail=1; }
 while IFS= read -r f; do
   case "$f" in
     *pyproject.toml)
-      # Did the dependency surface change?
-      if diff_for "$f" | grep -qE '^\+' \
-        && diff_for "$f" | grep -qiE '^\+.*(dependencies|^\+\s*")' \
-        && diff_for "$f" | grep -qiE 'dependencies'; then
+      # Only flag when an actual dependency ENTRY is added — an added line that
+      # is a quoted package spec, e.g.  +  "requests>=2.0",  or  +"flask".
+      # A brand-new/scaffolded `dependencies = []` (empty) must NOT trip this.
+      added_dep="$(diff_for "$f" | grep -E '^\+' \
+        | grep -vE '^\+\s*#' \
+        | grep -E '^\+\s*"[A-Za-z0-9_.-]+([<>=!~\[].*)?"' || true)"
+      # also catch an inline non-empty array added: dependencies = ["x"]
+      added_inline="$(diff_for "$f" | grep -E '^\+' \
+        | grep -E 'dependencies\s*=\s*\[\s*"' || true)"
+      if [[ -n "$added_dep" || -n "$added_inline" ]]; then
         dir="$(dirname "$f")"
-        # Require uv.lock to be staged too (uv add updates it).
         if ! { is_staged "uv.lock" || is_staged "$dir/uv.lock"; }; then
           err "$f: dependency edit without a matching uv.lock change. Use 'uv add <pkg>' / 'uv remove <pkg>' instead of editing [project.dependencies] by hand."
         fi

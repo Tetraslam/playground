@@ -1,0 +1,6 @@
+[project]
+name = "phonoscape"
+version = "0.1.0"
+description = "Scaffolded from a lain exploration (root-3)."
+requires-python = ">=3.12"
+dependencies = []

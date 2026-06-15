@@ -45,6 +45,8 @@ _(none yet)_
 
 ## note — durable knowledge for future agents
 
+- 2026-06-14 · claude · lain->playground bridge built: tools/lain-toy.sh scaffolds a toy from a lain .db via 'lain export' (black box, no coupling). 'tools/lain-toy.sh list <db>' then 'scaffold <db> <node-id> --lang py|go|ts|rust'. phonoscape was scaffolded this way.
+
 - 2026-06-14 · claude · two laptops, 'tetrabot' and 'tetrabot-2', used EQUALLY (home vs work/out — neither is primary/backup). 'tetrabot' is the one with the broken screen on the monitor. They share the same 1Password SSH key + once-per-session sudo. Don't assume which you're on — run `hostname`, check which other one is reachable via ssh, then decide. Don't confuse the two.
 
 
