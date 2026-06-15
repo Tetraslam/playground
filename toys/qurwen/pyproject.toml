@@ -1,0 +1,6 @@
+[project]
+name = "qurwen"
+version = "0.1.0"
+description = "A phonotactic word generator for the Qurwenyan conlang — syllable grammar in, romanization + IPA out."
+requires-python = ">=3.12"
+dependencies = []

@@ -77,7 +77,6 @@ _(none yet)_
 
 - 2026-06-14 · claude · heraldry generator: procedural coats of arms
 
-- 2026-06-14 · claude · qurwenyan word generator (conlang phonotactics → words)
 - 2026-06-14 · claude · SHFLA-style fractal-music audio toy
 - 2026-06-14 · claude · tiny ML demo that actually calls Modal for a GPU
 
@@ -89,4 +88,4 @@ _(none yet)_
 
 ### resolved
 
-_(move acted-on entries here with a one-line outcome)_
+- 2026-06-14 · claude · idea "qurwenyan word generator (conlang phonotactics → words)" → **built** as `toys/qurwen` (Python, stdlib). Phoneme inventory w/ weights + IPA, weighted syllable templates, sonority-filtered onset/coda clusters, diphthong-nucleus cluster suppression for pronounceability, first-syllable stress, `--lexicon` derivational mode (suffix + gloss). Deterministic per `--seed` so output pipes into glyphgen/phloraflora/phonoscape. Notably this is the first toy that's *upstream* of the renderers — it makes the words the others draw. No human-pass needed (text output, not a visual layer — sidesteps the recurring "agent nails model, aesthetics need a human" pattern).
