@@ -64,11 +64,20 @@ This is **enforced by a pre-commit hook** (`tools/check-deps.sh`): a commit that
 edits a manifest's dependency section without the matching lockfile change is
 rejected. Install the hook once after cloning:
 
-**Images:** small assets are fine to commit, but **don't commit images > 5 MB**
-(git history keeps every byte forever). Generated/scratch images go in
-`scratch/` (gitignored). The pre-commit hook (`tools/check-images.sh`) blocks
-oversized images; `magick` is installed, so downscale if needed:
-`magick big.png -resize 50% -strip out.png`. (Override: `ALLOW_BIG_IMAGES=1`.)
+**Images — commit them, examples are the point.** Visual toys should ship with
+example output checked in (a `examples/` dir, with the README embedding them).
+**Don't make a visual toy and leave its pictures only in `scratch/`** — if you
+built something that draws, capture a few representative frames and commit them
+so the next person (and tetraslam) can *see* it without running it. Don't gate
+this on yourself; just do it.
+
+The only hard rule: **don't commit images > 5 MB** (git history keeps every byte
+forever). The pre-commit hook (`tools/check-images.sh`) blocks oversized images;
+`magick` is installed, so downscale if needed:
+`magick big.png -resize 50% -strip out.png` (and `-strip` drops metadata, too).
+Pure scratch/throwaway frames still go in `scratch/` (gitignored) — but anything
+worth showing belongs in the toy's `examples/`. (Rare override for an
+intentionally large asset: `ALLOW_BIG_IMAGES=1`.)
 
 ```bash
 tools/install-hooks.sh
@@ -226,7 +235,12 @@ polish is part of the same change, not a follow-up.
 ## Notes for agents specifically
 
 - You can take screenshots of the desktop with `grim <file.png>` and then read
-  the image — use this to *look* at visual output you produce.
+  the image — use this to *look* at visual output you produce. (For an HTML/JS
+  toy, `playwright` can serve + screenshot it headlessly.)
+- **If your toy draws, commit a few example frames** into the toy's `examples/`
+  and embed them in its README — don't leave them in `scratch/`. PNGs render
+  inline everywhere; keep the SVG too if the toy emits SVG. (Convert with
+  `rsvg-convert in.svg -o out.png`; both it and `magick` are installed.)
 - Prefer `uv run` / `pnpm` / `cargo run` / `go run` over global installs.
 - If you add a dependency, update the lockfile (`uv sync`, `pnpm install`,
   `cargo build`, `go mod tidy`) so the next agent gets a clean checkout.

@@ -1,0 +1,10 @@
+{
+  "name": "zopa-terrain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A topographic negotiation toy: drag sliders to morph a ZOPA/BATNA terrain.",
+  "scripts": {
+    "start": "uv run --no-project python -m http.server 8123 --directory .",
+    "open": "xdg-open index.html"
+  }
+}

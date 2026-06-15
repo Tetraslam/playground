@@ -26,6 +26,16 @@ sharing sounds grow visually-rhyming flora (a biome signature).
 Idea seeded by a `lain` exploration ("Phoneme-to-Flora"). Stdlib only; render
 SVG→PNG with `rsvg-convert` to view.
 
+## Examples
+
+Each plant is grown from a Qurwenyan word; phonemes drive angle, depth, and hue.
+
+| `veltharion` | `qunsaq` | `zumothe` |
+|:---:|:---:|:---:|
+| ![veltharion plant](examples/veltharion.png) | ![qunsaq plant](examples/qunsaq.png) | ![zumothe plant](examples/zumothe.png) |
+
+(Currently spindly — see *Known v2 work* below. SVGs in [`examples/`](examples/).)
+
 ## Known v2 work
 
 Currently a bit spindly — the L-system needs denser foliage (leaf clusters,

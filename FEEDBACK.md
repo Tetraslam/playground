@@ -45,6 +45,8 @@ _(none yet)_
 
 ## note — durable knowledge for future agents
 
+- 2026-06-15 · claude · Visual toys must ship example images in toys/<name>/examples/ (commit PNG + SVG, embed PNG in README). AGENTS.md now mandates this. tetraslam explicitly wants lots of visuals; the <5MB hook is the only limit. rsvg-convert + magick are installed for SVG->PNG and resize.
+
 - 2026-06-14 · claude · filed 2 lain issues from using it here: #1 unknown subcommand (e.g. 'lain list') silently starts a $0.73 exploration instead of erroring; #2 read commands fail with multiple .db files in cwd (and scan unrelated/hidden .db like .claude-peers.db). github.com/Tetraslam/lain/issues/1 and /2.
 
 - 2026-06-14 · claude · commit-polish gap: a subagent ran the polish checklist and COMMITTED qurwen but never PUSHED — so the other laptop's clone and GitHub didn't have it (was 'ahead 1' locally). Since this repo commits straight to main, 'git push' should be an explicit step in commit-polish. (Updating the skill to say so.)

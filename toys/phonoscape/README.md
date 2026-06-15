@@ -123,6 +123,17 @@ This creates **semantic dissonance art**: a word meaning "silence" in a language
 - **Export as seed** → the parameter vector is a deterministic hash of the IPA string, so any identical word always produces the same landscape, making it usable as a worldbuilding "address system" — characters name a place and the name *is* the place
 - **Inverse mode** → upload a terrain heightmap; the tool infers what phonological structure would have generated it, producing a word-shaped etymology for a landscape that already exists
 
+## Examples
+
+Phonetically distinct words produce visibly distinct landscapes — the phonology
+*is* the topography.
+
+| `vrakh` (desert) | `velu` (savanna) | `khritsk` (scrubland) |
+|:---:|:---:|:---:|
+| ![vrakh terrain](examples/vrakh.png) | ![velu terrain](examples/velu.png) | ![khritsk terrain](examples/khritsk.png) |
+
+(SVGs alongside the PNGs in [`examples/`](examples/).)
+
 ## Status
 
 **Built and working, with a real landscape renderer.** Stdlib only.

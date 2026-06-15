@@ -19,6 +19,14 @@ uv run python toys/orderbook/main.py --seed crash --true-value 70 --out scratch/
   value** as a gold dashed line. Faint dots are trade prints. Watch the price
   *discover* the true value as informed traders push it there.
 
+## Examples
+
+| `market` — price discovers the true value | `crash` — true value drops to 70 |
+|:---:|:---:|
+| ![order book, market seed](examples/book.png) | ![order book, crash seed](examples/crash.png) |
+
+(SVGs alongside the PNGs in [`examples/`](examples/).)
+
 ## The agents
 
 - **Liquidity providers (~55%)** post limit orders near the touch — they make

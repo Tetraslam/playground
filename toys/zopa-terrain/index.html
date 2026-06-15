@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<!--
+  ZOPA Terrain — a topographic toy for negotiation theory.
+  Drag four sliders; the landscape morphs to show the Zone Of Possible
+  Agreement, each party's BATNA cliff, and the Nash-product fairness peak.
+  Single file, no build step. p5.js loads from CDN.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZOPA Terrain — a negotiation landscape</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+  <style>
+    :root {
+      --bg: #07070f;
+      --panel: #11111f;
+      --ink: #e8e8f0;
+      --dim: #8a8aa8;
+      --a: #ff5d6c;   /* Party A — red */
+      --b: #4db8ff;   /* Party B — blue */
+      --peak: #ffe066;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 18px 16px 48px; }
+    h1 { font-size: 18px; letter-spacing: 0.5px; margin: 0 0 2px; }
+    h1 .a { color: var(--a); } h1 .b { color: var(--b); }
+    .sub { color: var(--dim); font-size: 12px; margin: 0 0 16px; line-height: 1.5; }
+    #sketch-container { border-radius: 10px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,.5); }
+    #controls {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px 22px;
+      background: var(--panel); padding: 14px 16px; border-radius: 10px; margin-top: 12px;
+    }
+    label { display: flex; flex-direction: column; gap: 5px; font-size: 11px; color: var(--dim); }
+    label .row { display: flex; justify-content: space-between; align-items: baseline; }
+    label .val { color: var(--ink); font-variant-numeric: tabular-nums; font-size: 13px; }
+    label.a .name { color: var(--a); } label.b .name { color: var(--b); }
+    input[type=range] { width: 100%; accent-color: #888; }
+    label.a input[type=range] { accent-color: var(--a); }
+    label.b input[type=range] { accent-color: var(--b); }
+    .bar { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; align-items: center; }
+    button {
+      background: #1d1d33; color: var(--ink); border: 1px solid #33334d;
+      padding: 8px 14px; border-radius: 8px; font: inherit; font-size: 12px; cursor: pointer;
+      transition: background .12s, border-color .12s;
+    }
+    button:hover { background: #26264a; border-color: #4a4a73; }
+    button:active { transform: translateY(1px); }
+    .hint { color: var(--dim); font-size: 11px; line-height: 1.5; }
+    .scenarios { display: flex; gap: 6px; flex-wrap: wrap; }
+    .scenarios button { font-size: 11px; padding: 6px 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>ZOPA Terrain <span class="dim" style="color:var(--dim);font-size:12px">· a negotiation landscape</span></h1>
+    <p class="sub">
+      The hill is the <b>joint value</b> of a deal at each settlement point (the Nash product).
+      <span class="a" style="color:var(--a)">A</span> wants a low price, <span class="b" style="color:var(--b)">B</span> wants a high one.
+      Where their walk-away points overlap is the <b>ZOPA</b> — the plateau you can both stand on.
+      Improve a BATNA and watch the fair peak migrate. Drag the sliders.
+    </p>
+
+    <div id="sketch-container"></div>
+
+    <div id="controls">
+      <label class="a">
+        <span class="row"><span class="name">A · reservation (max price)</span><span class="val" id="aResVal">70</span></span>
+        <input type="range" id="aRes" min="0" max="100" value="70" />
+      </label>
+      <label class="a">
+        <span class="row"><span class="name">A · BATNA strength</span><span class="val" id="aBatnaVal">50</span></span>
+        <input type="range" id="aBatna" min="1" max="100" value="50" />
+      </label>
+      <label class="b">
+        <span class="row"><span class="name">B · reservation (min price)</span><span class="val" id="bResVal">40</span></span>
+        <input type="range" id="bRes" min="0" max="100" value="40" />
+      </label>
+      <label class="b">
+        <span class="row"><span class="name">B · BATNA strength</span><span class="val" id="bBatnaVal">50</span></span>
+        <input type="range" id="bBatna" min="1" max="100" value="50" />
+      </label>
+    </div>
+
+    <div class="bar">
+      <span class="hint">scenarios:</span>
+      <div class="scenarios">
+        <button data-s="positive">positive ZOPA</button>
+        <button data-s="negative">no deal</button>
+        <button data-s="asymmetric">A holds the power</button>
+        <button data-s="razor">razor-thin ridge</button>
+      </div>
+      <button id="shock">⚡ market shock</button>
+    </div>
+  </div>
+
+  <script>
+  new p5(function (p) {
+    const W = 728, H = 360;
+    const PAD = 28;                 // left/right padding inside canvas
+    const plotW = () => W - PAD * 2;
+    let t = 0;                      // animation clock
+
+    // --- model ---------------------------------------------------------------
+    // sigmoid "cliff": how firmly a party defends its reservation, sharpened by BATNA.
+    function sigmoid(v, sharp) { return 1 / (1 + Math.exp(-sharp * (v - 4))); }
+
+    function jointValue(x, aRes, aBatna, bRes, bBatna) {
+      const kA = aBatna * 0.012, kB = bBatna * 0.012;
+      const surplusA = Math.max(0, aRes - x) * sigmoid(aRes - x, kA);
+      const surplusB = Math.max(0, x - bRes) * sigmoid(x - bRes, kB);
+      return surplusA * surplusB;   // Nash product
+    }
+
+    function read(id) { return +document.getElementById(id).value; }
+    function xToPx(x) { return PAD + (x / 100) * plotW(); }
+
+    // --- setup ---------------------------------------------------------------
+    p.setup = function () {
+      const cnv = p.createCanvas(W, H);
+      cnv.parent('sketch-container');
+      p.colorMode(p.HSB, 360, 100, 100, 100);
+      p.textFont('ui-monospace, monospace');
+      // live value readouts
+      ['aRes','aBatna','bRes','bBatna'].forEach(id => {
+        const el = document.getElementById(id);
+        const out = document.getElementById(id + 'Val');
+        el.addEventListener('input', () => out.textContent = el.value);
+      });
+    };
+
+    // --- draw ----------------------------------------------------------------
+    p.draw = function () {
+      t += 0.03;
+      const aRes = read('aRes'), aBatna = read('aBatna');
+      const bRes = read('bRes'), bBatna = read('bBatna');
+
+      // sky gradient
+      for (let y = 0; y < H; y++) {
+        const n = y / H;
+        p.stroke(245, 40, p.lerp(7, 16, n));
+        p.line(0, y, W, y);
+      }
+
+      // sample the value curve
+      const N = plotW();
+      const vals = new Array(N + 1);
+      let maxVal = 0;
+      for (let i = 0; i <= N; i++) {
+        const x = (i / N) * 100;
+        const v = jointValue(x, aRes, aBatna, bRes, bBatna);
+        vals[i] = v;
+        if (v > maxVal) maxVal = v;
+      }
+      const hasZopa = aRes > bRes;
+
+      // ZOPA band (behind terrain)
+      if (hasZopa) {
+        const x0 = xToPx(bRes), x1 = xToPx(aRes);
+        p.noStroke(); p.fill(140, 60, 60, 12);
+        p.rect(x0, 0, x1 - x0, H);
+      }
+
+      const baseY = H - 30;
+
+      // terrain fill — layered columns, blue (low) to yellow (high)
+      for (let i = 0; i <= N; i++) {
+        const px = PAD + i;
+        const norm = maxVal > 0 ? vals[i] / maxVal : 0;
+        const colH = norm * (H * 0.72);
+        const topY = baseY - colH;
+        for (let py = baseY; py > topY; py--) {
+          const layer = (baseY - py) / Math.max(colH, 1);  // 0 bottom .. 1 top
+          const hue = p.lerp(210, 52, layer * norm + norm * 0.2);
+          const sat = 45 + layer * 50;
+          const bri = 22 + layer * 70 * norm + 10 * norm;
+          p.stroke(hue, sat, bri, 95);
+          p.point(px, py);
+        }
+      }
+
+      // contour lines (elevation rings)
+      p.noFill();
+      for (let level = 0.25; level < 1; level += 0.25) {
+        p.stroke(50, 20, 100, 18);
+        p.strokeWeight(1);
+        p.beginShape();
+        for (let i = 0; i <= N; i++) {
+          const norm = maxVal > 0 ? vals[i] / maxVal : 0;
+          if (norm >= level) p.vertex(PAD + i, baseY - level * (H * 0.72));
+        }
+        p.endShape();
+      }
+
+      // crisp ridge line on top of terrain
+      p.noFill(); p.stroke(50, 10, 100, 70); p.strokeWeight(1.5);
+      p.beginShape();
+      for (let i = 0; i <= N; i++) {
+        const norm = maxVal > 0 ? vals[i] / maxVal : 0;
+        p.vertex(PAD + i, baseY - norm * (H * 0.72));
+      }
+      p.endShape();
+
+      // reservation cliffs
+      drawCliff(aRes, p.color(0, 75, 100), 'A walk-away', 'right');
+      drawCliff(bRes, p.color(205, 80, 100), 'B walk-away', 'left');
+
+      // Nash peak marker (animated pulse) — only meaningful with a ZOPA
+      if (hasZopa && maxVal > 1e-6) {
+        let peakI = 0;
+        for (let i = 0; i <= N; i++) if (vals[i] >= vals[peakI]) peakI = i;
+        const peakX = PAD + peakI;
+        const peakPrice = (peakI / N) * 100;
+        const peakY = baseY - (vals[peakI] / maxVal) * (H * 0.72);
+        const pulse = 5 + Math.sin(t) * 2;
+        p.noStroke(); p.fill(50, 90, 100, 35);
+        p.circle(peakX, peakY, pulse * 3);
+        p.fill(50, 95, 100, 100);
+        p.circle(peakX, peakY, pulse);
+        p.stroke(50, 90, 100, 70); p.strokeWeight(1);
+        p.line(peakX, peakY, peakX, baseY);
+        p.noStroke(); p.fill(50, 20, 100);
+        p.textSize(11); p.textAlign(p.CENTER);
+        p.text('fair deal ≈ ' + peakPrice.toFixed(0), peakX, peakY - 12);
+      }
+
+      // baseline (the price axis)
+      p.stroke(240, 20, 40); p.strokeWeight(1);
+      p.line(PAD, baseY, W - PAD, baseY);
+      p.noStroke(); p.fill(240, 10, 55); p.textSize(10);
+      p.textAlign(p.LEFT);  p.text('low price', PAD, baseY + 16);
+      p.textAlign(p.RIGHT); p.text('high price', W - PAD, baseY + 16);
+
+      // headline label
+      p.textAlign(p.CENTER); p.textSize(12);
+      if (hasZopa) {
+        p.fill(140, 70, 95);
+        p.text('ZOPA  ·  ' + (aRes - bRes).toFixed(0) + ' units wide', W / 2, 22);
+      } else {
+        const flash = 70 + Math.sin(t * 3) * 25;
+        p.fill(0, 85, 100, flash);
+        p.text('⚡ no deal possible — reservations don\'t overlap', W / 2, 22);
+      }
+    };
+
+    function drawCliff(val, col, label, align) {
+      const cx = xToPx(val);
+      const baseY = H - 30;
+      p.stroke(col); p.strokeWeight(2);
+      // dashed vertical
+      for (let y = 8; y < baseY; y += 8) p.line(cx, y, cx, Math.min(y + 4, baseY));
+      p.noStroke(); p.fill(col); p.textSize(10);
+      p.textAlign(align === 'right' ? p.LEFT : p.RIGHT);
+      p.text(label, cx + (align === 'right' ? 5 : -5), 40);
+      // marker triangle on the axis
+      p.triangle(cx - 4, baseY + 2, cx + 4, baseY + 2, cx, baseY - 5);
+    }
+
+    // --- scenarios + shock ---------------------------------------------------
+    function set(id, v) {
+      const el = document.getElementById(id);
+      el.value = v; document.getElementById(id + 'Val').textContent = v;
+    }
+    const scenarios = {
+      positive:   () => { set('aRes',70); set('aBatna',50); set('bRes',40); set('bBatna',50); },
+      negative:   () => { set('aRes',35); set('aBatna',60); set('bRes',60); set('bBatna',60); },
+      asymmetric: () => { set('aRes',75); set('aBatna',92); set('bRes',40); set('bBatna',18); },
+      razor:      () => { set('aRes',52); set('aBatna',70); set('bRes',47); set('bBatna',70); },
+    };
+    document.querySelectorAll('.scenarios button').forEach(btn =>
+      btn.addEventListener('click', () => scenarios[btn.dataset.s]()));
+
+    document.getElementById('shock').addEventListener('click', () => {
+      // perturb one party's BATNA strength, simulating external market news
+      const who = Math.random() < 0.5 ? 'aBatna' : 'bBatna';
+      const cur = read(who);
+      const next = Math.max(1, Math.min(100, Math.round(cur + (Math.random() * 80 - 40))));
+      set(who, next);
+    });
+  });
+  </script>
+</body>
+</html>

@@ -35,3 +35,6 @@ target/
 # Screenshots / scratch outputs agents make while playing
 /scratch/
 *.tmp
+
+# Playwright MCP run artifacts (snapshots/console logs from headless screenshots)
+.playwright-mcp/
