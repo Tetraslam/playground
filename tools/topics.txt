@@ -1,0 +1,155 @@
+# Raw topic bank — the unabridged "what I want to learn" list from
+# tetraslam.world/blog/what_i_want_to_learn, as bare topics (domain<TAB>topic).
+#
+# Unlike seeds.txt (pre-framed toy ideas), these are RAW topics. Feed one to lain
+# and let IT invent the toy — "what's a makeable toy about <topic>?" — so the
+# idea space isn't pre-narrowed by whatever toy phrasing someone already thought
+# of. Broader, more surprising. Add topics freely as the list grows.
+
+finance	angel investing
+finance	microeconomics
+finance	market microstructure
+finance	prediction markets
+finance	derivatives trading
+finance	risk modeling
+finance	energy markets
+finance	space launch economics
+finance	corporate finance & capital structure
+finance	venture financing (termsheets, SAFEs, preferred stock)
+finance	financial accounting for startups
+finance	payments & settlement systems
+finance	financial regulation (KYC/AML, securities law)
+finance	tax optimization
+finance	negotiation theory & practice
+ai	game RL agents
+ai	AI alignment
+ai	distributed training
+ai	spatial understanding
+ai	training LLMs
+ai	LLM inference
+ai	robot VLAs
+ai	diffusion models
+ai	representation learning
+ai	sequence modeling (SSMs, RWKV, state-space variants)
+ai	world models
+ai	multi-agent RL
+ai	causal inference
+ai	mechanistic interpretability
+ai	LLM compression & distillation
+ai	retrieval (vector DBs, graph-based search, HNSW)
+bio	brain-computer interfaces
+bio	protein folding
+bio	synthetic biology
+bio	gain of function viruses
+bio	gene therapy and CRISPR
+bio	deep-sea ecosystems
+bio	algae farming
+bio	fermentation science
+bio	cellular & systems neuro (spiking models, population codes)
+bio	connectomics & network models of brains
+bio	biophysics of neurons & ion channels
+bio	neuroimaging (EEG, MEG, fMRI, calcium)
+bio	lab techniques (molecular bio, cell cultures, CRISPR wet labs)
+bio	synthetic gene circuits & genetic regulatory networks
+bio	metabolic engineering & industrial biotech
+bio	biostatistics
+bio	organoid computing
+bio	neuromorphic hardware
+cs-math	sparse matrix theory
+cs-math	topological data analysis
+cs-math	complexity theory
+cs-math	dynamical systems & chaos
+cs-math	formal verification, proof assistants, and LEAN
+cs-math	tigerbeetle internals
+cs-math	memory allocator design
+cs-math	compression algorithms
+cs-math	information geometry
+cs-math	real analysis & measure theory
+cs-math	functional analysis
+cs-math	probability & stochastic processes
+cs-math	information theory
+cs-math	numerical optimization
+cs-math	graph theory & network science
+cs-math	homotopy & algebraic topology
+cs-math	category theory
+cs-math	optimal transport
+cs-math	operating systems (scheduling, virtual memory, syscalls)
+cs-math	computer architecture (pipelines, caches, vector units, NUMA)
+cs-math	GPU architecture
+cs-math	SIMD, lock-free, cache-aware algorithms
+cs-math	databases (LSM trees, MVCC, query planners, OLAP)
+cs-math	networking (beej's guide)
+cs-math	observability & SRE (tracing, metrics, SLIs/SLOs, incident response)
+cs-math	time-series systems & event streams
+robotics	PID controllers
+robotics	robot kinematics
+robotics	signal processing
+robotics	soft robotics
+robotics	state estimation & filtering (Kalman, particle filters)
+robotics	SLAM
+robotics	motion planning
+robotics	model predictive control
+robotics	legged locomotion & whole-body control
+robotics	human-robot interaction
+philosophy	philosophy of science
+philosophy	epistemology
+philosophy	logic
+philosophy	philosophy of mathematics
+philosophy	philosophy of mind
+philosophy	philosophy of language
+philosophy	philosophy of artificial intelligence
+philosophy	Hegel
+philosophy	Kant
+philosophy	game theory
+history-law	Chinese history
+history-law	forms of government
+history-law	history of Wall Street
+history-law	geopolitics
+history-law	Roman legal theory
+history-law	maritime law
+transport-space	self-driving cars
+transport-space	air traffic control
+security	zero-knowledge proofs
+security	modern symmetric/asymmetric cryptography
+security	secure multiparty computation (+ FHE)
+security	hardware security (sidechannels, SGX/TEE, Rowhammer)
+security	binary exploitation, sandbox escapes
+security	protocol design & formal analysis (Signal)
+security	auth & identity systems (OAuth, OIDC)
+energy	tokamak plasma physics
+energy	power systems engineering (grids, transmission, frequency control)
+energy	batteries & electrochemistry
+energy	heat engines & thermodynamic cycles
+energy	carbon capture
+energy	materials science basics (phase diagrams, defects, nanostructures)
+energy	nuclear engineering (fission reactors, fusion confinement)
+hardware	analog & digital circuit design
+hardware	embedded systems (MCUs, RTOS)
+hardware	high-speed digital design (signal integrity, PCBs)
+hardware	sensor fusion hardware (IMUs, depth, cameras)
+hardware	RF (antennas, wireless protocols)
+social	behavioral economics
+social	cognitive biases
+social	organizational design & incentive architecture
+social	institutional economics & state capacity
+social	finding and hiring talent
+graphics	computer graphics
+graphics	audio codecs
+graphics	digital cartography
+graphics	Vocaloid
+natural-sci	meteorology fundamentals
+natural-sci	nonlinear dynamics
+design	Gothic architecture
+design	interaction design
+design	visual hierarchy & typography
+design	motion design
+design	sound design
+design	color science
+language	Japanese
+language	narrative design & story structure
+language	historical linguistics and evolution
+language	translation & localization
+misc	text adventure games
+misc	urban planning
+misc	supply chain management
+arts	poi spinning

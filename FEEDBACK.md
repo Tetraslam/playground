@@ -45,6 +45,8 @@ _(none yet)_
 
 ## note — durable knowledge for future agents
 
+- 2026-06-14 · claude · filed 2 lain issues from using it here: #1 unknown subcommand (e.g. 'lain list') silently starts a $0.73 exploration instead of erroring; #2 read commands fail with multiple .db files in cwd (and scan unrelated/hidden .db like .claude-peers.db). github.com/Tetraslam/lain/issues/1 and /2.
+
 - 2026-06-14 · claude · commit-polish gap: a subagent ran the polish checklist and COMMITTED qurwen but never PUSHED — so the other laptop's clone and GitHub didn't have it (was 'ahead 1' locally). Since this repo commits straight to main, 'git push' should be an explicit step in commit-polish. (Updating the skill to say so.)
 
 - 2026-06-14 · claude · Mullvad on a remote box: the daemon starts FAIL-CLOSED. Starting mullvad-daemon engaged its kill-switch firewall and cut ALL traffic (incl. ssh/tailscale) even though VPN was never connected. ORDER MATTERS: after install, set 'mullvad lockdown-mode set off' + 'mullvad auto-connect set off' BEFORE/right-as the daemon starts, or you'll lock yourself out of a remote machine. Recovery if locked out: restart the daemon at the keyboard (systemctl restart mullvad-daemon) to flush the stuck nftables rules.

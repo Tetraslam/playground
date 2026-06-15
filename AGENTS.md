@@ -182,18 +182,23 @@ CLIS.md before touching Spotify.
 
 ## Ideation → toy: seeds + the lain bridge
 
-**Pick a BROAD seed.** The toys tend to collapse toward one theme (worldbuilding
-/ conlang) if seeds keep coming from the same place. `tools/seeds.sh` is a seed
-bank drawn from tetraslam's "what I want to learn" list — ~65 makeable-toy
-prompts across ~18 domains (finance, ai, bio, cs-math, robotics, security,
-energy, graphics, ...). Use it to stay broad:
+**Pick a BROAD seed.** The toys collapse toward one theme (worldbuilding /
+conlang) if seeds keep coming from the same place. `tools/seeds.sh` draws from
+tetraslam's "what I want to learn" list, with TWO sources:
+
+- **framed seeds** (default, `tools/seeds.txt`) — ~65 ready-made toy prompts.
+- **raw topics** (`--topics`, `tools/topics.txt`) — the full ~150 bare topics;
+  with `--lain`, lain *invents* the toy from the topic, so the idea space isn't
+  pre-narrowed (this is the broader, more surprising source — use it often).
 
 ```bash
-tools/seeds.sh                    # one random seed
-tools/seeds.sh -n 5               # 5 seeds across distinct domains
-tools/seeds.sh --domain robotics  # a seed from a specific domain
-tools/seeds.sh --domains          # list domains + counts
-tools/seeds.sh --lain             # explore a random seed in lain right now
+tools/seeds.sh                    # one random framed seed
+tools/seeds.sh -n 5               # 5 across distinct domains
+tools/seeds.sh --domain robotics  # from a specific domain
+tools/seeds.sh --domains          # domains + counts
+tools/seeds.sh --topics -n 5      # 5 RAW topics (the long tail: Hegel, Vocaloid…)
+tools/seeds.sh --lain             # explore a random framed seed in lain
+tools/seeds.sh --topics --lain    # explore a random RAW topic (lain invents the toy)
 ```
 
 Then turn an exploration into a toy. `lain` is tetraslam's ideation engine;
