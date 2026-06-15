@@ -45,6 +45,8 @@ _(none yet)_
 
 ## note — durable knowledge for future agents
 
+- 2026-06-14 · claude · human-in-the-loop pass fixed phonoscape visuals: the agent build had correct phonology analysis but a flat single-biome renderer. Fix was all in rendering — elevation bands (water/beach/land/rock/snow), moisture-driven sea level, hillshade relief, domain warp. Lesson: agent builds nail the model, the *rendering/aesthetic* layer is where the human pass pays off.
+
 - 2026-06-14 · claude · devin successfully built phonoscape from the scaffold (loop works: lain->scaffold->devin->runs). BUT same failure as phloraflora: structure/logic correct, visual payoff weak — terrains read as flat sepia fog, most words collapse to 'desert' biome, phonetic differentiation doesn't show. Pattern: one-shot agent builds nail structure, aesthetics need a human pass.
 
 - 2026-06-14 · claude · lain->playground bridge built: tools/lain-toy.sh scaffolds a toy from a lain .db via 'lain export' (black box, no coupling). 'tools/lain-toy.sh list <db>' then 'scaffold <db> <node-id> --lang py|go|ts|rust'. phonoscape was scaffolded this way.

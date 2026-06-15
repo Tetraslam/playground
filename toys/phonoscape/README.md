@@ -125,16 +125,25 @@ This creates **semantic dissonance art**: a word meaning "silence" in a language
 
 ## Status
 
-**Built and working.** Implemented in Python (stdlib only). Run:
+**Built and working, with a real landscape renderer.** Stdlib only.
 
 ```bash
 uv run python toys/phonoscape/main.py --word vrakh --out scratch/vrakh.svg
 uv run python toys/phonoscape/main.py --word velu --size 800
+# view: rsvg-convert scratch/vrakh.svg -o scratch/vrakh.png
 ```
 
-The tool maps phonological features to terrain parameters:
-- Consonants (manner/place/voicing) → texture, drama, sharpness
-- Vowels (height/backness) → temperature, moisture, biome
-- Syllable count → octave count (terrain complexity)
+Phonology → terrain parameters (the analysis, from the original build):
+- consonants (manner/place/voicing) → amplitude, lacunarity, sharpness, drama
+- vowels (height/backness) → temperature, moisture → biome
+- syllable count → octaves (terrain complexity)
 
-Same word always produces the same terrain (deterministic PRNG seeded from the word).
+Rendering (a human-in-the-loop pass after the first agent build):
+- **elevation bands** — deep water → shallows → beach → biome land → rock → snow
+- **sea level** driven by moisture/drama, so wet words flood into lakes/coasts
+- **hillshade relief** (NW light) so ridges and valleys actually read
+- **domain warp** so coastlines wiggle instead of looking grid-aligned
+
+Deterministic: same word → same terrain. Phonetically distinct words now produce
+visibly distinct landscapes (e.g. arid `vrakh` desert vs. lush wet `velu`
+savanna) — the differentiation that the flat first version didn't show.

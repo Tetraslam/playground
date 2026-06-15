@@ -181,36 +181,27 @@ def map_to_terrain(params: dict) -> dict:
     }
 
 
+def _hash01(gx: int, gy: int, seed: int) -> float:
+    """Fast integer hash -> [-1, 1]. No object allocation (was the slow path)."""
+    h = (gx * 374761393 + gy * 668265263 + seed * 2246822519) & 0xFFFFFFFF
+    h = ((h ^ (h >> 13)) * 1274126177) & 0xFFFFFFFF
+    h = h ^ (h >> 16)
+    return (h / 0xFFFFFFFF) * 2.0 - 1.0
+
+
 def value_noise(x: float, y: float, rng: Rng, seed_offset: int = 0) -> float:
-    """Simple value noise for terrain generation."""
-    # Integer grid coordinates
-    ix, iy = int(x), int(y)
-    # Local coordinates
+    """Smooth value noise, cheap integer-hashed lattice."""
+    ix, iy = math.floor(x), math.floor(y)
     fx, fy = x - ix, y - iy
+    v00 = _hash01(ix, iy, seed_offset)
+    v10 = _hash01(ix + 1, iy, seed_offset)
+    v01 = _hash01(ix, iy + 1, seed_offset)
+    v11 = _hash01(ix + 1, iy + 1, seed_offset)
 
-    # Hash function for grid points
-    def hash_grid(gx: int, gy: int) -> float:
-        h = (gx * 374761393 + gy * 668265263 + seed_offset) & 0xFFFFFFFF
-        h = (h ^ (h >> 13)) * 1274126177
-        h = (h ^ (h >> 16))
-        # Use this to seed a deterministic value
-        rng_local = Rng(f"noise_{h}")
-        return rng_local.rand() * 2 - 1
-
-    # Corner values
-    v00 = hash_grid(ix, iy)
-    v10 = hash_grid(ix + 1, iy)
-    v01 = hash_grid(ix, iy + 1)
-    v11 = hash_grid(ix + 1, iy + 1)
-
-    # Smooth interpolation
     def smooth(t: float) -> float:
-        return t * t * (3 - 2 * t)
+        return t * t * t * (t * (t * 6 - 15) + 10)  # quintic, smoother than 3t²-2t³
 
-    sx = smooth(fx)
-    sy = smooth(fy)
-
-    # Bilinear interpolation
+    sx, sy = smooth(fx), smooth(fy)
     nx0 = v00 + sx * (v10 - v00)
     nx1 = v01 + sx * (v11 - v01)
     return nx0 + sy * (nx1 - nx0)
@@ -238,126 +229,128 @@ def fractal_noise(
     return value / max_value if max_value > 0 else 0.0
 
 
-def get_biome(temperature: float, moisture: float) -> tuple[str, str]:
-    """Map temperature/moisture to biome name and color."""
-    # Whittaker-style biome classification
+def get_biome(temperature: float, moisture: float) -> tuple[str, tuple[int, int, int]]:
+    """Map temperature/moisture to a biome name + its LAND base color (RGB)."""
     if temperature < 0.3:
         if moisture < 0.3:
-            return "tundra", "#e8dcc8"
+            return "tundra", (200, 196, 178)
         elif moisture < 0.6:
-            return "taiga", "#4a6741"
+            return "taiga", (74, 103, 65)
         else:
-            return "boreal fog", "#5a7a6a"
+            return "boreal fog", (90, 122, 106)
     elif temperature < 0.6:
         if moisture < 0.3:
-            return "scrubland", "#c9b896"
+            return "scrubland", (170, 154, 104)
         elif moisture < 0.6:
-            return "deciduous forest", "#5a8f3a"
+            return "deciduous forest", (90, 143, 58)
         else:
-            return "temperate rainforest", "#3d6b4a"
+            return "temperate rainforest", (61, 107, 74)
     else:
         if moisture < 0.3:
-            return "desert", "#e6d5a8"
+            return "desert", (216, 188, 130)
         elif moisture < 0.6:
-            return "savanna", "#a8c686"
+            return "savanna", (168, 178, 100)
         else:
-            return "jungle", "#2d5a3d"
+            return "jungle", (45, 110, 61)
+
+
+# Elevation palette anchors: (threshold, RGB). The land band is tinted toward
+# the biome color; water/snow are biome-independent so coastlines read clearly.
+def _lerp(a: tuple[int, int, int], b: tuple[int, int, int], t: float) -> tuple[int, int, int]:
+    return tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
+
+
+def elevation_color(
+    h: float, sea: float, biome_rgb: tuple[int, int, int], temperature: float
+) -> tuple[int, int, int]:
+    """Color a normalized height with sea level, beaches, land, and peaks."""
+    if h < sea * 0.55:
+        return _lerp((18, 38, 74), (32, 78, 120), h / max(sea * 0.55, 1e-6))  # deep -> shelf
+    if h < sea:
+        return _lerp((32, 78, 120), (74, 140, 170), (h - sea * 0.55) / max(sea * 0.45, 1e-6))  # shallows
+    if h < sea + 0.04:
+        return (224, 208, 158)  # beach
+    # land: biome color, darkening in valleys, lightening toward highlands
+    land_t = (h - sea - 0.04) / max(1 - sea - 0.04, 1e-6)
+    lo = _lerp((28, 44, 30), biome_rgb, 0.65)  # shadowed valley
+    base = _lerp(lo, biome_rgb, min(1.0, land_t * 1.6))
+    if land_t > 0.7:  # highlands -> rock
+        base = _lerp(base, (122, 116, 110), (land_t - 0.7) / 0.3)
+    if land_t > 0.88 and temperature < 0.55:  # snow caps in cold climates
+        base = _lerp(base, (240, 244, 250), (land_t - 0.88) / 0.12)
+    return base
 
 
 def render(word: str, size: int) -> str:
-    """Render terrain as SVG."""
+    """Render terrain as SVG: elevation bands + biome palette + hillshade relief."""
     params = analyze_phonology(word)
     terrain = map_to_terrain(params)
     rng = Rng(word)
+    biome_name, biome_rgb = get_biome(terrain["temperature"], terrain["moisture"])
 
-    # Grid resolution
-    resolution = 100
-    cell_size = size / resolution
+    res = 140
+    cell = size / res
 
-    # Generate heightmap
-    heightmap = []
-    for y in range(resolution):
-        row = []
-        for x in range(resolution):
-            # Normalize coordinates
-            nx = x / resolution * 4
-            ny = y / resolution * 4
-
-            # Base fractal noise
-            h = fractal_noise(nx, ny, terrain, rng)
-
-            # Apply erosion smoothing
-            if terrain["erosion"] > 0.3:
-                # Simple smoothing pass
-                h = h * (1 - terrain["erosion"] * 0.3)
-
-            # Apply sharpness
-            h = h * (1 + terrain["sharpness"])
-
-            # Apply drama (more extreme values)
+    # Domain-warp the sample space a little so coastlines wiggle (less grid-y).
+    warp = 0.35 + terrain["erosion"] * 0.4
+    heightmap = [[0.0] * res for _ in range(res)]
+    for y in range(res):
+        for x in range(res):
+            nx, ny = x / res * 4.0, y / res * 4.0
+            wx = nx + warp * value_noise(nx + 11.3, ny + 4.1, rng, seed_offset=7)
+            wy = ny + warp * value_noise(nx - 5.7, ny + 9.2, rng, seed_offset=19)
+            h = fractal_noise(wx, wy, terrain, rng)
+            h *= 1 + terrain["sharpness"]
             if terrain["drama"] > 0:
-                h = h * (1 + terrain["drama"])
+                h = math.copysign(abs(h) ** (1 - terrain["drama"] * 0.4), h)  # peaky
+            heightmap[y][x] = h
 
-            row.append(h)
-        heightmap.append(row)
+    # normalize to 0..1
+    flat = [h for row in heightmap for h in row]
+    lo, hi = min(flat), max(flat)
+    span = (hi - lo) or 1.0
+    heightmap = [[(h - lo) / span for h in row] for row in heightmap]
 
-    # Normalize heightmap to 0-1
-    min_h = min(min(row) for row in heightmap)
-    max_h = max(max(row) for row in heightmap)
-    if max_h > min_h:
-        heightmap = [[(h - min_h) / (max_h - min_h) for h in row] for row in heightmap]
+    # sea level: wetter/colder words flood more; drama lowers it (more land/peaks)
+    sea = 0.30 + terrain["moisture"] * 0.30 - terrain["drama"] * 0.12
+    sea = max(0.12, min(0.62, sea))
 
-    # Generate SVG
+    # light direction for hillshade (NW)
+    lx, ly = -0.7, -0.7
+
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" '
-        f'viewBox="0 0 {size} {size}">',
+        f'viewBox="0 0 {size} {size}" shape-rendering="crispEdges">'
     ]
-
-    # Render cells with biome coloring
-    for y in range(resolution):
-        for x in range(resolution):
+    for y in range(res):
+        for x in range(res):
             h = heightmap[y][x]
-            biome_name, biome_color = get_biome(terrain["temperature"], terrain["moisture"])
-
-            # Adjust color by elevation
-            # Higher = lighter/more saturated, lower = darker
-            elevation_factor = h * 0.4 - 0.2
-
-            # Parse hex color and adjust
-            r = int(biome_color[1:3], 16)
-            g = int(biome_color[3:5], 16)
-            b = int(biome_color[5:7], 16)
-
-            # Apply elevation adjustment
-            r = max(0, min(255, int(r * (1 + elevation_factor))))
-            g = max(0, min(255, int(g * (1 + elevation_factor))))
-            b = max(0, min(255, int(b * (1 + elevation_factor))))
-
-            color = f"#{r:02x}{g:02x}{b:02x}"
-
-            px = x * cell_size
-            py = y * cell_size
+            r, g, b = elevation_color(h, sea, biome_rgb, terrain["temperature"])
+            # hillshade: slope from neighbors (only on land, where it reads)
+            if h >= sea:
+                hx = heightmap[y][min(x + 1, res - 1)] - heightmap[y][max(x - 1, 0)]
+                hy = heightmap[min(y + 1, res - 1)][x] - heightmap[max(y - 1, 0)][x]
+                shade = 1.0 + (hx * lx + hy * ly) * 3.2
+                shade = max(0.6, min(1.35, shade))
+                r = max(0, min(255, int(r * shade)))
+                g = max(0, min(255, int(g * shade)))
+                b = max(0, min(255, int(b * shade)))
             parts.append(
-                f'<rect x="{px:.1f}" y="{py:.1f}" width="{cell_size:.1f}" height="{cell_size:.1f}" '
-                f'fill="{color}" stroke="none"/>'
+                f'<rect x="{x * cell:.2f}" y="{y * cell:.2f}" width="{cell:.2f}" '
+                f'height="{cell:.2f}" fill="#{r:02x}{g:02x}{b:02x}"/>'
             )
 
-    # Add contour lines for elevation
-    parts.append('<g stroke="rgba(0,0,0,0.15)" stroke-width="0.5" fill="none">')
-    for y in range(resolution):
-        for x in range(resolution):
-            h = heightmap[y][x]
-            if h > 0.7 and h < 0.75:  # High elevation contour
-                px = x * cell_size
-                py = y * cell_size
-                parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{cell_size * 0.4}"/>')
-            elif h > 0.3 and h < 0.35:  # Mid elevation contour
-                px = x * cell_size
-                py = y * cell_size
-                parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{cell_size * 0.3}"/>')
-    parts.append('</g>')
-
-    parts.append("</svg>")
+    # a couple of crisp coastline strokes for legibility
+    parts.append('<g fill="none" stroke="rgba(20,30,40,0.35)" stroke-width="0.8">')
+    for y in range(1, res):
+        for x in range(1, res):
+            a = heightmap[y][x] >= sea
+            if a != (heightmap[y][x - 1] >= sea) or a != (heightmap[y - 1][x] >= sea):
+                parts.append(
+                    f'<rect x="{x * cell:.2f}" y="{y * cell:.2f}" '
+                    f'width="{cell:.2f}" height="{cell:.2f}"/>'
+                )
+    parts.append("</g></svg>")
     return "".join(parts)
 
 
