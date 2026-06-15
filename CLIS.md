@@ -42,8 +42,14 @@ context. `playerctl -p spotify ...` also works for basic MPRIS transport.
   `vercel env`. (pnpm global.)
 - **tailscale** — the tailnet linking the laptops + homelab. `tailscale status`,
   `tailscale ip`. Read-only checks are safe.
-- **op** — 1Password CLI. `op read`, `op item get/create`. The source of truth
-  for every secret. Desktop app integration → biometric approval prompts.
+- **op** — 1Password CLI. The source of truth for every secret (one **Personal**
+  vault). `op read "op://Personal/<item>/<field>"` resolves one value;
+  `op item list` / `op item get` find references. Feed a password straight into a
+  command's stdin instead of hardcoding — e.g. sudo:
+  `op read "op://Personal/sudo/password" | sudo -S <cmd>` (one sudo at a time —
+  parallel sudo trips faillock). Desktop app integration → biometric prompts.
+  Full how-to in AGENTS.md (§Secrets) and `reference_1password.md` in global
+  memory.
 - **mullvad** — VPN. `mullvad status`, `mullvad connect/disconnect`.
 
 ## Banking — Mercury 💸 (careful)
@@ -80,8 +86,14 @@ context. `playerctl -p spotify ...` also works for basic MPRIS transport.
   cross-links, contradictions, and emergent patterns. Named after Lain Iwakura.
 
   ```bash
-  lain "your idea" --n 3 --m 2
+  lain "your idea" --n 3 --m 2          # inline seed (multi-word)
+  lain explore "your idea" --n 3 --m 2  # explicit form — use for one-word seeds
   ```
+
+  Note: a single-word seed that looks like a subcommand (e.g. `lain list`) now
+  errors with a "did you mean" instead of exploring (bareword guard). Use the
+  explicit `lain explore "<seed>"` escape hatch when scripting seeds that might
+  be one word — `tools/seeds.sh` already does.
 
   Bun monorepo (pnpm + turbo), built-in extensions: freeform, worldbuilding,
   debate, research. Uses AWS Bedrock via bearer token. Genuinely useful for

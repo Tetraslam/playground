@@ -104,14 +104,44 @@ tools/install-hooks.sh
 
 Available global keys (see `.env.op`): `ANTHROPIC_API_KEY`,
 `OPENROUTER_API_KEY`, `FIRECRAWL_API_KEY`, `MODAL_TOKEN_ID`,
-`MODAL_TOKEN_SECRET`.
+`MODAL_TOKEN_SECRET`. (This list may be out of date depending on how long it's
+been — `.env.op` is the source of truth; `cat .env.op` to see the current keys.)
 
 To add a new secret: store it in 1Password (`op item create`), then add the
 reference line to the relevant `.env.op`. Ask tetraslam if you need a key that
 isn't in the vault yet.
 
+### Resolving a single secret / feeding a password into a command
+
+The whole vault is `op://Personal/...` (one account, one **Personal** vault).
+When you don't need the whole `.env.op` injected — you just want *one* value —
+read it directly and pipe it where it's needed (keep it in a pipe, never a file
+or a variable that lands in shell history):
+
+```bash
+op read "op://Personal/<item>/<field>"        # field is usually password|credential
+
+# feed a password into a command that reads stdin (the sudo case):
+op read "op://Personal/sudo/password" | sudo -S <command>
+op read "op://Personal/sudo/password" | sudo -S -p '' pacman -S --noconfirm <pkg>
+
+# inject one secret as an env var for a single command:
+SECRET="$(op read "op://Personal/foo/credential")" some-command
+```
+
+Find the right reference when you don't know the field name:
+`op item list`, then `op item get "<item>" --fields label=password` (or
+`--format json | jq '.fields[]'`).
+
+> **One sudo at a time.** Never run parallel sudo commands (e.g. background
+> installs) — parallel attempts trip faillock and lock the account. Always
+> `op read ... | sudo -S`, sequentially.
+
 > Requires the 1Password desktop app running with CLI integration enabled, and
 > `op` signed in. The first resolve in a session may pop a biometric approval.
+
+(Full how-to, mirrored in tetraslam's global memory:
+`~/.claude/projects/-home-tetraslam/memory/reference_1password.md`.)
 
 ## House style (loose — it's a playground)
 

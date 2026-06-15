@@ -92,7 +92,11 @@ if [[ "$do_lain" == "1" ]]; then
   db="$HOME/$(printf '%s' "$label" | tr ' ' '-' | tr -cd 'a-zA-Z0-9-' | cut -c1-40).db"
   echo "seeds: exploring -> \"$label\""
   echo "       (db: $db)"
-  exec lain "$seed" -n 3 -m 1 --db "$db"
+  # Use the explicit `explore` subcommand (the documented escape hatch) rather
+  # than the inferred `lain "<seed>"` form: as of lain's bareword guard
+  # (commit 3423d3f), a single-word seed that looks like a command would error
+  # instead of exploring. `explore` always treats the argument as a seed.
+  exec lain explore "$seed" -n 3 -m 1 --db "$db"
 fi
 
 # default: just print the seed(s)
