@@ -157,17 +157,46 @@ Find the right reference when you don't know the field name:
 - Commit messages: short, present-tense, lowercase is fine. Have fun with them.
 - One toy per PR-sized change. Don't break other toys.
 
-## Ideas worth building (steal these)
+## Aim higher than a screenshot (read this — it's the point)
+
+The playground has a gravity well: almost every toy so far is "take an input →
+draw an SVG/canvas → look at it." That's model collapse. A static picture is the
+*cheapest* possible output, so an uninspired run defaults to it, and the whole
+repo drifts toward tiny visualizers of genuinely deep ideas. **Resist this.**
+
+A toy is the *system*, not the picture of the system. Before you build, ask:
+
+- **Does it run over time / hold state?** A simulation you can poke mid-flight, a
+  process with history, an agent that learns — beats a one-shot render.
+- **Is the hard part actually hard?** Implement the real algorithm (the matching
+  engine, the solver, the inference loop), not a cartoon of it.
+- **Can you interact with it, or does it just play back?** Levers that change the
+  outcome > a movie you watch.
+- **Does it compose?** Toys that emit/consume each other (qurwen → glyphgen) are
+  worth more than islands.
+- **Could it surprise its own author?** Emergent behavior, search that finds
+  things you didn't plant, dynamics you didn't hand-author.
+
+A view is welcome — it's the *window onto the system*, and yes, commit example
+frames. But the view is not the toy. If the most ambitious sentence you can say
+about your toy is "it makes a pretty PNG," go deeper.
+
+**Tiers, roughly:** (1) renders a thing → (2) simulates/computes a thing you can
+perturb → (3) a system with state, search, or learning that runs and surprises →
+(4) several of those composed into something with real depth. Push toward 3–4.
 
 tetraslam is a worldbuilder (conlang **Qurwenyan**, the **Pocket Realms** magic
 system), an ML researcher, and made **SHFLA** (turing-complete fractal-music
-viz). Toys that would be fun:
+viz). Ambitious directions worth stealing:
 
-- generative music / fractal audio experiments (SHFLA energy)
-- conlang tools: Qurwenyan word generators, romanization, glyph rendering
-- tiny ML demos that actually call Modal for a GPU
-- procedural worldbuilding: maps, heraldry, magic-system simulators
-- anything that makes a pretty SVG/PNG you can `grim`-screenshot and admire
+- a real engine: a tiny language/VM, a physics or market simulator with agents,
+  a constraint solver you can throw problems at
+- ML that actually trains/infers (call Modal for a GPU) — not a hardcoded demo
+- generative *systems*: music that's computed live, worlds that simulate forward
+- conlang/worldbuilding as a pipeline: generate → constrain → render → evolve,
+  with the pieces composing across toys
+- anything where you'd be tempted to write a paper or a README with a "how it
+  works" section longer than the "how to run it" section
 
 ## Leaving feedback (do this — don't lose it in chat)
 

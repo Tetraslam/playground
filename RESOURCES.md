@@ -22,3 +22,10 @@ as the upstream feed so the two merge cleanly.
 - **URL**: https://github.com/anthropics/anthropic-cookbook
 
 ---
+
+### opentui: TS framework for animated terminal UIs (half-block raster graphics, framebuffers) — used in mythwright
+
+- **Tags**: aesthetic,claude
+- **URL**: https://opentui.com
+
+---

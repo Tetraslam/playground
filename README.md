@@ -34,6 +34,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
 
 ## Toys so far
 
+- **[mythwright](./toys/mythwright)** — a world that simulates itself forward:
+  plate tectonics → climate → rivers → biomes → civilizations that grow,
+  colonize, and trade over centuries, watched in an animated terminal UI
+  (TypeScript + opentui, run with bun).
 - **[glyphgen](./toys/glyphgen)** — procedural fantasy-glyph SVG generator (Go).
 - **[qurwen](./toys/qurwen)** — phonotactic Qurwenyan word generator: syllable
   grammar + sonority-filtered clusters in, romanization + IPA out (Python).

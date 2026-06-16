@@ -66,3 +66,20 @@ misc	an urban-planning toy: zone a grid, watch traffic and land value emerge
 misc	a supply-chain simulator (the beer game) showing the bullwhip effect
 control	a state-estimation particle-filter toy localizing a robot in 1D
 control	a model-predictive-control toy steering a vehicle around a track
+
+# --- ambition tier (added to fight model collapse) ---
+# These are framed as SYSTEMS, not visualizers: things that run over time, hold
+# state, search, learn, or compose with other toys. When you draw one, the
+# picture is the WINDOW onto the system, not the toy. Prefer these.
+ai	a tiny autodiff engine + train a real net on it, watch the loss actually fall
+ai	a self-play RL arena where agents evolve strategies over generations (not a fixed demo)
+ai	a from-scratch GPT-style char model you can train on a corpus and sample live
+cs-math	a little stack-based language with a REPL, a parser, and a VM you can program
+cs-math	a SAT/CSP solver you can throw real puzzles at (sudoku, n-queens, scheduling)
+cs-math	a tiny relational database with a query planner you can EXPLAIN
+language	a sound-change ENGINE: author rules, run a proto-lang through millennia of drift
+worldbuilding	a world that simulates forward: tectonics -> climate -> rivers -> settlements -> trade
+finance	a multi-agent market where strategies compete for PnL and the price emerges from them
+robotics	a physics sim with agents that LEARN to locomote (not a hand-animated hopper)
+bio	an evolving ecosystem (genomes, mutation, selection) that surprises you after 10k ticks
+misc	a cellular automaton that's Turing-complete, with a compiler that targets it

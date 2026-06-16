@@ -88,8 +88,11 @@ def main():
         body = "\n".join(l for l in body.splitlines() if not l.strip().startswith("[["))
         print(body.strip())
         print("\n## Status\n")
-        print("Scaffolded stub — not built yet. Pick a language, implement the "
-              "mapping above, and make it produce something you can look at.")
+        print("Scaffolded stub — not built yet. Pick a language and build the "
+              "*system* behind the idea: the real algorithm, the thing that "
+              "runs over time, the part that's genuinely hard. A view is fine, "
+              "but it's the window onto the system, not the toy itself. Aim for "
+              "depth over a screenshot.")
 
 
 if __name__ == "__main__":
