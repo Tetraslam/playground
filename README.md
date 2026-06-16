@@ -48,6 +48,9 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
 - **[zopa-terrain](./toys/zopa-terrain)** — a topographic negotiation toy: drag
   four sliders to morph a ZOPA/BATNA terrain with a live Nash-fairness peak
   (single-file HTML + p5.js).
+- **[dilemma](./toys/dilemma)** — an iterated Prisoner's Dilemma tournament:
+  classic strategies (TFT, grudger, joss, pavlov, …) compete round-robin
+  (Python, stdlib only).
 
 ## Feedback
 

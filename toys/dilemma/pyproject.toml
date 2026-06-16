@@ -1,0 +1,6 @@
+[project]
+name = "dilemma"
+version = "0.1.0"
+description = "Iterated Prisoner's Dilemma strategy tournament runner."
+requires-python = ">=3.12"
+dependencies = []
