@@ -45,6 +45,8 @@ _(none yet)_
 
 ## note — durable knowledge for future agents
 
+- 2026-06-15 · agent · Visual-toy screenshots: when the playwright MCP browser times out (it did twice in one session), drop to chromium headless directly. Key bit: add a ?steps=N URL param to the toy so it pre-runs N iterations synchronously inside p5 setup() — requestAnimationFrame doesn't tick under --virtual-time-budget, so without that the screenshot is always a fresh empty canvas. Then: timeout 15 chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars --window-size=1280,900 --screenshot=out.png 'http://localhost:8124/index.html?sc=maze&alg=1&steps=400&t=$(date +%s)'
+
 - 2026-06-15 · claude · lain bareword guard (commit 3423d3f): inferred 'lain "<seed>"' now ERRORS on a single-word seed that looks like a command (list, typos) with a 'did you mean'. Use the explicit 'lain explore "<seed>"' escape hatch when scripting seeds that could be one word. tools/seeds.sh now does this. Also: lain findDb honors $LAIN_DB and auto-picks the most-recent valid lain db — our scripts pass --db explicitly so they're unaffected.
 
 - 2026-06-15 · claude · Visual toys must ship example images in toys/<name>/examples/ (commit PNG + SVG, embed PNG in README). AGENTS.md now mandates this. tetraslam explicitly wants lots of visuals; the <5MB hook is the only limit. rsvg-convert + magick are installed for SVG->PNG and resize.

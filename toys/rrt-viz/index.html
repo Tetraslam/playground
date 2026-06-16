@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<!--
+  rrt-viz — a tiny motion-planning playground.
+  Click to set start (left), goal (right). Drag in empty space to draw walls.
+  Watch RRT (or A*) find a path. Single file, no build step.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>rrt-viz — a motion-planning playground</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+  <style>
+    :root {
+      --bg: #06060d;
+      --panel: #0e0e1c;
+      --ink: #e7e7f0;
+      --dim: #7e7e9c;
+      --accent: #4dd0ff;
+      --goal: #ff6ad5;
+      --wall: #2a2a3d;
+      --path: #ffe066;
+      --warn: #ff6b6b;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 20px 16px 56px; }
+    h1 { font-size: 18px; letter-spacing: 0.5px; margin: 0 0 4px; }
+    h1 .ac { color: var(--accent); }
+    h1 .ac2 { color: var(--goal); }
+    .sub { color: var(--dim); font-size: 12px; margin: 0 0 18px; line-height: 1.55; }
+    #sketch { border-radius: 10px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.55); display: block; }
+    #controls {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px 22px;
+      background: var(--panel); padding: 14px 16px; border-radius: 10px; margin-top: 14px;
+    }
+    label { display: flex; flex-direction: column; gap: 5px; font-size: 11px; color: var(--dim); }
+    label .row { display: flex; justify-content: space-between; align-items: baseline; }
+    label .val { color: var(--ink); font-variant-numeric: tabular-nums; font-size: 13px; }
+    input[type=range] { width: 100%; accent-color: var(--accent); }
+    label.alg input[type=range] { accent-color: var(--goal); }
+    .bar { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; align-items: center; }
+    button {
+      background: #1a1a30; color: var(--ink); border: 1px solid #2f2f4a;
+      padding: 7px 13px; border-radius: 7px; font: inherit; font-size: 11px; cursor: pointer;
+      transition: background .12s, border-color .12s;
+    }
+    button:hover { background: #23234a; border-color: #4a4a73; }
+    button:active { transform: translateY(1px); }
+    button.on { background: #2a2a55; border-color: var(--accent); color: var(--accent); }
+    .hint { color: var(--dim); font-size: 11px; line-height: 1.55; margin-top: 12px; }
+    .stats {
+      display: flex; gap: 18px; margin-top: 10px; font-size: 11px; color: var(--dim);
+    }
+    .stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
+    .scenarios { display: flex; gap: 6px; flex-wrap: wrap; }
+    .scenarios button { font-size: 10px; padding: 5px 9px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>rrt-viz <span style="color:var(--dim); font-size:12px">· a motion-planning playground</span></h1>
+    <p class="sub">
+      <b>Left-click</b> empty space to place the <span class="ac" style="color:var(--accent)">start</span>.
+      <b>Right-click</b> for the <span class="ac2" style="color:var(--goal)">goal</span>.
+      <b>Drag</b> in empty space to draw walls. Click an existing wall to erase it.
+      The tree grows until it finds the goal — then a path lights up.
+    </p>
+
+    <div id="sketch"></div>
+
+    <div class="stats">
+      <span>nodes: <b id="statNodes">0</b></span>
+      <span>iterations: <b id="statIter">0</b></span>
+      <span>path length: <b id="statPath">—</b></span>
+      <span>status: <b id="statStatus">drag to draw walls</b></span>
+    </div>
+
+    <div id="controls">
+      <label>
+        <span class="row"><span class="name">algorithm</span><span class="val" id="algVal">RRT*</span></span>
+        <input type="range" id="alg" min="0" max="2" value="2" step="1" />
+      </label>
+      <label>
+        <span class="row"><span class="name">growth speed (iter / frame)</span><span class="val" id="spdVal">3</span></span>
+        <input type="range" id="spd" min="1" max="30" value="3" step="1" />
+      </label>
+      <label>
+        <span class="row"><span class="name">step size (px)</span><span class="val" id="stepVal">22</span></span>
+        <input type="range" id="step" min="6" max="60" value="22" step="1" />
+      </label>
+      <label>
+        <span class="row"><span class="name">goal bias</span><span class="val" id="biasVal">8%</span></span>
+        <input type="range" id="bias" min="0" max="40" value="8" step="1" />
+      </label>
+    </div>
+
+    <div class="bar">
+      <button id="btnReset">↺ reset tree</button>
+      <button id="btnClear">⌫ clear walls</button>
+      <button id="btnShow" class="on">show tree</button>
+      <span class="scenarios">
+        <button data-sc="maze">maze</button>
+        <button data-sc="narrow">narrow corridor</button>
+        <button data-sc="clutter">clutter</button>
+        <button data-sc="open">open field</button>
+      </span>
+    </div>
+
+    <p class="hint">
+      The tree samples the world randomly, then extends a branch from its
+      nearest node toward the sample — clipping at walls. RRT* rewires the
+      tree around each new node to find shorter paths. A* is the deterministic
+      grid-search classic: glowing frontier, then a clean path. Try the
+      <i>narrow corridor</i> scenario: A* crawls through, RRT* takes longer to
+      notice the gap.
+    </p>
+  </div>
+
+  <script>
+    // ---------- p5 sketch ----------
+    const W = 840, H = 520;
+    const sk = (p) => {
+      let img;
+      let start = null, goal = null;
+      let walls = [];         // each wall: {x, y, r}
+      let nodes = [];         // {x, y, parent}
+      let path = null;        // array of {x,y}
+      let iter = 0;
+      let running = true;
+      let showTree = true;
+      let pathLen = 0;
+      let reached = false;
+      let lastTime = 0;
+      let pendingSc = null;
+
+      // params (live-bound to DOM)
+      const params = {
+        alg: 2,     // 0 = A*, 1 = RRT, 2 = RRT*
+        spd: 3,
+        step: 22,
+        bias: 0.08,
+      };
+
+      // ---------- helpers ----------
+      const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+      const hitWall = (x, y) => walls.some(w => Math.hypot(w.x - x, w.y - y) < w.r + 2);
+      const segFree = (a, b) => {
+        // sample the segment, reject if any sample is inside a wall
+        const steps = Math.max(2, Math.ceil(dist(a, b) / 4));
+        for (let i = 1; i <= steps; i++) {
+          const t = i / steps;
+          if (hitWall(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t)) return false;
+        }
+        return true;
+      };
+      const steer = (from, to, step) => {
+        const d = dist(from, to);
+        if (d <= step) return { x: to.x, y: to.y };
+        const t = step / d;
+        return { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t };
+      };
+      const randPt = () => {
+        if (Math.random() < params.bias && goal) return { x: goal.x, y: goal.y };
+        return { x: Math.random() * W, y: Math.random() * H };
+      };
+      const nearest = (pt) => {
+        let best = 0, bestD = Infinity;
+        for (let i = 0; i < nodes.length; i++) {
+          const d = dist(nodes[i], pt);
+          if (d < bestD) { bestD = d; best = i; }
+        }
+        return best;
+      };
+      const nearIdxs = (pt, r) => {
+        const out = [];
+        for (let i = 0; i < nodes.length; i++) {
+          if (dist(nodes[i], pt) <= r) out.push(i);
+        }
+        return out;
+      };
+      const tracePath = (leafIdx) => {
+        const out = [];
+        let i = leafIdx;
+        while (i !== -1) { out.push(nodes[i]); i = nodes[i].parent; }
+        return out.reverse();
+      };
+      const computePathLen = (p) => {
+        let s = 0;
+        for (let i = 1; i < p.length; i++) s += dist(p[i - 1], p[i]);
+        return s;
+      };
+
+      // ---------- RRT / RRT* step ----------
+      const extendRRT = (isStar) => {
+        const sample = randPt();
+        const ni = nearest(sample);
+        const n = nodes[ni];
+        const nxt = steer(n, sample, params.step);
+        if (hitWall(nxt.x, nxt.y) || !segFree(n, nxt)) return;
+
+        const newIdx = nodes.length;
+        nodes.push({ x: nxt.x, y: nxt.y, parent: ni });
+
+        if (!isStar) return;
+        // RRT* — rewire within neighborhood
+        const radius = Math.min(60, params.step * 6 * Math.pow(Math.log(nodes.length + 1) / nodes.length, 0.5) * 12);
+        const near = nearIdxs(nxt, radius);
+        let bestParent = ni;
+        let bestCost = costTo(newIdx);
+        for (const k of near) {
+          if (k === newIdx) continue;
+          if (segFree(nodes[k], nxt)) {
+            const c = costTo(k) + dist(nodes[k], nxt);
+            if (c < bestCost) { bestCost = c; bestParent = k; }
+          }
+        }
+        nodes[newIdx].parent = bestParent;
+        for (const k of near) {
+          if (k === newIdx || k === bestParent) continue;
+          const cThroughNew = bestCost + dist(nodes[k], nxt);
+          if (cThroughNew < costTo(k) && segFree(nxt, nodes[k])) {
+            nodes[k].parent = newIdx;
+          }
+        }
+      };
+      // memoized cost-to-root (lazy)
+      const costCache = new Map();
+      const costTo = (i) => {
+        if (costCache.has(i)) return costCache.get(i);
+        let c = 0, cur = i;
+        while (nodes[cur].parent !== -1) {
+          c += dist(nodes[cur], nodes[nodes[cur].parent]);
+          cur = nodes[cur].parent;
+        }
+        costCache.set(i, c);
+        return c;
+      };
+
+      // ---------- A* (grid) ----------
+      const GS = 10; // grid cell px
+      const cols = Math.floor(W / GS), rows = Math.floor(H / GS);
+      let aGrid, aStart, aGoal, aOpen, aClosed, aCame, aGScore, aFScore, aDone;
+      const resetAStar = () => {
+        aGrid = new Array(cols * rows);
+        for (let i = 0; i < aGrid.length; i++) {
+          const cx = (i % cols) * GS + GS / 2, cy = Math.floor(i / cols) * GS + GS / 2;
+          aGrid[i] = hitWall(cx, cy);
+        }
+        aStart = aGoal = null;
+        aOpen = new Set(); aClosed = new Set();
+        aCame = new Map();
+        aGScore = new Map(); aFScore = new Map();
+        aDone = false;
+      };
+      const idx = (cx, cy) => cy * cols + cx;
+      const inG = (cx, cy) => cx >= 0 && cy >= 0 && cx < cols && cy < rows;
+      const aHeur = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+      const aNeigh = (cx, cy) => {
+        const out = [];
+        for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+          if (!dx && !dy) continue;
+          const nx = cx + dx, ny = cy + dy;
+          if (!inG(nx, ny) || aGrid[idx(nx, ny)]) continue;
+          // skip diagonals through a corner wall
+          if (dx && dy && (aGrid[idx(cx + dx, cy)] || aGrid[idx(cx, cy + dy)])) continue;
+          out.push([nx, ny]);
+        }
+        return out;
+      };
+      const stepAStar = () => {
+        if (aDone || !aStart || !aGoal) return;
+        if (aOpen.size === 0) { aDone = true; return; }
+        // pop lowest f
+        let bestK = null, bestF = Infinity;
+        for (const k of aOpen) {
+          const f = aFScore.get(k) ?? Infinity;
+          if (f < bestF) { bestF = f; bestK = k; }
+        }
+        if (bestK === null) { aDone = true; return; }
+        if (bestK === aGoal) {
+          aDone = true;
+          const rev = [];
+          let cur = aGoal;
+          while (cur !== undefined) {
+            const [cx, cy] = cur.split(',').map(Number);
+            rev.push({ x: cx * GS + GS / 2, y: cy * GS + GS / 2 });
+            cur = aCame.get(cur);
+          }
+          path = rev.reverse();
+          pathLen = computePathLen(path);
+          return;
+        }
+        aOpen.delete(bestK); aClosed.add(bestK);
+        const [cx, cy] = bestK.split(',').map(Number);
+        for (const [nx, ny] of aNeigh(cx, cy)) {
+          const nk = `${nx},${ny}`;
+          if (aClosed.has(nk)) continue;
+          const tentG = (aGScore.get(bestK) ?? Infinity) + Math.hypot(nx - cx, ny - cy);
+          if (!aOpen.has(nk)) aOpen.add(nk);
+          else if (tentG >= (aGScore.get(nk) ?? Infinity)) continue;
+          aCame.set(nk, bestK);
+          aGScore.set(nk, tentG);
+          aFScore.set(nk, tentG + aHeur([nx, ny], aGoal.split(',').map(Number)));
+        }
+      };
+
+      // ---------- lifecycle ----------
+      const resetTree = () => {
+        nodes = []; path = null; iter = 0; reached = false; pathLen = 0;
+        costCache.clear();
+        if (start) nodes.push({ x: start.x, y: start.y, parent: -1 });
+        if (params.alg === 0) {
+          resetAStar();
+          if (start) aStart = `${Math.floor(start.x / GS)},${Math.floor(start.y / GS)}`;
+          if (goal) aGoal = `${Math.floor(goal.x / GS)},${Math.floor(goal.y / GS)}`;
+          if (aStart && aGoal) { aOpen.add(aStart); aGScore.set(aStart, 0); aFScore.set(aStart, aHeur(aStart.split(',').map(Number), aGoal.split(',').map(Number))); }
+        }
+      };
+
+      const placeStart = (x, y) => { start = { x, y }; resetTree(); };
+      const placeGoal = (x, y) => { goal = { x, y }; resetTree(); };
+      const addWall = (x, y) => { walls.push({ x, y, r: 8 + Math.random() * 14 }); resetTree(); };
+      const removeWallAt = (x, y) => {
+        const i = walls.findIndex(w => Math.hypot(w.x - x, w.y - y) < w.r + 4);
+        if (i >= 0) { walls.splice(i, 1); resetTree(); }
+      };
+      const clearWalls = () => { walls = []; resetTree(); };
+
+      const stepOnce = () => {
+        if (params.alg === 0) { stepAStar(); iter++; return; }
+        extendRRT(params.alg === 2);
+        iter++;
+        if (goal && !reached) {
+          const gi = nearest(goal);
+          if (dist(nodes[gi], goal) <= params.step && segFree(nodes[gi], goal)) {
+            const leaf = nodes.length;
+            nodes.push({ x: goal.x, y: goal.y, parent: gi });
+            path = tracePath(leaf);
+            pathLen = computePathLen(path);
+            reached = true;
+          }
+        }
+      };
+
+      // ---------- draw ----------
+      const applyScenario = (which) => {
+        walls = []; start = { x: 80, y: H / 2 }; goal = { x: W - 80, y: H / 2 };
+        if (which === 'maze') {
+          for (let i = 1; i < 8; i++) walls.push({ x: 200 + i * 65, y: 120, r: 18 });
+          for (let i = 1; i < 7; i++) walls.push({ x: 200, y: 120 + i * 55, r: 18 });
+          for (let i = 1; i < 6; i++) walls.push({ x: 200 + i * 65, y: 410, r: 18 });
+          start = { x: 70, y: 80 }; goal = { x: W - 80, y: H - 80 };
+        } else if (which === 'narrow') {
+          walls.push({ x: W * 0.5, y: 130, r: 28 });
+          walls.push({ x: W * 0.5, y: H - 130, r: 28 });
+          for (let i = -3; i <= 3; i++) walls.push({ x: W * 0.5 + i * 38, y: H * 0.5, r: 16 });
+        } else if (which === 'clutter') {
+          for (let i = 0; i < 60; i++) {
+            walls.push({ x: 80 + Math.random() * (W - 160), y: 60 + Math.random() * (H - 120), r: 8 + Math.random() * 18 });
+          }
+        } else if (which === 'open') {
+          walls = [];
+        }
+        resetTree();
+      };
+
+      p.setup = () => {
+        const c = p.createCanvas(W, H);
+        c.parent('sketch');
+        start = { x: 80, y: H / 2 };
+        goal  = { x: W - 80, y: H / 2 };
+        resetTree();
+        bindDom();
+        // ?sc=<name>&alg=<idx> — scriptable scenarios / algorithms
+        const q = new URLSearchParams(location.search);
+        const alg = q.get('alg');
+        if (alg !== null) {
+          const v = parseInt(alg, 10);
+          if (!isNaN(v) && v >= 0 && v <= 2) {
+            params.alg = v;
+            const el = document.getElementById('alg');
+            el.value = String(v);
+            document.getElementById('algVal').textContent = ['A*', 'RRT', 'RRT*'][v];
+          }
+        }
+        const sc = q.get('sc');
+        if (sc) applyScenario(sc);
+        // ?steps=N — pre-run N iterations synchronously (for scriptable screenshots)
+        const steps = q.get('steps');
+        if (steps) {
+          const n = parseInt(steps, 10);
+          if (!isNaN(n) && n > 0) {
+            for (let i = 0; i < n; i++) {
+              if (!reached && !(params.alg === 0 && aDone)) stepOnce();
+              else break;
+            }
+          }
+        }
+      };
+
+      const drawScene = (alpha = 255) => {
+        // grid (subtle)
+        p.noFill(); p.stroke(20, 22, 36, alpha); p.strokeWeight(1);
+        for (let x = 0; x < W; x += GS) p.line(x, 0, x, H);
+        for (let y = 0; y < H; y += GS) p.line(0, y, W, y);
+
+        // A* frontier/closed
+        if (params.alg === 0) {
+          p.noStroke();
+          for (const k of aClosed) {
+            const [cx, cy] = k.split(',').map(Number);
+            p.fill(50, 70, 110, 90);
+            p.rect(cx * GS, cy * GS, GS, GS);
+          }
+          for (const k of aOpen) {
+            const [cx, cy] = k.split(',').map(Number);
+            p.fill(80, 130, 200, 130);
+            p.rect(cx * GS, cy * GS, GS, GS);
+          }
+        }
+
+        // walls
+        for (const w of walls) {
+          p.noStroke();
+          p.fill(46, 48, 70);
+          p.circle(w.x, w.y, w.r * 2);
+          p.fill(70, 72, 100);
+          p.circle(w.x, w.y, w.r * 0.6);
+        }
+
+        // tree
+        if (showTree && params.alg !== 0) {
+          p.stroke(77, 208, 255, 35);
+          p.strokeWeight(1);
+          for (const n of nodes) {
+            if (n.parent === -1) continue;
+            const p2 = nodes[n.parent];
+            p.line(n.x, n.y, p2.x, p2.y);
+          }
+          p.noStroke();
+          p.fill(77, 208, 255, 80);
+          for (const n of nodes) p.circle(n.x, n.y, 2.2);
+        }
+
+        // path
+        if (path && path.length > 1) {
+          p.stroke(255, 224, 102, 220);
+          p.strokeWeight(4);
+          p.strokeCap(p.ROUND);
+          for (let i = 1; i < path.length; i++) {
+            p.line(path[i - 1].x, path[i - 1].y, path[i].x, path[i].y);
+          }
+          // soft glow
+          p.stroke(255, 224, 102, 60);
+          p.strokeWeight(10);
+          for (let i = 1; i < path.length; i++) {
+            p.line(path[i - 1].x, path[i - 1].y, path[i].x, path[i].y);
+          }
+        }
+
+        // start + goal
+        drawNode(start, 11, p.color(77, 208, 255));
+        drawNode(goal,  12, p.color(255, 106, 213));
+      };
+
+      const drawNode = (pt, r, col) => {
+        if (!pt) return;
+        const rr = p.red(col), gg = p.green(col), bb = p.blue(col);
+        p.noStroke();
+        p.fill(rr, gg, bb, 30);
+        p.circle(pt.x, pt.y, r * 3);
+        p.fill(rr, gg, bb, 90);
+        p.circle(pt.x, pt.y, r * 2);
+        p.fill(rr, gg, bb);
+        p.circle(pt.x, pt.y, r);
+      };
+
+      p.draw = () => {
+        p.background(6, 6, 13);
+        drawScene();
+        if (running) {
+          for (let i = 0; i < params.spd; i++) {
+            if (!reached && !(params.alg === 0 && aDone)) stepOnce();
+            else break;
+          }
+        }
+        updateStats();
+        if (pendingSc) { pendingSc(); pendingSc = null; }
+      };
+
+      const updateStats = () => {
+        document.getElementById('statNodes').textContent = nodes.length;
+        document.getElementById('statIter').textContent = iter;
+        document.getElementById('statPath').textContent = path ? pathLen.toFixed(0) : '—';
+        const s = document.getElementById('statStatus');
+        if (reached || (params.alg === 0 && aDone && path)) {
+          s.textContent = 'solved ✓'; s.style.color = 'var(--path)';
+        } else if (reached === false && params.alg === 0 && aDone) {
+          s.textContent = 'no path'; s.style.color = 'var(--warn)';
+        } else {
+          s.textContent = 'growing…'; s.style.color = 'var(--accent)';
+        }
+      };
+
+      // ---------- input ----------
+      p.mousePressed = (e) => {
+        // ignore clicks on controls (outside canvas)
+      };
+      const onCanvasPress = (e) => {
+        const r = e.target.getBoundingClientRect();
+        const x = (e.clientX - r.left) * (W / r.width);
+        const y = (e.clientY - r.top) * (H / r.height);
+        if (e.button === 2) { placeGoal(x, y); return; }
+        if (e.button === 0) {
+          if (hitWall(x, y)) { removeWallAt(x, y); return; }
+          // start: shift-click OR near existing start; goal: alt-click OR near goal; else: draw
+          if (e.shiftKey) { placeStart(x, y); return; }
+          if (e.altKey) { placeGoal(x, y); return; }
+          // nearest to start/goal within 14 px = pick that one
+          if (start && dist({x,y}, start) < 18) { placeStart(x, y); return; }
+          if (goal  && dist({x,y}, goal)  < 18) { placeGoal(x, y);  return; }
+          // else start a wall-drag
+          addWall(x, y);
+          dragging = true;
+        }
+      };
+      const onCanvasMove = (e) => {
+        if (!dragging) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        const x = (e.clientX - r.left) * (W / r.width);
+        const y = (e.clientY - r.top) * (H / r.height);
+        if (Math.hypot(x - lastDrag.x, y - lastDrag.y) > 6) {
+          addWall(x, y);
+          lastDrag = { x, y };
+        }
+      };
+      let dragging = false, lastDrag = { x: 0, y: 0 };
+
+      // attach handlers
+      const cnv = () => document.querySelector('#sketch canvas');
+      const attach = () => {
+        const c = cnv(); if (!c) { setTimeout(attach, 30); return; }
+        c.addEventListener('mousedown', onCanvasPress);
+        c.addEventListener('contextmenu', (e) => e.preventDefault());
+        c.addEventListener('mousemove', onCanvasMove);
+        c.addEventListener('mouseup', () => { dragging = false; });
+        c.addEventListener('mouseleave', () => { dragging = false; });
+      };
+      attach();
+
+      // ---------- DOM ----------
+      const bindDom = () => {
+        const link = (id, key, fmt) => {
+          const el = document.getElementById(id);
+          const lab = document.getElementById(id + 'Val');
+          el.addEventListener('input', () => {
+            if (key === 'alg') {
+              params.alg = parseInt(el.value, 10);
+              lab.textContent = ['A*', 'RRT', 'RRT*'][params.alg];
+            } else if (key === 'spd') {
+              params.spd = parseInt(el.value, 10);
+              lab.textContent = String(params.spd);
+            } else if (key === 'step') {
+              params.step = parseFloat(el.value);
+              lab.textContent = String(params.step);
+            } else if (key === 'bias') {
+              params.bias = parseFloat(el.value) / 100;
+              lab.textContent = el.value + '%';
+            }
+            resetTree();
+          });
+        };
+        link('alg', 'alg');
+        link('spd', 'spd');
+        link('step', 'step');
+        link('bias', 'bias');
+
+        document.getElementById('btnReset').addEventListener('click', () => resetTree());
+        document.getElementById('btnClear').addEventListener('click', () => clearWalls());
+        const show = document.getElementById('btnShow');
+        show.addEventListener('click', () => {
+          showTree = !showTree;
+          show.classList.toggle('on', showTree);
+        });
+
+        const setStatus = (msg, color) => {
+          const s = document.getElementById('statStatus');
+          s.textContent = msg; if (color) s.style.color = color;
+        };
+
+        document.querySelectorAll('[data-sc]').forEach(b => {
+          b.addEventListener('click', () => applyScenario(b.dataset.sc));
+        });
+      };
+    };
+
+    new p5(sk);
+  </script>
+</body>
+</html>

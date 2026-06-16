@@ -1,0 +1,10 @@
+{
+  "name": "rrt-viz",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A motion-planning playground: RRT, RRT*, and A* grow paths through obstacles you draw.",
+  "scripts": {
+    "start": "uv run --no-project python -m http.server 8124 --directory .",
+    "open": "xdg-open index.html"
+  }
+}

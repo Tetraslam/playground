@@ -51,6 +51,8 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
 - **[dilemma](./toys/dilemma)** — an iterated Prisoner's Dilemma tournament:
   classic strategies (TFT, grudger, joss, pavlov, …) compete round-robin
   (Python, stdlib only).
+- **[rrt-viz](./toys/rrt-viz)** — a motion-planning playground: A\*, RRT, and
+  RRT\* grow paths through obstacles you draw (single-file HTML + p5.js).
 
 ## Feedback
 
