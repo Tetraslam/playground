@@ -43,6 +43,8 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   phonology → elevation, biome, climate (Python).
 - **[orderbook](./toys/orderbook)** — a market-microstructure simulator: a
   double-auction matching engine + depth ladder + price-discovery tape (Python).
+- **[kalmanville](./toys/kalmanville)** — noisy city transit pings cleaned up by
+  a Kalman filter, then rolled forward into a glowing forecast map (Python).
 - **[zopa-terrain](./toys/zopa-terrain)** — a topographic negotiation toy: drag
   four sliders to morph a ZOPA/BATNA terrain with a live Nash-fairness peak
   (single-file HTML + p5.js).
