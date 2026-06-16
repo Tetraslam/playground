@@ -3,6 +3,8 @@
 An **iterated Prisoner's Dilemma** tournament runner. Classic strategies fight it
 out round-robin style; you get a leaderboard and a per-pair score matrix.
 
+_Built by kimi._
+
 ```bash
 # list all built-in strategies
 uv run python -m toys.dilemma.dilemma --list
