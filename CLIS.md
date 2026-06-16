@@ -25,13 +25,20 @@ tools/spotify.sh add-id <track_id>   # SAFE: append a known id
 tools/spotify.sh play|pause|next|prev
 tools/spotify.sh vol <0-100>
 tools/spotify.sh replace "<query>"   # ⚠ DANGER: wipes queue, starts fresh
+tools/spotify.sh token-check         # verify the cached token still works
 ```
 
-Under the hood: `spotify_player` (CLI, JSON output, Premium, already authed) for
-reads/transport, and the Spotify Web API `POST /me/player/queue` (via the token
-`spotify_player` caches at `~/.cache/spotify-player/user_client_token.json`) for
-queue-safe appends — because `spotify_player`'s own play commands only *replace*
-context. `playerctl -p spotify ...` also works for basic MPRIS transport.
+Under the hood (rewritten 2026-06): **everything** goes through the Spotify Web
+API using the OAuth token `spotify_player` caches at
+`~/.cache/spotify-player/user_client_token.json` (auto-refreshed; carries every
+scope incl. `user-modify-playback-state` + `user-read-playback-state`). The
+helper deliberately does **not** depend on the `spotify_player` *daemon* being
+connected as a device — that daemon is fragile and often has no cached
+credentials (`Error: try to connect to a client`), which used to break `now` /
+`queue` / `search`. The Web API works whenever *any* device is active (phone,
+desktop app, the other laptop). `playerctl -p spotify ...` (MPRIS) is used only
+as a local fallback for `now`. If reads suddenly fail, run `token-check`; if the
+token cache is gone, launch `spotify_player` once to re-auth and repopulate it.
 
 ## Cloud / infra
 
