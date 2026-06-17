@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#eaf0f4"/>
+  <!-- Rime surface -->
+  <rect x="0" y="330" width="400" height="70" fill="#d4e2ea"/>
+  <line x1="0" y1="330" x2="400" y2="330" stroke="#8aa0ac" stroke-width="1"/>
+
+  <!-- spicule wake (discarded legs trailing behind, left) -->
+  <g stroke="#5a6a72" stroke-width="1.6" stroke-linecap="round">
+    <line x1="160" y1="332" x2="156" y2="318"/>
+    <line x1="130" y1="332" x2="124" y2="316"/>
+    <line x1="100" y1="333" x2="92" y2="314"/>
+    <line x1="70" y1="333" x2="60" y2="315"/>
+    <line x1="40" y1="334" x2="30" y2="318"/>
+  </g>
+
+  <!-- focused light beam through prism, converging on pit -->
+  <path d="M 170 230 L 230 230 L 200 332 Z" fill="#f2c14e" opacity="0.40"/>
+  <line x1="120" y1="120" x2="200" y2="170" stroke="#f2c14e" stroke-width="1.4" opacity="0.55" stroke-dasharray="3 4"/>
+
+  <!-- melted pit -->
+  <ellipse cx="200" cy="333" rx="10" ry="3" fill="#2a3a42"/>
+
+  <!-- hexagonal prism body (front face, pointy-top) -->
+  <polygon points="200,120 245,150 245,210 200,240 155,210 155,150"
+           fill="#c5dde8" stroke="#5d7d8c" stroke-width="1.6"/>
+  <!-- depth edges giving prism a 3D column look -->
+  <polyline points="200,120 220,108 265,138 265,198 245,210"
+            fill="#dceaef" stroke="#5d7d8c" stroke-width="1.2"/>
+  <line x1="245" y1="150" x2="265" y2="138" stroke="#5d7d8c" stroke-width="1.2"/>
+  <line x1="265" y1="198" x2="245" y2="210" stroke="#5d7d8c" stroke-width="1.2"/>
+  <!-- birefringent inner facet line -->
+  <line x1="200" y1="120" x2="200" y2="240" stroke="#7a98a6" stroke-width="0.8" opacity="0.6"/>
+
+  <!-- three telescoping ice-spar legs, grown at tip, shed at foot -->
+  <g stroke="#6a8a99" stroke-width="2.2" stroke-linecap="round" fill="none">
+    <line x1="172" y1="228" x2="162" y2="330"/>
+    <line x1="200" y1="240" x2="200" y2="330"/>
+    <line x1="228" y1="228" x2="238" y2="330"/>
+  </g>
+  <!-- growth-tip glints -->
+  <g fill="#3a4a52">
+    <circle cx="162" cy="330" r="1.4"/>
+    <circle cx="200" cy="330" r="1.4"/>
+    <circle cx="238" cy="330" r="1.4"/>
+  </g>
+
+  <!-- basal feeding slit -->
+  <line x1="188" y1="236" x2="212" y2="236" stroke="#2a3438" stroke-width="1.4"/>
+
+  <!-- labels -->
+  <g font-family="Georgia, serif" fill="#2a3438">
+    <text x="14" y="32" font-size="15" font-style="italic">Hexalira vitrea</text>
+    <text x="14" y="48" font-size="10" fill="#5a6a72">solar-melting lithotroph · Rime</text>
+    <text x="14" y="392" font-size="9" fill="#5a6a72">prism of epitaxial ice on three grown-and-shed spars; wake of discarded legs at left</text>
+  </g>
+</svg>

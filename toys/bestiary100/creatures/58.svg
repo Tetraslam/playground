@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#1c1812"/>
+  <!-- fossil-strewn badlands ground -->
+  <g fill="#3a2f22" opacity="0.9">
+    <path d="M 0 300 L 60 285 L 110 295 L 175 280 L 240 300 L 310 282 L 400 298 L 400 400 L 0 400 Z"/>
+  </g>
+  <g fill="#4a3c2a" opacity="0.6">
+    <ellipse cx="70" cy="330" rx="26" ry="6"/>
+    <ellipse cx="200" cy="345" rx="40" ry="7"/>
+    <ellipse cx="330" cy="325" rx="22" ry="5"/>
+  </g>
+  <!-- body: layered palimpsest armor, segmented, low and broad -->
+  <g>
+    <!-- base soft body -->
+    <ellipse cx="205" cy="260" rx="120" ry="42" fill="#8a5a22" opacity="0.9"/>
+    <!-- fossil-templated plates, stratified -->
+    <path d="M 95 256 Q 150 214 210 212 Q 270 214 318 254 Q 300 270 240 272 Q 170 274 95 256 Z"
+          fill="#d9c79a" stroke="#9c8856" stroke-width="1"/>
+    <path d="M 110 250 Q 158 222 208 220 Q 258 222 304 250 Q 248 258 206 258 Q 158 258 110 250 Z"
+          fill="#b8a47a" stroke="#7a6644" stroke-width="0.8"/>
+    <path d="M 128 244 Q 168 228 206 228 Q 244 228 286 244 Q 244 250 206 250 Q 168 250 128 244 Z"
+          fill="#d9c79a" stroke="#9c8856" stroke-width="0.7"/>
+    <!-- epitaxial crystal-striae on topmost plate -->
+    <g stroke="#7a6644" stroke-width="0.6" opacity="0.7" fill="none">
+      <path d="M 140 238 Q 175 230 205 231"/>
+      <path d="M 145 242 Q 178 234 207 235"/>
+      <path d="M 150 246 Q 181 238 209 239"/>
+      <path d="M 206 231 Q 233 231 268 240"/>
+      <path d="M 207 235 Q 235 235 270 244"/>
+    </g>
+  </g>
+  <!-- six legs, stiff, gait dictated by armor joints -->
+  <g stroke="#6b4a1f" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M 110 280 L 96 320"/>
+    <path d="M 150 292 L 138 330"/>
+    <path d="M 195 296 L 188 336"/>
+    <path d="M 235 296 L 244 336"/>
+    <path d="M 275 292 L 290 330"/>
+    <path d="M 312 280 L 330 320"/>
+  </g>
+  <!-- acid mandibles at the head (left) -->
+  <g stroke="#c9a23a" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M 96 258 L 70 252"/>
+    <path d="M 96 266 L 70 272"/>
+  </g>
+  <circle cx="66" cy="262" r="2.4" fill="#e0b840"/>
+  <!-- label -->
+  <text x="200" y="392" text-anchor="middle" font-family="monospace" font-size="11" fill="#9a8a6a">Osteocast errans · Bone Fields</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4ede0"/>
+  <!-- sand line -->
+  <rect x="0" y="270" width="400" height="130" fill="#d9c79a"/>
+  <!-- sunlight rays converging through column to focal point -->
+  <g stroke="#e8b84a" stroke-width="1" opacity="0.7">
+    <line x1="120" y1="40" x2="200" y2="180"/>
+    <line x1="160" y1="30" x2="200" y2="180"/>
+    <line x1="240" y1="30" x2="200" y2="180"/>
+    <line x1="280" y1="40" x2="200" y2="180"/>
+  </g>
+  <!-- focal point glow on sand -->
+  <circle cx="200" cy="290" r="6" fill="#e8b84a" opacity="0.9"/>
+  <circle cx="200" cy="290" r="14" fill="#e8b84a" opacity="0.25"/>
+  <!-- lens column: stacked meniscus lenses -->
+  <g fill="#bcd6e0" fill-opacity="0.55" stroke="#3a5566" stroke-width="1.2">
+    <ellipse cx="200" cy="80"  rx="22" ry="9"/>
+    <ellipse cx="200" cy="105" rx="26" ry="10"/>
+    <ellipse cx="200" cy="132" rx="30" ry="11"/>
+    <ellipse cx="200" cy="161" rx="34" ry="12"/>
+    <ellipse cx="200" cy="192" rx="38" ry="13"/>
+    <ellipse cx="200" cy="225" rx="42" ry="14"/>
+    <ellipse cx="200" cy="260" rx="46" ry="15"/>
+  </g>
+  <!-- buried basal bulb (retina-gut), half below sand -->
+  <g fill="#8a6a3e" stroke="#3a2a14" stroke-width="1.2">
+    <path d="M 154 268 Q 200 360 246 268 Q 246 260 200 260 Q 154 260 154 268 Z" fill-opacity="0.85"/>
+  </g>
+  <!-- inner retinal lining hint -->
+  <path d="M 168 272 Q 200 330 232 272" fill="none" stroke="#d9c79a" stroke-width="1" opacity="0.6"/>
+  <!-- charred prey dropping into aperture -->
+  <circle cx="200" cy="292" r="2.2" fill="#2a1a0e"/>
+  <circle cx="204" cy="297" r="1.4" fill="#2a1a0e"/>
+  <!-- labels, field-guide -->
+  <g font-family="ui-serif, Georgia, serif" font-size="10" fill="#3a2a14">
+    <text x="250" y="120">lens column</text>
+    <text x="250" y="133" font-style="italic" fill="#6a5a3e">silica, 7–15 wafers</text>
+    <text x="250" y="280">retina-gut bulb</text>
+    <text x="250" y="293" font-style="italic" fill="#6a5a3e">buried, photosensitive</text>
+    <text x="40" y="293">focal kill-point</text>
+    <text x="40" y="306" font-style="italic" fill="#6a5a3e">solar incineration</text>
+    <text x="120" y="380" font-style="italic">Cauterivitra heliocausta</text>
+    <text x="120" y="392" font-size="8" fill="#6a5a3e">Glass Wastes — medium, carnivore</text>
+  </g>
+</svg>

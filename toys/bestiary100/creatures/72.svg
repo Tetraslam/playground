@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#1a1218"/>
+  <!-- fissure walls -->
+  <polygon points="0,400 0,260 70,250 70,400" fill="#2a1a14" stroke="#4a2a1a" stroke-width="1"/>
+  <polygon points="400,400 400,260 330,250 330,400" fill="#2a1a14" stroke="#4a2a1a" stroke-width="1"/>
+  <!-- hot brine plume (lower) -->
+  <rect x="70" y="250" width="260" height="150" fill="#3a1015" opacity="0.7"/>
+  <ellipse cx="200" cy="250" rx="130" ry="10" fill="#6a1a12" opacity="0.6"/>
+  <!-- thermal boundary line -->
+  <line x1="70" y1="250" x2="330" y2="250" stroke="#c45a2a" stroke-width="0.8" stroke-dasharray="4 4" opacity="0.7"/>
+  <!-- the stack: four mineral discs spanning the gradient -->
+  <ellipse cx="200" cy="300" rx="78" ry="14" fill="#3a2228" stroke="#8a4a2a" stroke-width="1.5"/>
+  <ellipse cx="200" cy="275" rx="74" ry="13" fill="#2a2230" stroke="#8a4a3a" stroke-width="1.5"/>
+  <ellipse cx="200" cy="250" rx="70" ry="12" fill="#243040" stroke="#5a6a8a" stroke-width="1.5"/>
+  <ellipse cx="200" cy="226" rx="66" ry="11" fill="#1c2c3c" stroke="#4a6a8a" stroke-width="1.5"/>
+  <!-- pyrite nanowire lattice (vertical, between discs) -->
+  <g stroke="#c8a83a" stroke-width="0.8" opacity="0.85">
+    <line x1="150" y1="215" x2="150" y2="310"/>
+    <line x1="170" y1="215" x2="170" y2="310"/>
+    <line x1="190" y1="215" x2="190" y2="310"/>
+    <line x1="210" y1="215" x2="210" y2="310"/>
+    <line x1="230" y1="215" x2="230" y2="310"/>
+    <line x1="250" y1="215" x2="250" y2="310"/>
+  </g>
+  <g fill="#e0c050">
+    <circle cx="150" cy="226" r="1.6"/><circle cx="170" cy="226" r="1.6"/>
+    <circle cx="190" cy="226" r="1.6"/><circle cx="210" cy="226" r="1.6"/>
+    <circle cx="230" cy="226" r="1.6"/><circle cx="250" cy="226" r="1.6"/>
+  </g>
+  <!-- crown: electrolysis gas bladders -->
+  <g fill="#6a8aaa" stroke="#a8c8d8" stroke-width="0.8" opacity="0.75">
+    <circle cx="172" cy="210" r="7"/>
+    <circle cx="200" cy="205" r="9"/>
+    <circle cx="228" cy="210" r="7"/>
+  </g>
+  <!-- corona-stun field -->
+  <circle cx="200" cy="258" r="120" fill="none" stroke="#7aa0d8" stroke-width="0.6" stroke-dasharray="2 5" opacity="0.4"/>
+  <circle cx="200" cy="258" r="95" fill="none" stroke="#7aa0d8" stroke-width="0.5" stroke-dasharray="2 6" opacity="0.3"/>
+  <!-- stunned prey sinking onto stack -->
+  <g stroke="#a8907a" stroke-width="1" fill="none" opacity="0.8">
+    <path d="M 120 180 q 8 -6 16 0"/>
+    <path d="M 285 195 q 6 5 0 10"/>
+  </g>
+  <!-- holdfast roots into fissure -->
+  <g stroke="#4a2a1a" stroke-width="1.4" fill="none">
+    <path d="M 200 314 q -10 20 -30 30"/>
+    <path d="M 200 314 q 10 20 30 30"/>
+    <path d="M 200 314 q 0 25 -2 40"/>
+  </g>
+  <!-- label -->
+  <text x="200" y="378" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-style="italic" fill="#d8c8b0">Anisotherma pileata</text>
+  <text x="200" y="394" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#8a7a64">the Vent · sessile thermoelectric stack, 60 cm</text>
+</svg>

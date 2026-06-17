@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#1a1410"/>
+  <!-- fissure glow at base -->
+  <ellipse cx="200" cy="360" rx="120" ry="14" fill="#7a2e1a" opacity="0.6"/>
+  <ellipse cx="200" cy="360" rx="70" ry="8" fill="#c4502a" opacity="0.5"/>
+  <!-- stave casing: tapering blackened chimney -->
+  <path d="M 188 358 L 180 120 L 200 60 L 220 120 L 212 358 Z" fill="#2b2620" stroke="#0c0a08" stroke-width="1"/>
+  <!-- banded thermopile junctions -->
+  <g stroke="#3a3530" stroke-width="1" opacity="0.9">
+    <line x1="183" y1="340" x2="217" y2="340"/>
+    <line x1="184" y1="310" x2="216" y2="310"/>
+    <line x1="185" y1="280" x2="215" y2="280"/>
+    <line x1="186" y1="250" x2="214" y2="250"/>
+    <line x1="187" y1="220" x2="213" y2="220"/>
+    <line x1="188" y1="190" x2="212" y2="190"/>
+    <line x1="189" y1="160" x2="211" y2="160"/>
+    <line x1="190" y1="130" x2="210" y2="130"/>
+  </g>
+  <!-- copper crown frill -->
+  <g fill="#b87333">
+    <path d="M 200 60 L 168 92 L 178 100 L 158 110 L 172 118 L 200 100 Z"/>
+    <path d="M 200 60 L 232 92 L 222 100 L 242 110 L 228 118 L 200 100 Z"/>
+    <path d="M 200 60 L 200 36 L 206 48 L 214 40 L 210 56 Z"/>
+  </g>
+  <!-- oxygen vent plume -->
+  <g fill="none" stroke="#7a8a99" stroke-width="1.2" opacity="0.55">
+    <path d="M 200 40 q -8 -10 0 -22"/>
+    <path d="M 196 44 q -14 -8 -10 -24"/>
+    <path d="M 204 44 q 14 -8 10 -24"/>
+  </g>
+  <!-- basal hydrogen jet to the right -->
+  <g fill="#3a4a55" opacity="0.45">
+    <ellipse cx="240" cy="350" rx="34" ry="4"/>
+    <ellipse cx="262" cy="348" rx="20" ry="3"/>
+  </g>
+  <!-- label -->
+  <text x="200" y="388" text-anchor="middle" font-family="serif" font-size="12" fill="#9a8a7a" font-style="italic">Seebeck stave</text>
+</svg>

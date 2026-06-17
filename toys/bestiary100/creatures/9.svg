@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#1a1410"/>
+  <!-- fissure glow at base -->
+  <rect x="40" y="340" width="320" height="30" fill="#c8501c" opacity="0.5"/>
+  <rect x="80" y="345" width="240" height="20" fill="#e8a020" opacity="0.6"/>
+  <!-- lattice of tuned tubes, varying bore -->
+  <g stroke="#d8c8a8" fill="none" stroke-width="2">
+    <rect x="120" y="120" width="18" height="220"/>
+    <rect x="150" y="80"  width="26" height="260"/>
+    <rect x="186" y="150" width="10" height="190"/>
+    <rect x="204" y="60"  width="34" height="280"/>
+    <rect x="246" y="100" width="14" height="240"/>
+    <rect x="268" y="130" width="22" height="210"/>
+    <rect x="298" y="170" width="9"  height="170"/>
+  </g>
+  <!-- syncytial lining: thin film inside each tube -->
+  <g fill="#5a8a7a" opacity="0.7">
+    <rect x="123" y="125" width="12" height="210"/>
+    <rect x="154" y="86"  width="18" height="252"/>
+    <rect x="188" y="155" width="6"  height="183"/>
+    <rect x="208" y="66"  width="26" height="272"/>
+    <rect x="249" y="105" width="8"  height="233"/>
+    <rect x="271" y="135" width="16" height="203"/>
+    <rect x="300" y="175" width="5"  height="163"/>
+  </g>
+  <!-- sound waves emanating (the knell) -->
+  <g stroke="#d8c8a8" fill="none" opacity="0.35" stroke-width="1">
+    <path d="M 60 200 Q 80 180 60 160"/>
+    <path d="M 50 200 Q 80 150 50 100"/>
+    <path d="M 340 200 Q 320 180 340 160"/>
+    <path d="M 350 200 Q 320 150 350 100"/>
+  </g>
+  <!-- motes drifting updraft -->
+  <g fill="#e8a020" opacity="0.8">
+    <circle cx="170" cy="300" r="1.5"/>
+    <circle cx="220" cy="280" r="1"/>
+    <circle cx="260" cy="310" r="1.5"/>
+    <circle cx="195" cy="320" r="1"/>
+    <circle cx="240" cy="295" r="1"/>
+  </g>
+</svg>

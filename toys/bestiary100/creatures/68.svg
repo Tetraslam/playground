@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4f7fb"/>
+  <!-- host ice crystal, hexagonal prism seen along c-axis -->
+  <polygon points="200,40 339,120 339,280 200,360 61,280 61,120"
+           fill="#dce9f4" stroke="#9bb8d6" stroke-width="2"/>
+  <!-- basal cleavage lines -->
+  <line x1="61" y1="120" x2="339" y2="280" stroke="#9bb8d6" stroke-width="0.5" opacity="0.5"/>
+  <line x1="339" y1="120" x2="61" y2="280" stroke="#9bb8d6" stroke-width="0.5" opacity="0.5"/>
+  <!-- birefringent strain fringes from inclusion -->
+  <path d="M 200 200 q -60 -40 -120 -10" fill="none" stroke="#b8c8e0" stroke-width="1" stroke-dasharray="3 4"/>
+  <path d="M 200 200 q 60 40 120 10" fill="none" stroke="#b8c8e0" stroke-width="1" stroke-dasharray="3 4"/>
+  <path d="M 200 200 q -40 60 -10 120" fill="none" stroke="#b8c8e0" stroke-width="1" stroke-dasharray="3 4"/>
+  <!-- the Regelator: branching gel network, indigo -->
+  <g stroke="#2a2e5e" stroke-width="2.2" fill="none" stroke-linecap="round">
+    <path d="M 200 200 L 150 150 L 110 140"/>
+    <path d="M 150 150 L 130 110"/>
+    <path d="M 200 200 L 250 165 L 295 158"/>
+    <path d="M 250 165 L 270 120"/>
+    <path d="M 200 200 L 175 250 L 140 280"/>
+    <path d="M 175 250 L 200 295"/>
+    <path d="M 200 200 L 235 255 L 280 280"/>
+    <path d="M 235 255 L 225 300"/>
+  </g>
+  <!-- pigment nodes (harvest cells) -->
+  <g fill="#1a1d3f">
+    <circle cx="200" cy="200" r="3.5"/>
+    <circle cx="150" cy="150" r="2.5"/>
+    <circle cx="110" cy="140" r="2"/>
+    <circle cx="130" cy="110" r="2"/>
+    <circle cx="250" cy="165" r="2.5"/>
+    <circle cx="295" cy="158" r="2"/>
+    <circle cx="270" cy="120" r="2"/>
+    <circle cx="175" cy="250" r="2.5"/>
+    <circle cx="140" cy="280" r="2"/>
+    <circle cx="200" cy="295" r="2"/>
+    <circle cx="235" cy="255" r="2.5"/>
+    <circle cx="280" cy="280" r="2"/>
+    <circle cx="225" cy="300" r="2"/>
+  </g>
+  <!-- healed probe channel toward a neighbor inclusion (mating) -->
+  <path d="M 110 140 Q 70 120 48 132" fill="none" stroke="#2a2e5e" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+  <circle cx="48" cy="132" r="1.6" fill="#1a1d3f" opacity="0.6"/>
+  <!-- scale -->
+  <g font-family="serif" font-size="11" fill="#3a4a66">
+    <line x1="60" y1="380" x2="120" y2="380" stroke="#3a4a66" stroke-width="1"/>
+    <text x="63" y="375">5 cm</text>
+  </g>
+  <text x="370" y="392" font-family="serif" font-size="10" fill="#3a4a66" text-anchor="end">Regelator — Rime inclusion</text>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f4f1ea"/>
+  <!-- thermal glow core -->
+  <path d="M170 360 L170 150 Q200 120 230 150 L230 360 Z" fill="#c8501c" opacity="0.85"/>
+  <!-- outer mineral chimney wall -->
+  <path d="M150 360 L160 150 Q165 130 175 122 L185 110 Q200 95 215 110 L225 122 Q235 130 240 150 L250 360 Z"
+        fill="none" stroke="#2b2b2b" stroke-width="3"/>
+  <!-- hooded mouth flare -->
+  <path d="M150 150 Q200 100 250 150" fill="none" stroke="#2b2b2b" stroke-width="3"/>
+  <!-- inward spines -->
+  <line x1="160" y1="140" x2="185" y2="120" stroke="#2b2b2b" stroke-width="2"/>
+  <line x1="178" y1="128" x2="195" y2="112" stroke="#2b2b2b" stroke-width="2"/>
+  <line x1="200" y1="122" x2="200" y2="104" stroke="#2b2b2b" stroke-width="2"/>
+  <line x1="222" y1="128" x2="205" y2="112" stroke="#2b2b2b" stroke-width="2"/>
+  <line x1="240" y1="140" x2="215" y2="120" stroke="#2b2b2b" stroke-width="2"/>
+  <!-- interior glow -->
+  <path d="M178 360 L178 160 Q200 138 222 160 L222 360 Z" fill="#e8a23a" opacity="0.6"/>
+  <!-- basal ring / foot -->
+  <ellipse cx="200" cy="362" rx="55" ry="9" fill="none" stroke="#2b2b2b" stroke-width="3"/>
+  <ellipse cx="200" cy="362" rx="48" ry="5" fill="#2b2b2b" opacity="0.35"/>
+  <!-- flank pore dots -->
+  <circle cx="168" cy="250" r="2.5" fill="#2b2b2b"/>
+  <circle cx="168" cy="290" r="2.5" fill="#2b2b2b"/>
+  <circle cx="232" cy="250" r="2.5" fill="#2b2b2b"/>
+  <circle cx="232" cy="290" r="2.5" fill="#2b2b2b"/>
+  <!-- heat shimmer lines rising -->
+  <path d="M195 100 Q190 80 198 65" fill="none" stroke="#c8501c" stroke-width="1.5" opacity="0.7"/>
+  <path d="M205 100 Q210 82 202 68" fill="none" stroke="#c8501c" stroke-width="1.5" opacity="0.7"/>
+  <!-- scale bar -->
+  <line x1="300" y1="370" x2="350" y2="370" stroke="#2b2b2b" stroke-width="1.5"/>
+  <text x="325" y="385" font-family="serif" font-size="11" fill="#2b2b2b" text-anchor="middle">1 m</text>
+  <text x="30" y="30" font-family="serif" font-style="italic" font-size="14" fill="#2b2b2b">Pyrostega simulacra</text>
+</svg>

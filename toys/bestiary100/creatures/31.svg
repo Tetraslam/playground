@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4efe6"/>
+
+  <!-- ground line -->
+  <line x1="20" y1="330" x2="380" y2="330" stroke="#3a3530" stroke-width="1"/>
+
+  <!-- legs (six, stilted) -->
+  <g stroke="#2c2722" stroke-width="3" stroke-linecap="round" fill="none">
+    <line x1="150" y1="300" x2="135" y2="330"/>
+    <line x1="178" y1="300" x2="170" y2="330"/>
+    <line x1="206" y1="300" x2="214" y2="330"/>
+    <line x1="234" y1="300" x2="250" y2="330"/>
+    <line x1="262" y1="300" x2="280" y2="330"/>
+    <line x1="290" y1="300" x2="298" y2="330"/>
+  </g>
+
+  <!-- body: low elongated dome -->
+  <path d="M 130 300 Q 140 250 210 248 Q 290 250 310 300 Z" fill="#2c2722" stroke="#1a1612" stroke-width="1.5"/>
+
+  <!-- head + grinding plate -->
+  <path d="M 130 300 Q 112 296 104 286 L 96 290 L 100 300 Z" fill="#2c2722" stroke="#1a1612" stroke-width="1.5"/>
+  <line x1="100" y1="290" x2="96" y2="293" stroke="#8a4a2a" stroke-width="2"/>
+
+  <!-- mosaic carapace: fossil fragments grafted onto the back -->
+  <g stroke="#1a1612" stroke-width="1">
+    <!-- jaw fragment -->
+    <path d="M 150 268 Q 162 254 178 260 L 172 272 Q 158 270 150 268 Z" fill="#e8dcc4"/>
+    <!-- vertebra disc -->
+    <circle cx="200" cy="262" r="9" fill="#e8dcc4"/>
+    <circle cx="200" cy="262" r="3.5" fill="#c9b994"/>
+    <!-- spiral shell fragment -->
+    <path d="M 222 270 q 8 -14 18 -8 q 4 8 -4 12 q -6 2 -10 -2 Z" fill="#e8dcc4"/>
+    <!-- tooth row -->
+    <g fill="#e8dcc4">
+      <polygon points="248,272 252,260 256,272"/>
+      <polygon points="256,272 260,258 264,272"/>
+      <polygon points="264,272 268,262 272,272"/>
+      <polygon points="272,272 276,260 280,272"/>
+    </g>
+    <!-- rib arc -->
+    <path d="M 150 290 Q 165 280 184 290" fill="none" stroke="#e8dcc4" stroke-width="3"/>
+    <path d="M 286 290 Q 296 282 304 290" fill="none" stroke="#e8dcc4" stroke-width="3"/>
+  </g>
+
+  <!-- one rust accent: a fresh wet graft -->
+  <circle cx="238" cy="284" r="2.5" fill="#8a4a2a"/>
+
+  <!-- scale bar -->
+  <g stroke="#3a3530" stroke-width="1" fill="#3a3530" font-family="serif" font-size="9">
+    <line x1="320" y1="355" x2="372" y2="355"/>
+    <line x1="320" y1="351" x2="320" y2="359"/>
+    <line x1="372" y1="351" x2="372" y2="359"/>
+    <text x="340" y="370" text-anchor="middle">~1 m</text>
+  </g>
+
+  <!-- caption -->
+  <text x="200" y="392" text-anchor="middle" font-family="serif" font-size="11" font-style="italic" fill="#3a3530">Colluvan graftback — dorsal mosaic, lateral aspect</text>
+</svg>

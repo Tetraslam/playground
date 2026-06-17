@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#0a1018"/>
+  <!-- ancient pack-ice floor -->
+  <rect x="0" y="330" width="400" height="70" fill="#141d28"/>
+  <line x1="0" y1="330" x2="400" y2="330" stroke="#2a3a4a" stroke-width="1"/>
+  <!-- protein plug anchor -->
+  <ellipse cx="200" cy="332" rx="9" ry="4" fill="#3a4a5a"/>
+  <!-- main dendritic crystal, glass-clear blue -->
+  <g stroke="#9fc8e8" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.9">
+    <path d="M200 330 L200 150"/>
+    <path d="M200 250 L150 210 L120 200"/>
+    <path d="M200 250 L250 210 L280 200"/>
+    <path d="M200 200 L165 165 L145 155"/>
+    <path d="M200 200 L235 165 L255 155"/>
+    <path d="M200 150 L175 120 L160 105"/>
+    <path d="M200 150 L225 120 L240 105"/>
+    <path d="M200 120 L200 80"/>
+  </g>
+  <!-- secondary dendrites, thinner -->
+  <g stroke="#7fa8c8" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.8">
+    <path d="M150 210 L130 215 L115 220"/>
+    <path d="M250 210 L270 215 L285 220"/>
+    <path d="M165 165 L150 150"/>
+    <path d="M235 165 L250 150"/>
+    <path d="M175 120 L165 100"/>
+    <path d="M225 120 L235 100"/>
+    <path d="M120 200 L105 190"/>
+    <path d="M280 200 L295 190"/>
+    <path d="M200 80 L190 60"/>
+    <path d="M200 80 L210 60"/>
+  </g>
+  <!-- faint protein lattice threading (teal accent) -->
+  <g stroke="#3a8a8a" stroke-width="0.6" fill="none" opacity="0.7" stroke-dasharray="2 3">
+    <path d="M200 330 L200 80"/>
+    <path d="M200 250 L150 210"/>
+    <path d="M200 250 L250 210"/>
+    <path d="M200 150 L175 120"/>
+    <path d="M200 150 L225 120"/>
+  </g>
+  <!-- decoy shard, detaching lower-right -->
+  <g stroke="#9fc8e8" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.55">
+    <path d="M280 200 L305 215 L320 210"/>
+    <path d="M295 190 L315 185"/>
+  </g>
+  <circle cx="320" cy="210" r="2" fill="#3a8a8a" opacity="0.8"/>
+  <!-- field-guide label -->
+  <text x="200" y="38" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="16" fill="#d8e0e8">Glaciependula rimealis</text>
+  <text x="200" y="56" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7a8a98">rime floor · protein-doped ice · ×0.4</text>
+</svg>

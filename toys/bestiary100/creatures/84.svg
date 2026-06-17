@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4ede0"/>
+  <!-- ground line -->
+  <line x1="20" y1="330" x2="380" y2="330" stroke="#8a7a5c" stroke-width="1"/>
+  <!-- fossil bone (rib-like curve) hosting the osteothec -->
+  <path d="M 90 330 Q 110 180 200 150 Q 300 130 330 200" fill="none" stroke="#b8a987" stroke-width="26" stroke-linecap="round"/>
+  <!-- hollowed cavity showing the worm inside -->
+  <ellipse cx="215" cy="160" rx="22" ry="12" fill="#2b2620" transform="rotate(-18 215 160)"/>
+  <!-- vermiform body coil -->
+  <path d="M 205 152 Q 222 148 228 160 Q 232 172 218 176 Q 206 178 202 168" fill="none" stroke="#4a3f33" stroke-width="5" stroke-linecap="round"/>
+  <!-- setae bristles emerging from foramina along the bone -->
+  <g stroke="#6b5d45" stroke-width="1.2" stroke-linecap="round">
+    <line x1="120" y1="285" x2="108" y2="305"/>
+    <line x1="128" y1="252" x2="112" y2="268"/>
+    <line x1="140" y1="222" x2="122" y2="232"/>
+    <line x1="156" y1="196" x2="136" y2="200"/>
+    <line x1="178" y1="174" x2="158" y2="172"/>
+    <line x1="248" y1="150" x2="262" y2="138"/>
+    <line x1="276" y1="148" x2="292" y2="132"/>
+    <line x1="302" y1="162" x2="320" y2="150"/>
+    <line x1="318" y1="184" x2="338" y2="176"/>
+  </g>
+  <!-- boring hole, recently exited -->
+  <circle cx="135" cy="270" r="6" fill="#2b2620"/>
+  <!-- abandoned old fossil fragment on ground -->
+  <path d="M 250 330 Q 270 318 300 322 Q 315 326 318 332" fill="none" stroke="#c9bc97" stroke-width="8" stroke-linecap="round"/>
+  <!-- scale bar -->
+  <line x1="40" y1="370" x2="120" y2="370" stroke="#2b2620" stroke-width="1.5"/>
+  <text x="80" y="385" font-family="serif" font-size="10" fill="#2b2620" text-anchor="middle">10 cm</text>
+  <!-- label -->
+  <text x="200" y="40" font-family="serif" font-size="14" fill="#2b2620" text-anchor="middle" font-style="italic">Osteothec</text>
+  <text x="200" y="56" font-family="serif" font-size="10" fill="#6b5d45" text-anchor="middle">Bone Fields — lithotroph</text>
+</svg>

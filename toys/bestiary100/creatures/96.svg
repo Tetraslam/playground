@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#121a26"/>
+  <!-- abyssal water tone -->
+  <rect x="0" y="0" width="400" height="400" fill="#0e1620"/>
+  <!-- hot fissure glow at base -->
+  <ellipse cx="200" cy="372" rx="170" ry="34" fill="#d96b2c" opacity="0.55"/>
+  <ellipse cx="200" cy="372" rx="90" ry="16" fill="#f0a14a" opacity="0.85"/>
+  <!-- rising vent brine shimmer -->
+  <g stroke="#d96b2c" stroke-width="1" opacity="0.4">
+    <path d="M 170 360 Q 174 300 168 240" fill="none"/>
+    <path d="M 200 362 Q 206 290 198 220" fill="none"/>
+    <path d="M 230 360 Q 226 300 232 240" fill="none"/>
+  </g>
+  <!-- fissure crack in rock -->
+  <path d="M 60 374 L 340 374" stroke="#2a1a12" stroke-width="3"/>
+  <path d="M 60 374 L 200 366 L 340 374" stroke="#1a0f08" stroke-width="1.5" fill="none"/>
+  <!-- thermal gradient line (dashed, the thermocouple boundary) -->
+  <line x1="40" y1="250" x2="360" y2="250" stroke="#6fe0c4" stroke-width="0.8" stroke-dasharray="4 5" opacity="0.5"/>
+  <text x="350" y="246" text-anchor="end" font-family="serif" font-size="9" fill="#6fe0c4" opacity="0.7">thermal step</text>
+
+  <!-- STEM: stacked pyrite discs rooted in the hot zone, crossing the gradient -->
+  <g fill="#b8902e" stroke="#5c4416" stroke-width="0.8">
+    <ellipse cx="200" cy="358" rx="26" ry="6"/>
+    <ellipse cx="200" cy="344" rx="22" ry="5"/>
+    <ellipse cx="200" cy="330" rx="19" ry="5"/>
+    <ellipse cx="200" cy="316" rx="16" ry="4.5"/>
+    <ellipse cx="200" cy="302" rx="14" ry="4"/>
+    <ellipse cx="200" cy="288" rx="12" ry="4"/>
+    <ellipse cx="200" cy="274" rx="11" ry="3.5"/>
+  </g>
+  <!-- bimetallic junction ticks -->
+  <g stroke="#3a2a0e" stroke-width="0.6">
+    <line x1="188" y1="351" x2="212" y2="351"/>
+    <line x1="190" y1="337" x2="210" y2="337"/>
+    <line x1="192" y1="323" x2="208" y2="323"/>
+    <line x1="194" y1="309" x2="206" y2="309"/>
+    <line x1="195" y1="295" x2="205" y2="295"/>
+    <line x1="196" y1="281" x2="204" y2="281"/>
+  </g>
+
+  <!-- CHALICE CUP: greigite parabolic bowl, rim just above the gradient line -->
+  <path d="M 150 232 Q 200 168 250 232 Q 244 258 200 258 Q 156 258 150 232 Z"
+        fill="#2a2620" stroke="#0d0b08" stroke-width="1.2"/>
+  <!-- inner cup lining (electrogenic biofilm) -->
+  <path d="M 158 230 Q 200 178 242 230 Q 236 250 200 250 Q 164 250 158 230 Z"
+        fill="#1c2a2c" opacity="0.8"/>
+  <!-- rim halo of bioluminescent bacteria -->
+  <ellipse cx="200" cy="232" rx="52" ry="8" fill="none" stroke="#6fe0c4" stroke-width="2.2" opacity="0.9"/>
+  <ellipse cx="200" cy="232" rx="52" ry="8" fill="none" stroke="#a8f0dc" stroke-width="0.8" opacity="0.6"/>
+  <!-- rim glow nodes -->
+  <g fill="#a8f0dc">
+    <circle cx="150" cy="232" r="2.4"/>
+    <circle cx="175" cy="216" r="2.2"/>
+    <circle cx="200" cy="210" r="2.6"/>
+    <circle cx="225" cy="216" r="2.2"/>
+    <circle cx="250" cy="232" r="2.4"/>
+  </g>
+  <!-- soft glow halo around rim -->
+  <ellipse cx="200" cy="222" rx="70" ry="34" fill="#6fe0c4" opacity="0.08"/>
+
+  <!-- lured prey: two small vent shrimp drifting toward the light -->
+  <g fill="#3a4a52" stroke="#1a2630" stroke-width="0.6">
+    <path d="M 110 150 q 8 -3 14 0 q 2 6 -4 9 q -8 2 -12 -3 z"/>
+    <path d="M 0 0 l 10 -2 l 2 4 l -10 2 z" transform="translate(108 152)"/>
+  </g>
+  <g fill="#3a4a52" stroke="#1a2630" stroke-width="0.6">
+    <path d="M 300 165 q 7 -2 12 1 q 1 5 -4 7 q -7 1 -10 -3 z"/>
+  </g>
+  <!-- dashed approach lines from shrimp to rim -->
+  <g stroke="#6fe0c4" stroke-width="0.6" stroke-dasharray="2 3" opacity="0.5" fill="none">
+    <path d="M 120 152 Q 150 180 175 212"/>
+    <path d="M 296 168 Q 270 190 240 218"/>
+  </g>
+
+  <!-- scale bar -->
+  <g stroke="#9aa6b0" stroke-width="1" fill="#9aa6b0" font-family="serif" font-size="10">
+    <line x1="312" y1="386" x2="372" y2="386"/>
+    <line x1="312" y1="382" x2="312" y2="390"/>
+    <line x1="372" y1="382" x2="372" y2="390"/>
+    <text x="342" y="378" text-anchor="middle">3 cm</text>
+  </g>
+
+  <!-- caption -->
+  <text x="20" y="30" font-family="serif" font-size="13" fill="#cdd6df">Galvanoscyphus pyritis</text>
+  <text x="20" y="46" font-family="serif" font-size="10" font-style="italic" fill="#6a7785">rooted across a fissure thermal step, lure flared</text>
+</svg>

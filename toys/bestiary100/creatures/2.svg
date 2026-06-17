@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#1a0f0a"/>
+  <!-- vent plume -->
+  <path d="M150 380 Q200 300 250 380 Z" fill="#3a1f10" opacity="0.6"/>
+  <!-- body: leaf-shaped shell -->
+  <ellipse cx="200" cy="210" rx="90" ry="55" fill="#2d2218" stroke="#c45a2a" stroke-width="2"/>
+  <!-- scale rows -->
+  <g stroke="#8a3a1a" stroke-width="1" fill="none">
+    <path d="M120 200 Q200 180 280 200"/>
+    <path d="M125 215 Q200 195 275 215"/>
+    <path d="M130 230 Q200 212 270 230"/>
+  </g>
+  <!-- anode lobe (head) with filaments -->
+  <path d="M110 210 Q90 195 95 185 Q120 190 115 210 Z" fill="#c45a2a"/>
+  <g stroke="#e08a3a" stroke-width="1.2" fill="none">
+    <path d="M95 188 L70 175"/>
+    <path d="M98 195 L72 190"/>
+    <path d="M100 202 L74 205"/>
+    <path d="M103 208 L78 220"/>
+  </g>
+  <!-- legs -->
+  <g stroke="#5a3a20" stroke-width="1.5" fill="none">
+    <path d="M140 255 L130 275"/>
+    <path d="M170 260 L165 282"/>
+    <path d="M200 262 L200 285"/>
+    <path d="M230 260 L235 282"/>
+    <path d="M260 255 L270 275"/>
+  </g>
+  <!-- field-guide label -->
+  <text x="200" y="40" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="16" fill="#e0d4c0">Chemolectrix vermillionis</text>
+  <text x="200" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#9a8a70">vent fissure rim · ×0.4</text>
+</svg>

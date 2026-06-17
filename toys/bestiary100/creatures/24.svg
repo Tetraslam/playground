@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4f1ea"/>
+  <!-- trailing charged filaments -->
+  <g stroke="#5b6b7a" stroke-width="0.8" fill="none" opacity="0.85">
+    <path d="M150 150 Q120 220 95 300"/>
+    <path d="M170 150 Q150 230 135 320"/>
+    <path d="M195 150 Q195 240 195 340"/>
+    <path d="M220 150 Q240 230 255 320"/>
+    <path d="M240 150 Q275 220 300 300"/>
+    <path d="M205 150 Q210 250 215 360"/>
+    <path d="M185 150 Q175 250 165 360"/>
+    <path d="M160 150 Q135 220 110 290"/>
+    <path d="M230 150 Q260 220 285 290"/>
+  </g>
+  <!-- barbs on filaments -->
+  <g fill="#5b6b7a">
+    <circle cx="95" cy="300" r="1.6"/>
+    <circle cx="135" cy="320" r="1.6"/>
+    <circle cx="195" cy="340" r="1.6"/>
+    <circle cx="255" cy="320" r="1.6"/>
+    <circle cx="300" cy="300" r="1.6"/>
+    <circle cx="215" cy="360" r="1.6"/>
+    <circle cx="165" cy="360" r="1.6"/>
+    <circle cx="110" cy="290" r="1.6"/>
+    <circle cx="285" cy="290" r="1.6"/>
+  </g>
+  <!-- aerogel shell -->
+  <ellipse cx="195" cy="130" rx="78" ry="92" fill="#cfe0e6" stroke="#2f3e4a" stroke-width="1.6"/>
+  <!-- equatorial suture -->
+  <path d="M117 130 Q195 150 273 130" fill="none" stroke="#2f3e4a" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <!-- nacre photophore spots -->
+  <g fill="#2f3e4a">
+    <circle cx="170" cy="90" r="2"/>
+    <circle cx="210" cy="80" r="2"/>
+    <circle cx="225" cy="110" r="2"/>
+    <circle cx="160" cy="115" r="2"/>
+    <circle cx="195" cy="105" r="2"/>
+    <circle cx="180" cy="70" r="2"/>
+    <circle cx="240" cy="95" r="2"/>
+    <circle cx="150" cy="95" r="2"/>
+  </g>
+  <!-- gastric pore -->
+  <ellipse cx="195" cy="148" rx="6" ry="3" fill="#2f3e4a"/>
+  <!-- posterior gas nozzles -->
+  <g fill="#2f3e4a">
+    <rect x="186" y="218" width="3" height="8"/>
+    <rect x="201" y="218" width="3" height="8"/>
+  </g>
+  <!-- venting gas puff -->
+  <g stroke="#5b6b7a" stroke-width="0.7" fill="none" opacity="0.6">
+    <path d="M187 230 Q183 250 180 270"/>
+    <path d="M203 230 Q207 250 210 270"/>
+  </g>
+  <!-- scale + label -->
+  <g font-family="Georgia, serif" fill="#2f3e4a">
+    <line x1="60" y1="370" x2="160" y2="370" stroke="#2f3e4a" stroke-width="1"/>
+    <text x="110" y="385" font-size="10" text-anchor="middle">~1 m</text>
+    <text x="200" y="385" font-size="12" font-style="italic" text-anchor="middle">Pneumatothorax argenteus</text>
+  </g>
+</svg>

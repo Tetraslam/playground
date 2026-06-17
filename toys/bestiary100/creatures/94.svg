@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#0f1419"/>
+  <!-- world-tree root anchors, top corners -->
+  <path d="M0,40 C30,38 60,52 78,58 C74,70 50,78 0,72 Z" fill="#5a4634"/>
+  <path d="M400,40 C370,38 340,52 322,58 C326,70 350,78 400,72 Z" fill="#5a4634"/>
+  <path d="M0,40 C20,44 40,46 60,50" fill="none" stroke="#3d2f24" stroke-width="2"/>
+  <path d="M400,40 C380,44 360,46 340,50" fill="none" stroke="#3d2f24" stroke-width="2"/>
+  <!-- the filament: taut line with slight sag, glowing teal -->
+  <path d="M70,56 Q200,150 330,56" fill="none" stroke="#6ee0c8" stroke-width="1.5" opacity="0.9"/>
+  <!-- bioluminescent nodes along the filament -->
+  <circle cx="110" cy="78" r="2.2" fill="#aef3e8"/>
+  <circle cx="150" cy="104" r="1.8" fill="#aef3e8"/>
+  <circle cx="190" cy="128" r="2.5" fill="#aef3e8"/>
+  <circle cx="250" cy="116" r="1.8" fill="#aef3e8"/>
+  <circle cx="290" cy="82" r="2.2" fill="#aef3e8"/>
+  <!-- midspan catching coil -->
+  <g transform="translate(200,135)" stroke="#6ee0c8" stroke-width="1.5" fill="none">
+    <circle r="9"/>
+    <circle r="6" opacity="0.7"/>
+    <circle r="3" opacity="0.9"/>
+  </g>
+  <!-- faint halo around coil -->
+  <circle cx="200" cy="135" r="14" fill="#6ee0c8" opacity="0.12"/>
+  <!-- root-feet (crawling ends) on each anchor -->
+  <circle cx="70" cy="56" r="3.5" fill="#6ee0c8" opacity="0.85"/>
+  <circle cx="330" cy="56" r="3.5" fill="#6ee0c8" opacity="0.85"/>
+  <!-- field-guide label -->
+  <text x="200" y="380" text-anchor="middle" font-family="serif" font-style="italic" font-size="13" fill="#aef3e8" opacity="0.7">Tensicorda vibrans</text>
+  <text x="200" y="395" text-anchor="middle" font-family="serif" font-size="9" fill="#6ee0c8" opacity="0.5">tension-snare, midspan coil</text>
+</svg>

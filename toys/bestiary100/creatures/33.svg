@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f4efe4"/>
+  <!-- annular wing: outer ellipse + inner aperture, seen at a tilt -->
+  <ellipse cx="200" cy="205" rx="150" ry="62" fill="none" stroke="#3a4a55" stroke-width="3"/>
+  <ellipse cx="200" cy="205" rx="62" ry="24" fill="#f4efe4" stroke="#3a4a55" stroke-width="2.5"/>
+  <!-- leading-edge intake slits (top arc) -->
+  <g stroke="#7a6a4a" stroke-width="2">
+    <line x1="120" y1="178" x2="124" y2="170"/>
+    <line x1="140" y1="168" x2="143" y2="159"/>
+    <line x1="162" y1="160" x2="164" y2="151"/>
+    <line x1="186" y1="155" x2="187" y2="146"/>
+    <line x1="210" y1="155" x2="211" y2="146"/>
+    <line x1="234" y1="160" x2="236" y2="151"/>
+    <line x1="256" y1="168" x2="259" y2="159"/>
+    <line x1="276" y1="178" x2="280" y2="170"/>
+  </g>
+  <!-- spiral gill tracks inside the ring (left side, between outer and inner) -->
+  <g stroke="#7a6a4a" stroke-width="1.2" fill="none">
+    <path d="M 138 198 Q 160 188 178 198"/>
+    <path d="M 132 210 Q 158 200 180 210"/>
+    <path d="M 138 222 Q 160 232 178 222"/>
+  </g>
+  <g stroke="#7a6a4a" stroke-width="1.2" fill="none">
+    <path d="M 222 198 Q 240 188 262 198"/>
+    <path d="M 220 210 Q 242 200 268 210"/>
+    <path d="M 222 222 Q 240 232 262 222"/>
+  </g>
+  <!-- trailing-edge pressure pits (bottom arc) -->
+  <g fill="#3a4a55">
+    <circle cx="130" cy="240" r="1.6"/>
+    <circle cx="155" cy="252" r="1.6"/>
+    <circle cx="182" cy="258" r="1.6"/>
+    <circle cx="218" cy="258" r="1.6"/>
+    <circle cx="245" cy="252" r="1.6"/>
+    <circle cx="270" cy="240" r="1.6"/>
+  </g>
+  <!-- motion line suggesting ram airflow through the aperture -->
+  <g stroke="#9aa0a6" stroke-width="1" fill="none" stroke-dasharray="3 4">
+    <path d="M 60 205 L 150 205"/>
+    <path d="M 250 205 L 340 205"/>
+  </g>
+  <!-- caption -->
+  <text x="200" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#3a4a55" font-style="italic">Annulavis aetheris</text>
+  <text x="200" y="362" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#7a6a4a">obligate-flight ram-filter · Aether</text>
+  <text x="200" y="382" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#9aa0a6">ventral aspect, planform</text>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#15212b"/>
+  <!-- vent fissure glow -->
+  <ellipse cx="200" cy="372" rx="150" ry="14" fill="#e85d2a" opacity="0.35"/>
+  <path d="M70 372 Q200 366 330 372" stroke="#e85d2a" stroke-width="3" fill="none" opacity="0.9"/>
+  <path d="M120 370 Q200 362 280 370" stroke="#f7a93c" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <!-- heat shimmer rising -->
+  <path d="M180 360 Q176 320 182 280 Q186 240 178 200" stroke="#6b8f9e" stroke-width="1" fill="none" opacity="0.35"/>
+  <path d="M222 360 Q226 322 220 282 Q216 242 224 202" stroke="#6b8f9e" stroke-width="1" fill="none" opacity="0.35"/>
+  <!-- the stack: tapering column of discs -->
+  <g fill="#c8893a" stroke="#5b3d18" stroke-width="1">
+    <ellipse cx="200" cy="356" rx="62" ry="10"/>
+    <ellipse cx="200" cy="328" rx="56" ry="9"/>
+    <ellipse cx="200" cy="302" rx="50" ry="8.5"/>
+    <ellipse cx="200" cy="278" rx="44" ry="8"/>
+    <ellipse cx="200" cy="256" rx="38" ry="7.5"/>
+    <ellipse cx="200" cy="236" rx="32" ry="7"/>
+    <ellipse cx="200" cy="218" rx="26" ry="6.5"/>
+    <ellipse cx="200" cy="202" rx="20" ry="6"/>
+    <ellipse cx="200" cy="188" rx="14" ry="5"/>
+    <ellipse cx="200" cy="176" rx="9" ry="4"/>
+  </g>
+  <!-- symbiont filaments -->
+  <g stroke="#6b8f9e" stroke-width="0.7" fill="none" opacity="0.6">
+    <path d="M142 356 Q130 330 138 300"/>
+    <path d="M150 340 Q140 318 146 294"/>
+    <path d="M258 356 Q270 330 262 300"/>
+    <path d="M250 340 Q260 318 254 294"/>
+    <path d="M168 300 Q156 276 162 252"/>
+    <path d="M232 300 Q244 276 238 252"/>
+  </g>
+  <!-- topple indicator: faint lean arrow -->
+  <g stroke="#f7a93c" stroke-width="1" fill="none" opacity="0.5">
+    <path d="M200 176 Q230 150 252 138"/>
+    <path d="M246 142 L252 138 L248 132"/>
+  </g>
+  <!-- caption -->
+  <text x="200" y="392" font-family="serif" font-size="11" fill="#c8893a" text-anchor="middle" font-style="italic">Catenate Kiln · Pyroplegma catenatum</text>
+</svg>

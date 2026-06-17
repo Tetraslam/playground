@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#e8f0f5"/>
+  <!-- faint horizon haze -->
+  <rect y="340" width="400" height="60" fill="#d4e3ec"/>
+  <!-- dendritic ice banner, vertical -->
+  <g stroke="#b8d4e3" stroke-width="1" fill="#ffffff" fill-opacity="0.85">
+    <!-- main ribbon -->
+    <path d="M195 60 L205 60 L208 80 L210 320 L200 340 L190 320 L192 80 Z"/>
+    <!-- side branches, left -->
+    <path d="M192 110 L150 105 L148 108 L192 116 Z"/>
+    <path d="M192 165 L130 162 L128 165 L192 170 Z"/>
+    <path d="M193 225 L155 224 L154 227 L193 230 Z"/>
+    <path d="M193 280 L165 280 L164 283 L193 284 Z"/>
+    <!-- side branches, right -->
+    <path d="M208 90 L255 85 L257 88 L208 96 Z"/>
+    <path d="M208 140 L270 136 L272 139 L208 145 Z"/>
+    <path d="M207 200 L250 199 L251 202 L207 204 Z"/>
+    <path d="M207 255 L235 255 L236 258 L207 259 Z"/>
+    <path d="M208 305 L228 305 L229 307 L208 308 Z"/>
+  </g>
+  <!-- leading edge: capillary needles at top -->
+  <g stroke="#6fa8c4" stroke-width="0.9" fill="none">
+    <line x1="195" y1="60" x2="188" y2="38"/>
+    <line x1="198" y1="60" x2="196" y2="34"/>
+    <line x1="201" y1="60" x2="204" y2="34"/>
+    <line x1="204" y1="60" x2="211" y2="38"/>
+    <line x1="200" y1="60" x2="200" y2="30"/>
+  </g>
+  <!-- protein spine -->
+  <line x1="200" y1="62" x2="200" y2="338" stroke="#2c3e50" stroke-width="1.4" stroke-opacity="0.75"/>
+  <!-- wicking groove sump at base -->
+  <circle cx="200" cy="340" r="3.5" fill="#2c3e50" fill-opacity="0.8"/>
+  <!-- sound-wave cues flanking the chord -->
+  <g stroke="#9bb8c7" stroke-width="0.6" fill="none" stroke-opacity="0.7">
+    <path d="M120 180 Q140 200 120 220"/>
+    <path d="M110 170 Q135 200 110 230"/>
+    <path d="M280 180 Q260 200 280 220"/>
+    <path d="M290 170 Q265 200 290 230"/>
+  </g>
+  <!-- scale bar -->
+  <g stroke="#2c3e50" stroke-width="1">
+    <line x1="320" y1="370" x2="370" y2="370"/>
+    <line x1="320" y1="366" x2="320" y2="374"/>
+    <line x1="370" y1="366" x2="370" y2="374"/>
+  </g>
+  <text x="345" y="386" font-family="monospace" font-size="9" fill="#2c3e50" text-anchor="middle">1 m</text>
+  <text x="20" y="386" font-family="monospace" font-size="10" fill="#2c3e50">Vexilice · Rime</text>
+</svg>

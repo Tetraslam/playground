@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f4ead5"/>
+  <!-- horizon / glass flats -->
+  <rect x="0" y="270" width="400" height="130" fill="#e8d9a8"/>
+  <line x1="0" y1="270" x2="400" y2="270" stroke="#b89a5e" stroke-width="1"/>
+  <!-- old furrows -->
+  <line x1="40" y1="330" x2="360" y2="330" stroke="#c9b27a" stroke-width="1.2"/>
+  <line x1="70" y1="358" x2="330" y2="358" stroke="#c9b27a" stroke-width="1.2"/>
+  <!-- stilts -->
+  <g stroke="#6b5a3a" stroke-width="3" stroke-linecap="round">
+    <line x1="158" y1="232" x2="140" y2="300"/>
+    <line x1="242" y1="232" x2="260" y2="300"/>
+    <line x1="200" y1="232" x2="200" y2="312"/>
+  </g>
+  <!-- focal beam -->
+  <line x1="200" y1="210" x2="200" y2="300" stroke="#d9863a" stroke-width="1.4" stroke-dasharray="3 3"/>
+  <circle cx="200" cy="300" r="4" fill="#d9863a"/>
+  <!-- parabolic dish carapace -->
+  <path d="M 110 232 Q 200 150 290 232 Z" fill="#7a6a4a" stroke="#3f3422" stroke-width="2"/>
+  <!-- dichroic sheen lines -->
+  <path d="M 132 224 Q 200 168 268 224" fill="none" stroke="#c9b27a" stroke-width="1"/>
+  <path d="M 150 214 Q 200 180 250 214" fill="none" stroke="#e8d9a8" stroke-width="1"/>
+  <!-- label -->
+  <text x="200" y="385" text-anchor="middle" font-family="serif" font-size="13" fill="#3f3422" font-style="italic">Heliocaster</text>
+</svg>

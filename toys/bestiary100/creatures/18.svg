@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f4efe6"/>
+
+  <!-- canopy bark surface suggestion -->
+  <path d="M0 350 Q100 340 200 352 T400 348" stroke="#8a7e6a" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M0 365 Q120 358 220 366 T400 362" stroke="#8a7e6a" stroke-width="1" fill="none" opacity="0.3"/>
+
+  <!-- focal spot on bark (cooked patch) -->
+  <ellipse cx="200" cy="352" rx="14" ry="4" fill="#6b4a2a" opacity="0.8"/>
+  <line x1="200" y1="180" x2="200" y2="350" stroke="#d98a3a" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.7"/>
+
+  <!-- six stilt legs -->
+  <g stroke="#2b2f33" stroke-width="1.6" fill="none" stroke-linecap="round">
+    <path d="M150 195 Q140 270 120 348"/>
+    <path d="M170 195 Q166 275 158 349"/>
+    <path d="M190 195 Q191 277 191 350"/>
+    <path d="M210 195 Q209 277 209 350"/>
+    <path d="M230 195 Q234 275 242 349"/>
+    <path d="M250 195 Q260 270 280 348"/>
+  </g>
+  <!-- needle-claw feet -->
+  <g stroke="#2b2f33" stroke-width="0.8" fill="none">
+    <path d="M118 348 l-4 4 M120 350 l-2 5 M122 348 l0 6"/>
+    <path d="M156 349 l-4 4 M158 351 l-2 5 M160 349 l0 6"/>
+    <path d="M189 350 l-4 4 M191 352 l-2 5 M193 350 l0 6"/>
+    <path d="M207 350 l-4 4 M209 352 l-2 5 M211 350 l0 6"/>
+    <path d="M240 349 l4 4 M242 351 l2 5 M244 349 l0 6"/>
+    <path d="M278 348 l4 4 M280 350 l2 5 M282 348 l0 6"/>
+  </g>
+
+  <!-- parabolic mirror dish (body) -->
+  <path d="M120 190 Q200 120 280 190 Q200 210 120 190 Z" fill="#cdd6dc" stroke="#2b2f33" stroke-width="1.5"/>
+  <path d="M135 188 Q200 132 265 188 Q200 202 135 188 Z" fill="#b7c4ce" stroke="#2b2f33" stroke-width="1.1"/>
+  <path d="M152 186 Q200 144 248 186 Q200 196 152 186 Z" fill="#a3b3c0" stroke="#2b2f33" stroke-width="0.9"/>
+  <!-- focal pinhole -->
+  <circle cx="200" cy="182" r="3.5" fill="#2b2f33"/>
+  <circle cx="200" cy="182" r="1.2" fill="#d98a3a"/>
+
+  <!-- scale bar -->
+  <line x1="40" y1="385" x2="120" y2="385" stroke="#2b2f33" stroke-width="1.2"/>
+  <text x="80" y="379" font-family="serif" font-size="10" fill="#2b2f33" text-anchor="middle">~3 m</text>
+
+  <!-- caption -->
+  <text x="200" y="32" font-family="serif" font-size="13" fill="#2b2f33" text-anchor="middle" font-style="italic">Crownforge</text>
+  <text x="200" y="47" font-family="serif" font-size="9" fill="#5a5145" text-anchor="middle">lateral aspect · the Canopy</text>
+</svg>

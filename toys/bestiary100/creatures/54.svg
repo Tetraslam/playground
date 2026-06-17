@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <!-- palette: deep sky #1a2740, ice cyan #9fd8e6, chitin ink #14202b, wind #e8f4f8 -->
+  <rect width="400" height="400" fill="#1a2740"/>
+
+  <!-- wind lines, faint -->
+  <g stroke="#e8f4f8" stroke-width="1" fill="none" opacity="0.35">
+    <path d="M20 70 Q120 60 220 72 T380 68"/>
+    <path d="M30 96 Q130 86 230 98 T388 94"/>
+    <path d="M24 122 Q124 112 224 124 T382 120"/>
+  </g>
+
+  <!-- ice ground -->
+  <path d="M0 330 L400 330 L400 400 L0 400 Z" fill="#9fd8e6" opacity="0.18"/>
+  <path d="M0 330 Q100 322 200 330 T400 330" fill="none" stroke="#9fd8e6" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- chitinous mast (fluted column) -->
+  <g stroke="#14202b" fill="#14202b">
+    <path d="M188 330 L192 150 L208 150 L212 330 Z"/>
+    <line x1="196" y1="158" x2="196" y2="328" stroke="#9fd8e6" stroke-width="0.75" opacity="0.5"/>
+    <line x1="204" y1="158" x2="204" y2="328" stroke="#9fd8e6" stroke-width="0.75" opacity="0.5"/>
+  </g>
+
+  <!-- terraced ice crown, stacked fins narrowing upward -->
+  <g fill="#9fd8e6" stroke="#14202b" stroke-width="1">
+    <path d="M160 178 Q200 168 240 178 L236 198 Q200 190 164 198 Z" opacity="0.85"/>
+    <path d="M168 150 Q200 142 232 150 L229 168 Q200 161 171 168 Z" opacity="0.9"/>
+    <path d="M176 124 Q200 117 224 124 L222 140 Q200 134 178 140 Z" opacity="0.95"/>
+    <path d="M183 100 Q200 94 217 100 L215 114 Q200 109 185 114 Z"/>
+  </g>
+
+  <!-- whistle edges: thin notches on terrace windward (left) sides -->
+  <g stroke="#14202b" stroke-width="0.75" fill="none">
+    <path d="M160 178 l-6 -2 M164 198 l-6 2"/>
+    <path d="M168 150 l-5 -2 M171 168 l-5 2"/>
+    <path d="M176 124 l-4 -2 M178 140 l-4 2"/>
+    <path d="M183 100 l-3 -1"/>
+  </g>
+
+  <!-- sound arcs emanating rightward (lee) -->
+  <g stroke="#e8f4f8" stroke-width="1" fill="none" opacity="0.55">
+    <path d="M244 178 q22 -4 30 6"/>
+    <path d="M250 150 q26 -5 36 6"/>
+    <path d="M252 124 q30 -6 42 6"/>
+    <path d="M250 100 q34 -7 48 6"/>
+  </g>
+
+  <!-- label -->
+  <g font-family="Georgia, serif" fill="#e8f4f8">
+    <text x="20" y="382" font-size="13" font-style="italic">Cymatocrista sibilans</text>
+    <text x="20" y="396" font-size="9" opacity="0.7">Rime · piezoelectric mast</text>
+  </g>
+</svg>

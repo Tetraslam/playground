@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#0e1620"/>
+  <!-- faint upper-atmosphere haze -->
+  <circle cx="200" cy="200" r="170" fill="none" stroke="#2a3a4d" stroke-width="1" opacity="0.5"/>
+
+  <!-- radiating lens-plate vanes (biogenic ice) -->
+  <g stroke="#cfe6f2" stroke-width="1.2" fill="#9fc7dc" fill-opacity="0.35">
+    <g transform="translate(200 200)">
+      <ellipse cx="0" cy="-95" rx="26" ry="62"/>
+      <ellipse cx="0" cy="-95" rx="26" ry="62" transform="rotate(51.4)"/>
+      <ellipse cx="0" cy="-95" rx="26" ry="62" transform="rotate(102.8)"/>
+      <ellipse cx="0" cy="-95" rx="26" ry="62" transform="rotate(154.2)"/>
+      <ellipse cx="0" cy="-95" rx="26" ry="62" transform="rotate(205.7)"/>
+      <ellipse cx="0" cy="-95" rx="26" ry="62" transform="rotate(257.1)"/>
+      <ellipse cx="0" cy="-95" rx="26" ry="62" transform="rotate(308.5)"/>
+    </g>
+  </g>
+
+  <!-- vane suture rings -->
+  <g stroke="#5b7a90" stroke-width="0.8" fill="none">
+    <circle cx="200" cy="200" r="40"/>
+  </g>
+
+  <!-- chitinous spine -->
+  <rect x="196" y="178" width="8" height="44" rx="4" fill="#3a2a1c"/>
+
+  <!-- heated amber core -->
+  <circle cx="200" cy="200" r="7" fill="#e8a83b"/>
+  <circle cx="200" cy="200" r="2.5" fill="#fff4d6"/>
+
+  <!-- annotation tick: shatter suture -->
+  <g stroke="#7d93a8" stroke-width="0.7" fill="#7d93a8" font-family="serif" font-size="10">
+    <line x1="296" y1="120" x2="270" y2="148"/>
+    <text x="300" y="118">suture (autotomy line)</text>
+  </g>
+
+  <!-- scale bar -->
+  <g stroke="#7d93a8" stroke-width="1" fill="#7d93a8" font-family="serif" font-size="9">
+    <line x1="40" y1="370" x2="90" y2="370"/>
+    <line x1="40" y1="366" x2="40" y2="374"/>
+    <line x1="90" y1="366" x2="90" y2="374"/>
+    <text x="40" y="386">~3 cm</text>
+  </g>
+
+  <!-- caption -->
+  <text x="200" y="386" text-anchor="middle" fill="#7d93a8" font-family="serif" font-size="11" font-style="italic">Rimeglass vexillar</text>
+</svg>

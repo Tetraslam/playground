@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f4efe2"/>
+  <!-- faint underglow wash -->
+  <ellipse cx="200" cy="210" rx="150" ry="120" fill="#d8e6c9" opacity="0.35"/>
+
+  <!-- host hyphae: thin pale strands the lattice taps -->
+  <g stroke="#9aa583" stroke-width="1" fill="none" opacity="0.6">
+    <path d="M40 120 Q160 150 360 110"/>
+    <path d="M50 260 Q180 230 370 280"/>
+    <path d="M120 40 Q140 200 110 360"/>
+    <path d="M300 50 Q280 210 320 360"/>
+  </g>
+
+  <!-- the lattice body: triangulated dark threads -->
+  <g stroke="#2b2630" stroke-width="1.4" fill="none" stroke-linecap="round">
+    <polygon points="140,140 250,130 200,210" />
+    <polygon points="250,130 310,200 200,210" />
+    <polygon points="200,210 310,200 270,290" />
+    <polygon points="200,210 270,290 150,280" />
+    <polygon points="200,210 150,280 140,140" />
+    <polygon points="140,140 200,210 110,180" />
+    <polygon points="310,200 250,130 320,90" />
+    <line x1="110" y1="180" x2="140" y2="140"/>
+    <line x1="320" y1="90" x2="250" y2="130"/>
+  </g>
+
+  <!-- tap nodes: amber luminescent knots at lattice vertices -->
+  <g fill="#c8a44a">
+    <circle cx="140" cy="140" r="3.5"/>
+    <circle cx="250" cy="130" r="3.5"/>
+    <circle cx="200" cy="210" r="4"/>
+    <circle cx="310" cy="200" r="3.5"/>
+    <circle cx="270" cy="290" r="3.5"/>
+    <circle cx="150" cy="280" r="3.5"/>
+    <circle cx="110" cy="180" r="3"/>
+    <circle cx="320" cy="90" r="3"/>
+  </g>
+
+  <!-- scale bar -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="10" fill="#5a5246">
+    <line x1="40" y1="370" x2="90" y2="370" stroke="#5a5246" stroke-width="1"/>
+    <text x="100" y="374">~ 8 cm span</text>
+  </g>
+  <text x="40" y="40" font-family="ui-serif, Georgia, serif" font-size="13" font-style="italic" fill="#2b2630">Hyphal Repeater</text>
+  <text x="40" y="56" font-family="ui-sans-serif, system-ui, sans-serif" font-size="9" fill="#5a5246">Underglow · lattice specimen, dorsal</text>
+</svg>

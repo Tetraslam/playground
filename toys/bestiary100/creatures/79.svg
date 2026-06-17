@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#0a1420"/>
+  <!-- auroral glow band -->
+  <rect x="0" y="60" width="400" height="120" fill="#1f3a2e" opacity="0.55"/>
+  <rect x="0" y="90" width="400" height="70" fill="#2d5a44" opacity="0.35"/>
+  <!-- faint aurora ribbons -->
+  <path d="M0 110 Q100 90 200 105 Q300 118 400 100" stroke="#4a7a5a" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M0 130 Q120 145 220 128 Q320 115 400 132" stroke="#3a6a4a" stroke-width="1" fill="none" opacity="0.4"/>
+
+  <!-- cryostele: helical ice spire, base at ~360, apex at ~90 -->
+  <!-- shadow / back helix arc (paler) -->
+  <g fill="none" stroke="#5a7a92" stroke-width="2.5" stroke-linecap="round" opacity="0.7">
+    <path d="M200 355 Q165 320 200 300"/>
+    <path d="M200 270 Q165 240 200 225"/>
+    <path d="M200 195 Q165 170 200 160"/>
+    <path d="M200 132 Q170 120 200 115"/>
+  </g>
+  <!-- front helix arc (brighter ice) -->
+  <g fill="none" stroke="#cfe4f2" stroke-width="3" stroke-linecap="round">
+    <path d="M200 355 Q235 320 200 300"/>
+    <path d="M200 270 Q235 240 200 225"/>
+    <path d="M200 195 Q235 170 200 160"/>
+    <path d="M200 132 Q230 120 200 115"/>
+  </g>
+  <!-- central brine axis (wine-dark) -->
+  <path d="M200 358 L200 112" stroke="#6a1a28" stroke-width="1.5" fill="none" opacity="0.85"/>
+  <!-- iron-oxide doping flecks -->
+  <g fill="#7a3a1a">
+    <circle cx="212" cy="330" r="1.2"/>
+    <circle cx="188" cy="305" r="1"/>
+    <circle cx="216" cy="250" r="1.2"/>
+    <circle cx="190" cy="225" r="1"/>
+    <circle cx="214" cy="175" r="1"/>
+    <circle cx="192" cy="155" r="1"/>
+  </g>
+  <!-- apex shard (about to shatter) -->
+  <path d="M200 112 L196 95 L205 100 L200 112 Z" fill="#cfe4f2" stroke="#5a7a92" stroke-width="0.8"/>
+  <!-- base rooting into rime -->
+  <g stroke="#cfe4f2" stroke-width="1.2" fill="none" opacity="0.6">
+    <path d="M200 358 L188 372"/>
+    <path d="M200 358 L200 374"/>
+    <path d="M200 358 L212 372"/>
+  </g>
+  <rect x="0" y="372" width="400" height="28" fill="#1a2638" opacity="0.8"/>
+
+  <!-- field-guide label -->
+  <text x="200" y="36" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="15" fill="#d8cdb0">Cryostele dirimens</text>
+  <text x="200" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#8a8470">rime · piezoelectric helix · ×0.22</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4f1e8"/>
+
+  <!-- world-wood limb -->
+  <path d="M 20 70 Q 200 40 380 78" stroke="#8a6f4f" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M 20 70 Q 200 40 380 78" stroke="#6f5740" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="3 9" opacity="0.6"/>
+
+  <!-- dorsal chromatophore glow halos -->
+  <g opacity="0.55">
+    <circle cx="168" cy="178" r="20" fill="#6fbfae"/>
+    <circle cx="232" cy="206" r="16" fill="#6fbfae"/>
+    <circle cx="196" cy="232" r="13" fill="#6fbfae"/>
+  </g>
+
+  <!-- creature body: leaf/almond clamped under limb -->
+  <path d="M 200 96 C 270 110 300 180 286 244 C 274 296 232 312 200 308 C 168 312 126 296 114 244 C 100 180 130 110 200 96 Z"
+        fill="#e8e6dc" stroke="#1f2a33" stroke-width="2.2"/>
+
+  <!-- dorsal mosaic polygons -->
+  <g stroke="#1f2a33" stroke-width="1.1" fill="none">
+    <path d="M 150 150 L 188 142 L 196 178 L 160 186 Z"/>
+    <path d="M 196 178 L 232 168 L 244 206 L 206 214 Z"/>
+    <path d="M 160 186 L 170 224 L 140 230 L 134 196 Z"/>
+    <path d="M 206 214 L 244 206 L 250 244 L 214 250 Z"/>
+    <path d="M 170 224 L 206 214 L 210 246 L 178 252 Z"/>
+  </g>
+  <g fill="#6fbfae" opacity="0.85">
+    <path d="M 152 152 L 186 145 L 193 176 L 163 183 Z"/>
+    <path d="M 200 181 L 230 172 L 240 203 L 209 210 Z"/>
+    <path d="M 174 226 L 205 218 L 208 243 L 181 248 Z"/>
+  </g>
+
+  <!-- ventral fringe: ciliated skirt -->
+  <g stroke="#1f2a33" stroke-width="1" fill="none">
+    <path d="M 120 250 L 112 286"/>
+    <path d="M 138 270 L 132 308"/>
+    <path d="M 158 282 L 154 322"/>
+    <path d="M 180 290 L 178 330"/>
+    <path d="M 200 292 L 200 334"/>
+    <path d="M 220 290 L 222 330"/>
+    <path d="M 242 282 L 246 322"/>
+    <path d="M 262 270 L 268 308"/>
+    <path d="M 280 250 L 288 286"/>
+  </g>
+
+  <!-- ventral photoreceptor dots along fringe -->
+  <g fill="#1f2a33">
+    <circle cx="112" cy="288" r="2"/>
+    <circle cx="132" cy="310" r="2"/>
+    <circle cx="154" cy="324" r="2"/>
+    <circle cx="178" cy="332" r="2"/>
+    <circle cx="200" cy="336" r="2"/>
+    <circle cx="222" cy="332" r="2"/>
+    <circle cx="246" cy="324" r="2"/>
+    <circle cx="268" cy="310" r="2"/>
+    <circle cx="288" cy="288" r="2"/>
+  </g>
+
+  <!-- caption -->
+  <text x="200" y="380" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+        font-style="italic" font-size="16" fill="#1f2a33">Mimolux mendax</text>
+</svg>

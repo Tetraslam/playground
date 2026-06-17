@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f4ecd8"/>
+  <!-- sun -->
+  <circle cx="60" cy="60" r="14" fill="#d4a017" stroke="#3a2f1d" stroke-width="1.5"/>
+  <!-- refracted ray through body to focal point -->
+  <line x1="74" y1="60" x2="200" y2="220" stroke="#3a2f1d" stroke-width="0.8" stroke-dasharray="3 3"/>
+  <line x1="200" y1="220" x2="300" y2="320" stroke="#b03a2e" stroke-width="1.2"/>
+  <!-- focal scorch on ground -->
+  <ellipse cx="300" cy="324" rx="9" ry="3" fill="#5a1a0a" opacity="0.6"/>
+  <!-- ground line -->
+  <line x1="40" y1="338" x2="360" y2="338" stroke="#3a2f1d" stroke-width="1"/>
+  <!-- three splayed legs -->
+  <line x1="195" y1="200" x2="150" y2="335" stroke="#3a2f1d" stroke-width="2.2"/>
+  <line x1="205" y1="200" x2="205" y2="335" stroke="#3a2f1d" stroke-width="2.2"/>
+  <line x1="215" y1="200" x2="262" y2="335" stroke="#3a2f1d" stroke-width="2.2"/>
+  <!-- glass spurs at leg tips -->
+  <circle cx="150" cy="335" r="2.5" fill="#6fa8b8"/>
+  <circle cx="205" cy="335" r="2.5" fill="#6fa8b8"/>
+  <circle cx="262" cy="335" r="2.5" fill="#6fa8b8"/>
+  <!-- crystal disc stack (the lens) -->
+  <ellipse cx="200" cy="160" rx="46" ry="9" fill="#bfe3e8" stroke="#3a2f1d" stroke-width="1.5"/>
+  <ellipse cx="200" cy="178" rx="52" ry="10" fill="#9fd2d8" stroke="#3a2f1d" stroke-width="1.5"/>
+  <ellipse cx="200" cy="198" rx="48" ry="9" fill="#7fc0c8" stroke="#3a2f1d" stroke-width="1.5"/>
+  <!-- chitinous gimbal frame -->
+  <rect x="182" y="150" width="36" height="56" fill="none" stroke="#3a2f1d" stroke-width="1.8" rx="3"/>
+  <!-- focal pit on lowest disc -->
+  <circle cx="200" cy="212" r="3" fill="#3a2f1d"/>
+  <!-- label -->
+  <text x="200" y="372" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-style="italic" fill="#3a2f1d">Dioptra</text>
+  <text x="200" y="390" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#6b5a44">Glass Wastes · ♂ lens-body, 12 cm span</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#dce7ef"/>
+  <!-- polarized sky reference rays -->
+  <g stroke="#9fb3c4" stroke-width="0.75" opacity="0.5">
+    <line x1="40" y1="60" x2="120" y2="60"/>
+    <line x1="280" y1="60" x2="360" y2="60"/>
+    <line x1="40" y1="80" x2="100" y2="80"/>
+    <line x1="300" y1="80" x2="360" y2="80"/>
+  </g>
+  <!-- sun -->
+  <circle cx="330" cy="70" r="10" fill="#f2d98a"/>
+  <!-- the caravel: triangular aerogel sail -->
+  <polygon points="200,70 110,300 290,300" fill="#f4f7fa" stroke="#5b7385" stroke-width="2"/>
+  <!-- aerogel pore texture -->
+  <g fill="#c7d6e0" opacity="0.8">
+    <circle cx="180" cy="160" r="4"/>
+    <circle cx="215" cy="180" r="3"/>
+    <circle cx="165" cy="220" r="3.5"/>
+    <circle cx="230" cy="240" r="3"/>
+    <circle cx="195" cy="260" r="4"/>
+    <circle cx="150" cy="270" r="2.5"/>
+    <circle cx="250" cy="200" r="2.5"/>
+  </g>
+  <!-- sublimation pits along trailing edge (left side) -->
+  <g fill="#dce7ef" stroke="#5b7385" stroke-width="1">
+    <circle cx="155" cy="240" r="4"/>
+    <circle cx="140" cy="270" r="3.5"/>
+  </g>
+  <!-- crystalline keel -->
+  <polygon points="110,300 290,300 230,360 170,360" fill="#7e93a4" stroke="#3f5366" stroke-width="1.5"/>
+  <line x1="170" y1="360" x2="200" y2="300" stroke="#3f5366" stroke-width="0.75"/>
+  <line x1="230" y1="360" x2="200" y2="300" stroke="#3f5366" stroke-width="0.75"/>
+  <!-- ganglion + ocelli hint at keel top -->
+  <circle cx="200" cy="305" r="3" fill="#2b3a47"/>
+  <!-- caption -->
+  <text x="200" y="388" text-anchor="middle" font-family="serif" font-size="13" fill="#2b3a47" font-style="italic">Sublimation Caravel</text>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4efe2"/>
+  <!-- ground line -->
+  <line x1="40" y1="340" x2="360" y2="340" stroke="#4a4038" stroke-width="1.5"/>
+  <!-- fossil shards in substrate -->
+  <g stroke="#4a4038" stroke-width="1" fill="none" opacity="0.5">
+    <path d="M70 348 l12 -6 l4 8 z"/>
+    <path d="M300 352 l8 -10 l6 6 z"/>
+    <path d="M250 346 l10 -4 l2 7 z"/>
+  </g>
+
+  <!-- legs -->
+  <g stroke="#4a4038" stroke-width="4" stroke-linecap="round">
+    <line x1="150" y1="320" x2="142" y2="338"/>
+    <line x1="180" y1="324" x2="176" y2="339"/>
+    <line x1="210" y1="324" x2="214" y2="339"/>
+    <line x1="240" y1="320" x2="248" y2="338"/>
+    <line x1="120" y1="316" x2="108" y2="336"/>
+    <line x1="268" y1="312" x2="282" y2="334"/>
+  </g>
+
+  <!-- body dome (underframe) -->
+  <ellipse cx="195" cy="312" rx="92" ry="26" fill="#4a4038"/>
+
+  <!-- head + acid radula -->
+  <ellipse cx="108" cy="318" rx="20" ry="14" fill="#4a4038"/>
+  <path d="M92 322 q-10 4 -16 10" stroke="#b5651d" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="100" cy="314" r="1.6" fill="#e8e0d0"/>
+
+  <!-- dorsal spire: banded stack of trapezoids, oldest (broad) at base -->
+  <g stroke="#4a4038" stroke-width="1.2">
+    <polygon points="125,292 265,292 255,272 135,272" fill="#e8e0d0"/>
+    <polygon points="135,272 255,272 246,254 144,254" fill="#b5651d"/>
+    <polygon points="144,254 246,254 238,238 152,238" fill="#e8e0d0"/>
+    <polygon points="152,238 238,238 231,224 159,224" fill="#4a4038"/>
+    <polygon points="159,224 231,224 225,212 165,212" fill="#e8e0d0"/>
+    <polygon points="165,212 225,212 220,202 170,202" fill="#b5651d"/>
+    <polygon points="170,202 220,202 216,194 174,194" fill="#e8e0d0"/>
+    <polygon points="174,194 216,194 213,188 177,188" fill="#4a4038"/>
+    <polygon points="177,188 213,188 210,184 180,184" fill="#e8e0d0"/>
+    <polygon points="180,184 210,184 207,181 183,181" fill="#b5651d"/>
+    <polygon points="183,181 207,181 195,172 195,172" fill="#e8e0d0"/>
+  </g>
+
+  <!-- field-guide label -->
+  <g font-family="Georgia, serif" fill="#4a4038">
+    <text x="200" y="372" font-size="12" font-style="italic" text-anchor="middle">Osteocairn accretus</text>
+    <text x="200" y="386" font-size="9" text-anchor="middle" letter-spacing="1.5">BONE FIELDS · lithotroph</text>
+  </g>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <title>Aerochorda catenata — field sketch</title>
+  <!-- palette: ink #14213d, bladder #a9d6e5, glow #ffd166, thread #6b7a8f -->
+  <rect width="400" height="400" fill="#fbfbf7"/>
+
+  <!-- faint horizon line, two distant landmasses -->
+  <path d="M 0 372 L 120 364 L 200 372 L 400 360" fill="none" stroke="#14213d" stroke-width="1" opacity="0.25"/>
+  <path d="M 0 388 L 400 384" fill="none" stroke="#14213d" stroke-width="0.75" opacity="0.18"/>
+
+  <!-- helical chain: connecting filament -->
+  <path d="M 78 356 Q 96 332 70 300 Q 44 268 120 304 Q 196 340 104 244 Q 12 148 168 268 Q 324 388 152 196 Q -20 4 220 220 Q 460 436 196 144 Q 32 -148 284 168 Q 536 484 240 92 Q -56 -120 320 116"
+        fill="none" stroke="#6b7a8f" stroke-width="1.1" opacity="0.55"/>
+
+  <!-- bladders along the helix, alternating offset to fake 3D -->
+  <g fill="#a9d6e5" fill-opacity="0.55" stroke="#14213d" stroke-width="1">
+    <ellipse cx="78"  cy="356" rx="9" ry="7"/>
+    <ellipse cx="62"  cy="298" rx="9" ry="7"/>
+    <ellipse cx="118" cy="326" rx="9" ry="7"/>
+    <ellipse cx="100" cy="268" rx="9" ry="7"/>
+    <ellipse cx="158" cy="296" rx="9" ry="7"/>
+    <ellipse cx="138" cy="238" rx="9" ry="7"/>
+    <ellipse cx="196" cy="266" rx="9" ry="7"/>
+    <ellipse cx="176" cy="208" rx="9" ry="7"/>
+    <ellipse cx="234" cy="236" rx="9" ry="7"/>
+    <ellipse cx="214" cy="178" rx="9" ry="7"/>
+    <ellipse cx="272" cy="206" rx="9" ry="7"/>
+    <ellipse cx="252" cy="148" rx="9" ry="7"/>
+    <ellipse cx="310" cy="176" rx="9" ry="7"/>
+    <ellipse cx="290" cy="118" rx="9" ry="7"/>
+    <ellipse cx="328" cy="116" rx="9" ry="7"/>
+    <ellipse cx="300" cy="72"  rx="9" ry="7"/>
+  </g>
+
+  <!-- glow nodes: a few bladders lit by atmospheric luminance -->
+  <g fill="#ffd166" opacity="0.85">
+    <circle cx="118" cy="326" r="2.2"/>
+    <circle cx="196" cy="266" r="2.2"/>
+    <circle cx="272" cy="206" r="2.2"/>
+    <circle cx="328" cy="116" r="2.2"/>
+  </g>
+
+  <!-- electrostatic mucus threads trailing off a few bladders -->
+  <g stroke="#6b7a8f" stroke-width="0.6" opacity="0.45" fill="none">
+    <path d="M 78 356 q 14 18 6 38"/>
+    <path d="M 158 296 q 18 -6 30 4"/>
+    <path d="M 234 236 q 20 10 14 32"/>
+    <path d="M 310 176 q 22 -8 34 6"/>
+    <path d="M 214 178 q -6 -22 8 -34"/>
+  </g>
+
+  <!-- scale + caption -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif" fill="#14213d">
+    <line x1="40" y1="392" x2="120" y2="392" stroke="#14213d" stroke-width="1"/>
+    <line x1="40" y1="388" x2="40" y2="396" stroke="#14213d" stroke-width="1"/>
+    <line x1="120" y1="388" x2="120" y2="396" stroke="#14213d" stroke-width="1"/>
+    <text x="80" y="384" font-size="9" text-anchor="middle">~ 1 km chain</text>
+    <text x="200" y="24" font-size="11" text-anchor="middle" font-style="italic">Aerochorda catenata</text>
+    <text x="200" y="37" font-size="8" text-anchor="middle" opacity="0.7">Aether — helical aerostat</text>
+  </g>
+</svg>

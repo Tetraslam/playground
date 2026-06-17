@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#0d1b2a"/>
+  <!-- thermal shear horizon -->
+  <line x1="20" y1="210" x2="380" y2="190" stroke="#2a4a5e" stroke-width="0.75" stroke-dasharray="2 4"/>
+  <!-- hoarweft net: frosted mesh -->
+  <g stroke="#e8f4f8" stroke-width="0.9" fill="none" opacity="0.85">
+    <path d="M40 150 L360 130"/>
+    <path d="M40 175 L360 155"/>
+    <path d="M40 200 L360 180"/>
+    <path d="M40 225 L360 205"/>
+    <path d="M40 250 L360 230"/>
+    <path d="M40 150 L60 250"/>
+    <path d="M90 142 L110 242"/>
+    <path d="M140 134 L160 234"/>
+    <path d="M190 127 L210 227"/>
+    <path d="M240 120 L260 220"/>
+    <path d="M290 114 L310 214"/>
+    <path d="M340 108 L360 208"/>
+    <!-- diagonals -->
+    <path d="M40 150 L360 230" opacity="0.5"/>
+    <path d="M40 250 L360 130" opacity="0.5"/>
+  </g>
+  <!-- protein filament core (warm thread woven through) -->
+  <path d="M40 200 C120 188, 200 205, 280 178 S360 165, 360 180"
+        stroke="#d4a373" stroke-width="1.4" fill="none" opacity="0.95"/>
+  <path d="M40 225 C120 213, 200 230, 280 203 S360 188, 360 205"
+        stroke="#d4a373" stroke-width="1.4" fill="none" opacity="0.7"/>
+  <!-- frost crystal nodes -->
+  <g fill="#e8f4f8">
+    <circle cx="90" cy="170" r="2.4"/>
+    <circle cx="160" cy="160" r="3"/>
+    <circle cx="230" cy="150" r="2.2"/>
+    <circle cx="300" cy="142" r="2.8"/>
+    <circle cx="60" cy="218" r="2.2"/>
+    <circle cx="130" cy="210" r="3"/>
+    <circle cx="200" cy="200" r="2.6"/>
+    <circle cx="270" cy="192" r="3.2"/>
+    <circle cx="340" cy="184" r="2.4"/>
+  </g>
+  <!-- a few hex-ice prisms at heavier nodes -->
+  <g fill="none" stroke="#b8d8e0" stroke-width="0.8">
+    <polygon points="160,160 165,154 172,154 177,160 172,166 165,166"/>
+    <polygon points="270,192 275,186 282,186 287,192 282,198 275,198"/>
+  </g>
+  <!-- trapped ice-mite, frozen onto mesh -->
+  <g>
+    <ellipse cx="200" cy="200" rx="4.5" ry="2.2" fill="#9bb5c4" stroke="#e8f4f8" stroke-width="0.5"/>
+    <line x1="195.5" y1="200" x2="192" y2="198" stroke="#e8f4f8" stroke-width="0.4"/>
+    <line x1="195.5" y1="200" x2="192" y2="202" stroke="#e8f4f8" stroke-width="0.4"/>
+    <line x1="204.5" y1="200" x2="208" y2="198" stroke="#e8f4f8" stroke-width="0.4"/>
+    <line x1="204.5" y1="200" x2="208" y2="202" stroke="#e8f4f8" stroke-width="0.4"/>
+  </g>
+  <!-- scale + label -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif" fill="#e8f4f8">
+    <line x1="300" y1="370" x2="360" y2="370" stroke="#e8f4f8" stroke-width="0.8"/>
+    <text x="330" y="384" font-size="9" text-anchor="middle" opacity="0.8">~120 m</text>
+    <text x="20" y="384" font-size="11" opacity="0.9">Hoarweft · Rime</text>
+  </g>
+  <!-- sacrificial node (reproduction) at lower right -->
+  <circle cx="340" cy="184" r="5" fill="none" stroke="#d4a373" stroke-width="0.8" stroke-dasharray="1.5 1.5"/>
+</svg>

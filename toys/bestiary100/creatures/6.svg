@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#0d1117"/>
+  <!-- vent fissure glow -->
+  <ellipse cx="200" cy="372" rx="170" ry="26" fill="#c2410c" opacity="0.55"/>
+  <ellipse cx="200" cy="372" rx="110" ry="14" fill="#f97316" opacity="0.8"/>
+  <!-- rising heat shimmer lines -->
+  <path d="M180 360 Q186 300 178 240 Q172 180 184 120" stroke="#f97316" stroke-width="1.2" fill="none" opacity="0.35"/>
+  <path d="M220 360 Q214 300 222 240 Q228 180 216 120" stroke="#f97316" stroke-width="1.2" fill="none" opacity="0.35"/>
+  <!-- stratocolumn: stack of trapezoidal rings, tapering up -->
+  <g fill="#8d8d93" stroke="#3f3f46" stroke-width="1">
+    <polygon points="150,365 250,365 240,335 160,335"/>
+    <polygon points="160,335 240,335 232,305 168,305"/>
+    <polygon points="168,305 232,305 225,275 175,275"/>
+    <polygon points="175,275 225,275 219,245 181,245"/>
+    <polygon points="181,245 219,245 214,215 186,215"/>
+    <polygon points="186,215 214,215 210,185 190,185"/>
+    <polygon points="190,185 210,185 207,155 193,155"/>
+    <polygon points="193,155 207,155 205,125 195,125"/>
+  </g>
+  <!-- hot lumen core (faint inner glow up the column) -->
+  <rect x="197" y="125" width="6" height="240" fill="#f97316" opacity="0.45"/>
+  <!-- crown: conductive whiskers -->
+  <g stroke="#ef4444" stroke-width="1.4" fill="none" stroke-linecap="round">
+    <path d="M200 125 L200 70"/>
+    <path d="M200 125 L178 78"/>
+    <path d="M200 125 L222 78"/>
+    <path d="M200 125 L160 100"/>
+    <path d="M200 125 L240 100"/>
+    <path d="M200 125 L168 58"/>
+    <path d="M200 125 L232 58"/>
+  </g>
+  <!-- whisker tips -->
+  <g fill="#fca5a5">
+    <circle cx="200" cy="70" r="2"/>
+    <circle cx="178" cy="78" r="2"/>
+    <circle cx="222" cy="78" r="2"/>
+    <circle cx="160" cy="100" r="2"/>
+    <circle cx="240" cy="100" r="2"/>
+    <circle cx="168" cy="58" r="2"/>
+    <circle cx="232" cy="58" r="2"/>
+  </g>
+  <!-- basal disc anchored in fissure -->
+  <ellipse cx="200" cy="368" rx="58" ry="8" fill="#52525b"/>
+  <!-- scale bar -->
+  <g stroke="#a1a1aa" stroke-width="1" fill="#a1a1aa" font-family="monospace" font-size="9">
+    <line x1="318" y1="372" x2="378" y2="372"/>
+    <line x1="318" y1="368" x2="318" y2="376"/>
+    <line x1="378" y1="368" x2="378" y2="376"/>
+    <text x="348" y="388" text-anchor="middle" stroke="none">~1.5 m</text>
+  </g>
+  <!-- label -->
+  <text x="14" y="24" fill="#a1a1aa" font-family="monospace" font-size="11">Pyrostratum pyleus</text>
+  <text x="14" y="38" fill="#71717a" font-family="monospace" font-size="9">Plume-Riding Stratocolumn</text>
+</svg>

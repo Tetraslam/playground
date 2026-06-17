@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#14110a"/>
+  <!-- mire slurry layer -->
+  <rect x="0" y="150" width="400" height="250" fill="#241d11" opacity="0.9"/>
+  <!-- surface film -->
+  <line x1="0" y1="150" x2="400" y2="150" stroke="#3a2f1c" stroke-width="1"/>
+  <!-- bubbles rising from the chain -->
+  <g fill="#6a8f7a" opacity="0.5">
+    <circle cx="120" cy="120" r="2.5"/>
+    <circle cx="135" cy="90" r="1.8"/>
+    <circle cx="150" cy="60" r="1.3"/>
+    <circle cx="250" cy="130" r="2.2"/>
+    <circle cx="265" cy="100" r="1.5"/>
+  </g>
+  <!-- the chain: 7 capsules, curving through the muck -->
+  <g transform="translate(60 280)">
+    <!-- lead capsule (larger, with papillae) -->
+    <g>
+      <ellipse cx="0" cy="0" rx="26" ry="20" fill="#3a2c1a" stroke="#6a5230" stroke-width="1.5"/>
+      <!-- pharynx mouth -->
+      <circle cx="-22" cy="0" r="5" fill="#0e0a05"/>
+      <!-- chemoreceptive papillae -->
+      <g stroke="#8a6a3a" stroke-width="1" stroke-linecap="round">
+        <line x1="-26" y1="-10" x2="-34" y2="-14"/>
+        <line x1="-28" y1="0" x2="-38" y2="0"/>
+        <line x1="-26" y1="10" x2="-34" y2="14"/>
+      </g>
+      <!-- gas bladder hint -->
+      <ellipse cx="2" cy="-6" rx="14" ry="6" fill="#4a7a6a" opacity="0.55"/>
+    </g>
+    <!-- sphincter link -->
+    <rect x="22" y="-3" width="10" height="6" fill="#2a2012" stroke="#5a4426" stroke-width="0.8"/>
+    <!-- segment 2 -->
+    <g transform="translate(54 8)">
+      <ellipse cx="0" cy="0" rx="18" ry="15" fill="#3a2c1a" stroke="#6a5230" stroke-width="1.3"/>
+      <ellipse cx="2" cy="-5" rx="10" ry="4.5" fill="#4a7a6a" opacity="0.5"/>
+    </g>
+    <rect x="70" y="5" width="8" height="6" fill="#2a2012" stroke="#5a4426" stroke-width="0.8"/>
+    <!-- segment 3 -->
+    <g transform="translate(100 22)">
+      <ellipse cx="0" cy="0" rx="18" ry="15" fill="#3a2c1a" stroke="#6a5230" stroke-width="1.3"/>
+      <ellipse cx="2" cy="-5" rx="10" ry="4.5" fill="#4a7a6a" opacity="0.5"/>
+    </g>
+    <rect x="116" y="19" width="8" height="6" fill="#2a2012" stroke="#5a4426" stroke-width="0.8"/>
+    <!-- segment 4 -->
+    <g transform="translate(146 30)">
+      <ellipse cx="0" cy="0" rx="18" ry="15" fill="#3a2c1a" stroke="#6a5230" stroke-width="1.3"/>
+      <ellipse cx="2" cy="-5" rx="10" ry="4.5" fill="#4a7a6a" opacity="0.5"/>
+    </g>
+    <rect x="162" y="27" width="8" height="6" fill="#2a2012" stroke="#5a4426" stroke-width="0.8"/>
+    <!-- segment 5 -->
+    <g transform="translate(192 28)">
+      <ellipse cx="0" cy="0" rx="18" ry="15" fill="#3a2c1a" stroke="#6a5230" stroke-width="1.3"/>
+      <ellipse cx="2" cy="-5" rx="10" ry="4.5" fill="#4a7a6a" opacity="0.5"/>
+    </g>
+    <rect x="208" y="25" width="8" height="6" fill="#2a2012" stroke="#5a4426" stroke-width="0.8"/>
+    <!-- segment 6 -->
+    <g transform="translate(238 18)">
+      <ellipse cx="0" cy="0" rx="18" ry="15" fill="#3a2c1a" stroke="#6a5230" stroke-width="1.3"/>
+      <ellipse cx="2" cy="-5" rx="10" ry="4.5" fill="#4a7a6a" opacity="0.5"/>
+    </g>
+    <rect x="254" y="15" width="8" height="6" fill="#2a2012" stroke="#5a4426" stroke-width="0.8"/>
+    <!-- rearmost bud: sealed, darker, dormant -->
+    <g transform="translate(284 4)">
+      <ellipse cx="0" cy="0" rx="16" ry="13" fill="#241a0e" stroke="#4a3820" stroke-width="1.3"/>
+      <ellipse cx="2" cy="-4" rx="9" ry="4" fill="#2e5246" opacity="0.45"/>
+    </g>
+  </g>
+  <!-- detritus motes in the slurry -->
+  <g fill="#5a4a28" opacity="0.6">
+    <circle cx="40" cy="200" r="1.5"/>
+    <circle cx="350" cy="180" r="1.8"/>
+    <circle cx="300" cy="320" r="1.2"/>
+    <circle cx="90" cy="340" r="1.6"/>
+    <circle cx="370" cy="280" r="1.3"/>
+    <circle cx="20" cy="300" r="1.1"/>
+  </g>
+  <!-- field-guide label -->
+  <text x="200" y="36" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="15" fill="#d8cdb0">Baryscaphe catenata</text>
+  <text x="200" y="54" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#8a8470">mire decay-layer · chain-colonial · ×0.4</text>
+  <!-- scale bar -->
+  <g stroke="#8a8470" stroke-width="1" fill="#8a8470" font-family="serif" font-size="10">
+    <line x1="300" y1="372" x2="380" y2="372"/>
+    <line x1="300" y1="368" x2="300" y2="376"/>
+    <line x1="380" y1="368" x2="380" y2="376"/>
+    <text x="340" y="388" text-anchor="middle" stroke="none">~0.4 m</text>
+  </g>
+</svg>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- field-guide sketch: Dioptra refringens -->
+  <rect width="400" height="400" fill="#f4efe1"/>
+
+  <!-- sky / horizon note -->
+  <text x="20" y="28" font-family="serif" font-size="13" fill="#3a3a3a" font-style="italic">Dioptra refringens — lateral section, local noon</text>
+
+  <!-- sun glyph -->
+  <circle cx="60" cy="70" r="10" fill="#e8b54a"/>
+  <g stroke="#e8b54a" stroke-width="1" fill="none">
+    <line x1="60" y1="50" x2="60" y2="44"/>
+    <line x1="60" y1="90" x2="60" y2="96"/>
+    <line x1="40" y1="70" x2="34" y2="70"/>
+    <line x1="80" y1="70" x2="86" y2="70"/>
+  </g>
+
+  <!-- incoming sunlight, dashed -->
+  <g stroke="#e8b54a" stroke-width="1.2" stroke-dasharray="4 3" fill="none">
+    <line x1="70" y1="78" x2="200" y2="150"/>
+    <line x1="70" y1="62" x2="200" y2="150"/>
+  </g>
+
+  <!-- the lens body: stacked Fresnel rings, side view -->
+  <g fill="none" stroke="#2b3a44" stroke-width="1.4">
+    <!-- rim steps -->
+    <path d="M 150 150 L 250 150 L 244 158 L 156 158 Z" fill="#4a5a66"/>
+    <path d="M 158 158 L 242 158 L 236 166 L 164 166 Z" fill="#6b8a99"/>
+    <path d="M 166 166 L 234 166 L 228 174 L 172 174 Z" fill="#9fc4cf"/>
+    <path d="M 172 174 L 228 174 L 222 182 L 178 182 Z" fill="#cfe6ec"/>
+    <path d="M 178 182 L 222 182 L 216 190 L 184 190 Z" fill="#eaf6f8"/>
+    <path d="M 184 190 L 216 190 L 210 198 L 190 198 Z" fill="#f7fcfd"/>
+  </g>
+
+  <!-- converging beam below lens -->
+  <g fill="#e8b54a" fill-opacity="0.55">
+    <path d="M 190 198 L 210 198 L 203 232 L 197 232 Z"/>
+  </g>
+  <!-- focal hotspot on sand -->
+  <ellipse cx="200" cy="234" rx="9" ry="3.2" fill="#e8b54a"/>
+  <ellipse cx="200" cy="234" rx="4" ry="1.6" fill="#fff3c4"/>
+
+  <!-- glass sand surface (refractive dune) -->
+  <path d="M 0 240 L 400 240 L 400 400 L 0 400 Z" fill="#d9cfa9"/>
+  <path d="M 0 240 Q 100 236 200 240 T 400 240" fill="none" stroke="#9c8f63" stroke-width="1"/>
+  <!-- the shaft being bored -->
+  <path d="M 197 240 L 197 300 L 203 300 L 203 240 Z" fill="#6b5a3a"/>
+  <path d="M 197 300 L 197 320 M 203 300 L 203 320" stroke="#3a3a3a" stroke-width="0.6" fill="none"/>
+  <text x="210" y="278" font-family="serif" font-size="10" fill="#3a3a3a" font-style="italic">refrozen sleeve</text>
+
+  <!-- ground texture: a few glass shards -->
+  <g fill="#cfe6ec" stroke="#9fc4cf" stroke-width="0.6">
+    <polygon points="60,260 78,254 84,272 66,276"/>
+    <polygon points="300,268 318,260 326,282 304,286"/>
+    <polygon points="140,330 160,326 164,348 142,350"/>
+    <polygon points="250,340 272,336 276,358 252,360"/>
+  </g>
+
+  <!-- annotations -->
+  <g font-family="serif" font-size="10" fill="#3a3a3a">
+    <line x1="250" y1="160" x2="300" y2="150" stroke="#3a3a3a" stroke-width="0.6"/>
+    <text x="302" y="153">silica Fresnel rings</text>
+    <line x1="205" y1="232" x2="270" y2="222" stroke="#3a3a3a" stroke-width="0.6"/>
+    <text x="272" y="225">focal melt-point</text>
+    <line x1="200" y1="300" x2="270" y2="310" stroke="#3a3a3a" stroke-width="0.6"/>
+    <text x="272" y="313">bored shaft</text>
+  </g>
+
+  <text x="20" y="386" font-family="serif" font-size="10" fill="#6a6a6a" font-style="italic">Plate 92 — Glass Wastes — scale ~15 cm dia.</text>
+</svg>

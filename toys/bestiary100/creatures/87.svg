@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f7fafa"/>
+  <!-- sunbeam entering from upper left -->
+  <polygon points="40,40 96,96 88,104 32,48" fill="#e8c97a" opacity="0.7"/>
+  <line x1="32" y1="48" x2="88" y2="104" stroke="#b8923a" stroke-width="0.75"/>
+  <!-- hexagonal prism (hollow), hanging vertically -->
+  <polygon points="200,70 252,100 252,300 200,330 148,300 148,100"
+           fill="none" stroke="#5b8aa0" stroke-width="2"/>
+  <!-- inner spectrum stripes (7) -->
+  <g stroke-width="2" stroke-linecap="round">
+    <line x1="158" y1="106" x2="158" y2="294" stroke="#7a4ba8"/>
+    <line x1="170" y1="100" x2="170" y2="300" stroke="#3f6fb5"/>
+    <line x1="184" y1="96"  x2="184" y2="304" stroke="#4f9a8e"/>
+    <line x1="200" y1="94"  x2="200" y2="306" stroke="#c9b23a"/>
+    <line x1="216" y1="96"  x2="216" y2="304" stroke="#c98a3a"/>
+    <line x1="230" y1="100" x2="230" y2="300" stroke="#b5553a"/>
+    <line x1="242" y1="106" x2="242" y2="294" stroke="#8a3a52"/>
+  </g>
+  <!-- central axial thread (the living part) -->
+  <line x1="200" y1="70" x2="200" y2="330" stroke="#222" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <!-- brine ballast at base -->
+  <ellipse cx="200" cy="338" rx="34" ry="10" fill="#2b3a44" stroke="#222" stroke-width="1"/>
+  <!-- snap line (where it shears) -->
+  <line x1="148" y1="180" x2="252" y2="180" stroke="#b5553a" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <!-- falling shardstar, lower right -->
+  <polygon points="330,250 348,258 330,266 312,258" fill="none" stroke="#5b8aa0" stroke-width="1"/>
+  <line x1="330" y1="266" x2="330" y2="300" stroke="#b5553a" stroke-width="0.75" stroke-dasharray="2 2"/>
+  <!-- labels -->
+  <g font-family="ui-sans-serif, system-ui" font-size="10" fill="#2b3a44">
+    <text x="60" y="120">sunbeam</text>
+    <text x="258" y="184">snap line</text>
+    <text x="338" y="284" text-anchor="start">shardstar</text>
+    <text x="200" y="360" text-anchor="middle">axial thread (living core)</text>
+  </g>
+</svg>

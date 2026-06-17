@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f5f1e6"/>
+  <!-- badland strata bands -->
+  <rect x="0" y="40" width="400" height="60" fill="#cbb89a" opacity="0.5"/>
+  <rect x="0" y="300" width="400" height="60" fill="#cbb89a" opacity="0.5"/>
+  <line x1="0" y1="40" x2="400" y2="40" stroke="#9a8466" stroke-width="0.5"/>
+  <line x1="0" y1="100" x2="400" y2="100" stroke="#9a8466" stroke-width="0.5"/>
+  <line x1="0" y1="300" x2="400" y2="300" stroke="#9a8466" stroke-width="0.5"/>
+  <line x1="0" y1="360" x2="400" y2="360" stroke="#9a8466" stroke-width="0.5"/>
+
+  <!-- fossil bone cross-section: a curved rib shard -->
+  <path d="M 90 110 Q 200 80 310 120 Q 320 200 300 285 Q 200 300 110 285 Q 80 200 90 110 Z"
+        fill="#ece3d0" stroke="#7a6a4e" stroke-width="2"/>
+
+  <!-- Haversian canals: concentric osteon rings -->
+  <g fill="none" stroke="#b8a888" stroke-width="0.8">
+    <circle cx="150" cy="160" r="22"/>
+    <circle cx="150" cy="160" r="14"/>
+    <circle cx="150" cy="160" r="7"/>
+    <circle cx="240" cy="140" r="20"/>
+    <circle cx="240" cy="140" r="12"/>
+    <circle cx="240" cy="140" r="6"/>
+    <circle cx="200" cy="220" r="26"/>
+    <circle cx="200" cy="220" r="17"/>
+    <circle cx="200" cy="220" r="9"/>
+    <circle cx="265" cy="225" r="18"/>
+    <circle cx="265" cy="225" r="10"/>
+    <circle cx="130" cy="245" r="16"/>
+    <circle cx="130" cy="245" r="9"/>
+  </g>
+
+  <!-- Osteosuture: living threads threading the canals, dark indigo -->
+  <g stroke="#2b2547" stroke-width="1.6" fill="none" stroke-linecap="round">
+    <path d="M 150 160 Q 175 150 200 160 Q 225 172 240 140"/>
+    <path d="M 240 140 Q 250 180 200 220"/>
+    <path d="M 200 220 Q 230 222 265 225"/>
+    <path d="M 200 220 Q 165 232 130 245"/>
+    <path d="M 130 245 Q 110 230 150 160"/>
+    <path d="M 265 225 Q 285 200 240 140"/>
+  </g>
+
+  <!-- acid-secreting leading nodes (rust accent) -->
+  <g fill="#8a3a1e">
+    <circle cx="150" cy="160" r="2.6"/>
+    <circle cx="240" cy="140" r="2.6"/>
+    <circle cx="200" cy="220" r="2.6"/>
+    <circle cx="265" cy="225" r="2.6"/>
+    <circle cx="130" cy="245" r="2.6"/>
+  </g>
+
+  <!-- re-deposited wake: faint indigo grain trails behind threads -->
+  <g stroke="#2b2547" stroke-width="0.5" opacity="0.35" fill="none">
+    <path d="M 150 160 Q 160 156 170 158"/>
+    <path d="M 240 140 Q 234 160 222 168"/>
+    <path d="M 200 220 Q 215 221 228 223"/>
+  </g>
+
+  <!-- a second, smaller fossil being bridged toward (right edge) -->
+  <path d="M 330 150 Q 360 170 350 230 Q 330 245 315 220 Q 312 180 330 150 Z"
+        fill="#ece3d0" stroke="#7a6a4e" stroke-width="1.5"/>
+  <g fill="none" stroke="#b8a888" stroke-width="0.7">
+    <circle cx="335" cy="190" r="12"/>
+    <circle cx="335" cy="190" r="6"/>
+  </g>
+  <!-- bridging spore-filament -->
+  <path d="M 265 225 Q 295 215 315 205 Q 330 200 335 190"
+        fill="none" stroke="#2b2547" stroke-width="1" stroke-dasharray="2 3"/>
+
+  <!-- scale -->
+  <g font-family="serif" font-size="11" fill="#4a3d28">
+    <line x1="60" y1="382" x2="120" y2="382" stroke="#4a3d28" stroke-width="1"/>
+    <text x="63" y="377">2 cm</text>
+  </g>
+  <text x="372" y="392" font-family="serif" font-size="10" fill="#4a3d28" text-anchor="end">Osteosuture — Bone Fields</text>
+</svg>

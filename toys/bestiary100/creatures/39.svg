@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- field-guide: Tessellated Burner, dorsal view, with focal-beam inset -->
+  <rect width="400" height="400" fill="#f4ecd8"/>
+
+  <!-- top-down disc of hex tiles -->
+  <g transform="translate(150 180)">
+    <!-- central focal tile -->
+    <polygon points="0,-20 17,-10 17,10 0,20 -17,10 -17,-10" fill="#c8703a" stroke="#3a2410" stroke-width="1"/>
+    <!-- ring 1 -->
+    <g stroke="#3a2410" stroke-width="0.8" fill="#e8b85a">
+      <polygon points="0,-20 17,-10 34,-20 51,-10 34,0 17,-10"/>
+      <polygon points="0,-20 -17,-10 -34,-20 -51,-10 -34,0 -17,-10"/>
+      <polygon points="17,10 34,0 51,10 34,20 17,20 0,10"/>
+      <polygon points="-17,10 -34,0 -51,10 -34,20 -17,20 0,10"/>
+      <polygon points="17,-10 34,0 17,10 0,0 -17,-10 0,-20"/>
+    </g>
+    <!-- ring 2 (outer, paler) -->
+    <g stroke="#3a2410" stroke-width="0.7" fill="#f0d488">
+      <polygon points="34,-20 51,-10 68,-20 85,-10 68,0 51,-10"/>
+      <polygon points="-34,-20 -51,-10 -68,-20 -85,-10 -68,0 -51,-10"/>
+      <polygon points="34,20 51,10 68,20 51,30 34,30 17,20"/>
+      <polygon points="-34,20 -51,10 -68,20 -51,30 -34,30 -17,20"/>
+      <polygon points="51,-10 68,0 85,10 68,20 51,10 34,0"/>
+      <polygon points="-51,-10 -68,0 -85,10 -68,20 -51,10 -34,0"/>
+      <polygon points="68,-20 85,-10 102,0 85,10 68,0 51,-10"/>
+      <polygon points="-68,-20 -85,-10 -102,0 -85,10 -68,0 -51,-10"/>
+    </g>
+  </g>
+
+  <!-- side-view inset: disc tilting, beam converging to ground -->
+  <g transform="translate(280 250)">
+    <!-- ground line -->
+    <line x1="-50" y1="90" x2="60" y2="90" stroke="#3a2410" stroke-width="1.2"/>
+    <!-- scorch mark -->
+    <ellipse cx="0" cy="91" rx="6" ry="2" fill="#c8703a"/>
+    <!-- converging rays -->
+    <g stroke="#c8703a" stroke-width="1.1">
+      <line x1="-42" y1="20" x2="-1" y2="90"/>
+      <line x1="-20" y1="12" x2="0" y2="90"/>
+      <line x1="20" y1="12" x2="0" y2="90"/>
+      <line x1="42" y1="20" x2="1" y2="90"/>
+    </g>
+    <!-- tilted disc (side) -->
+    <g transform="rotate(-18 0 0)">
+      <ellipse cx="0" cy="0" rx="44" ry="8" fill="#e8b85a" stroke="#3a2410" stroke-width="1"/>
+      <line x1="-44" y1="0" x2="44" y2="0" stroke="#c8703a" stroke-width="0.7"/>
+    </g>
+    <!-- sun -->
+    <circle cx="55" cy="-55" r="9" fill="#c8703a"/>
+    <g stroke="#c8703a" stroke-width="1">
+      <line x1="55" y1="-70" x2="55" y2="-78"/>
+      <line x1="70" y1="-55" x2="78" y2="-55"/>
+      <line x1="44" y1="-66" x2="38" y2="-72"/>
+      <line x1="66" y1="-66" x2="72" y2="-72"/>
+    </g>
+  </g>
+
+  <!-- labels -->
+  <text x="14" y="30" font-family="serif" font-size="15" font-style="italic" fill="#3a2410">Tessellated Burner</text>
+  <text x="14" y="46" font-family="serif" font-size="10" fill="#5a3a1c">dorsal colony (l.) &amp; hunting aspect (r.)</text>
+  <text x="14" y="390" font-family="serif" font-size="9" fill="#5a3a1c">Glass Wastes — tile disc Ø ~30cm</text>
+</svg>

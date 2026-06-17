@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#0e1a2b"/>
+  <!-- faint frost field -->
+  <g stroke="#2a3f5a" stroke-width="0.5" fill="none" opacity="0.6">
+    <path d="M0 60 L400 60 M0 130 L400 130 M0 210 L400 210 M0 290 L400 290 M0 360 L400 360"/>
+  </g>
+  <!-- hexveil: central hexagon -->
+  <g transform="translate(200 200)">
+    <!-- outer hex membrane -->
+    <polygon points="0,-110 95,-55 95,55 0,110 -95,55 -95,-55"
+             fill="#cfe8f2" fill-opacity="0.18"
+             stroke="#a9d6e8" stroke-width="1.5"/>
+    <!-- photonic brine channels: six petals -->
+    <g stroke="#7fb8d4" stroke-width="0.8" fill="none" opacity="0.85">
+      <path d="M0 0 L0 -95 M0 0 L82 -47 M0 0 L82 47 M0 0 L0 95 M0 0 L-82 47 M0 0 L-82 -47"/>
+      <circle cx="0" cy="-70" r="14"/>
+      <circle cx="61" cy="-35" r="14"/>
+      <circle cx="61" cy="35" r="14"/>
+      <circle cx="0" cy="70" r="14"/>
+      <circle cx="-61" cy="35" r="14"/>
+      <circle cx="-61" cy="-35" r="14"/>
+    </g>
+    <!-- iridescent accent -->
+    <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15"
+             fill="#e8c7ff" fill-opacity="0.45"
+             stroke="#c9a3e8" stroke-width="0.8"/>
+    <!-- nucleator monolayer (lower face) -->
+    <circle r="4" fill="#f4f0e0"/>
+  </g>
+  <!-- scale bar -->
+  <g stroke="#8aa0bd" stroke-width="1" fill="#8aa0bd" font-family="serif" font-size="11">
+    <line x1="40" y1="370" x2="120" y2="370"/>
+    <line x1="40" y1="366" x2="40" y2="374"/>
+    <line x1="120" y1="366" x2="120" y2="374"/>
+    <text x="80" y="388" text-anchor="middle" stroke="none">~30 cm</text>
+  </g>
+  <text x="360" y="388" text-anchor="end" font-family="serif" font-size="11"
+        font-style="italic" fill="#8aa0bd">Cryoscolith petaloides</text>
+</svg>

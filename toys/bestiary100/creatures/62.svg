@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f4efe6"/>
+  <!-- field-guide label -->
+  <text x="20" y="32" font-family="ui-serif, Georgia, serif" font-size="15" font-style="italic" fill="#2a2a2a">Helicograptus aetheris</text>
+  <text x="20" y="48" font-family="ui-serif, Georgia, serif" font-size="10" fill="#6a6a6a">dextral form · ~4 m · Aether</text>
+
+  <!-- helical ribbon: alternating front/back bands giving twist illusion -->
+  <g stroke="#3a4a55" stroke-width="1.4" fill="none">
+    <!-- spine -->
+    <path d="M 60 250 C 120 190, 200 300, 280 220 C 320 180, 350 160, 370 150" stroke="#2a2a2a" stroke-width="1.6"/>
+  </g>
+
+  <!-- ribbon segments (front-facing, solid) -->
+  <g fill="#7fa8a0" fill-opacity="0.85" stroke="#2a4a44" stroke-width="1">
+    <path d="M 60 250 Q 80 210 95 205 Q 90 245 78 268 Z"/>
+    <path d="M 130 232 Q 150 200 168 198 Q 162 238 148 258 Z"/>
+    <path d="M 205 248 Q 226 222 244 222 Q 236 258 222 274 Z"/>
+    <path d="M 280 220 Q 300 196 318 196 Q 312 228 300 244 Z"/>
+  </g>
+
+  <!-- ribbon segments (back-facing, hatched/desaturated) -->
+  <g fill="#cdd9d4" stroke="#6a8078" stroke-width="0.9">
+    <path d="M 95 205 Q 112 215 130 232 Q 112 250 95 245 Z"/>
+    <path d="M 168 198 Q 186 212 205 248 Q 186 248 168 232 Z"/>
+    <path d="M 244 222 Q 262 216 280 220 Q 262 252 244 250 Z"/>
+    <path d="M 318 196 Q 336 180 350 175 Q 340 208 326 216 Z"/>
+  </g>
+
+  <!-- gas bladders along leading edge -->
+  <g fill="#e8c66a" stroke="#7a5a20" stroke-width="1">
+    <ellipse cx="68" cy="262" rx="7" ry="5"/>
+    <ellipse cx="138" cy="244" rx="7" ry="5"/>
+    <ellipse cx="214" cy="258" rx="7" ry="5"/>
+    <ellipse cx="290" cy="230" rx="7" ry="5"/>
+    <ellipse cx="358" cy="166" rx="6" ry="4.5"/>
+  </g>
+
+  <!-- fracture node marker -->
+  <g>
+    <line x1="168" y1="180" x2="168" y2="210" stroke="#a83838" stroke-width="1" stroke-dasharray="2 2"/>
+    <text x="172" y="178" font-family="ui-serif, Georgia, serif" font-size="9" fill="#a83838">fracture node</text>
+  </g>
+
+  <!-- scale bar -->
+  <g stroke="#2a2a2a" stroke-width="1">
+    <line x1="290" y1="370" x2="370" y2="370"/>
+    <line x1="290" y1="366" x2="290" y2="374"/>
+    <line x1="370" y1="366" x2="370" y2="374"/>
+  </g>
+  <text x="330" y="386" font-family="ui-serif, Georgia, serif" font-size="10" fill="#2a2a2a" text-anchor="middle">1 m</text>
+</svg>

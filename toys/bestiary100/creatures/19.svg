@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#e8f1f5"/>
+  <!-- hexagonal ice crystal -->
+  <polygon points="200,40 339,120 339,280 200,360 61,280 61,120"
+           fill="#cfe3ee" stroke="#9bc1d4" stroke-width="2"/>
+  <!-- niveograph labyrinth: branching saline channels etched into basal face -->
+  <g fill="none" stroke="#1f4e6b" stroke-width="2.2" stroke-linecap="round">
+    <!-- central trunk -->
+    <path d="M200,360 C200,300 200,260 200,210"/>
+    <!-- primary branches -->
+    <path d="M200,300 C230,280 260,270 295,250"/>
+    <path d="M200,280 C170,260 140,250 105,235"/>
+    <path d="M200,240 C220,220 240,205 270,185"/>
+    <path d="M200,225 C180,205 165,190 140,170"/>
+    <path d="M200,210 C210,180 215,150 220,110"/>
+    <!-- secondary twigs -->
+    <path d="M295,250 C310,245 322,238 332,228"/>
+    <path d="M295,250 C300,235 305,222 308,208"/>
+    <path d="M105,235 C92,232 80,228 70,220"/>
+    <path d="M105,235 C100,220 96,208 93,195"/>
+    <path d="M270,185 C285,180 296,172 304,162"/>
+    <path d="M270,185 C272,170 274,158 275,145"/>
+    <path d="M140,170 C128,165 118,158 110,150"/>
+    <path d="M140,170 C135,158 132,148 130,138"/>
+    <path d="M220,110 C228,100 234,90 238,78"/>
+    <path d="M220,110 C210,100 204,90 200,80"/>
+    <!-- fine tips -->
+    <path d="M200,360 C190,350 184,340 180,330"/>
+    <path d="M200,360 C210,350 216,340 220,330"/>
+  </g>
+  <!-- a faint second colony meeting at upper-right, fusing -->
+  <g fill="none" stroke="#1f4e6b" stroke-width="1.4" stroke-linecap="round" opacity="0.6">
+    <path d="M339,120 C320,140 305,160 295,180"/>
+    <path d="M320,140 C310,150 302,162 296,175"/>
+    <path d="M339,140 C325,155 315,168 308,182"/>
+  </g>
+  <!-- a single mint-green cytoplasm fleck (the only "living" mark) -->
+  <circle cx="200" cy="300" r="3.5" fill="#9ed9b8"/>
+  <circle cx="270" cy="185" r="2.5" fill="#9ed9b8"/>
+  <circle cx="140" cy="170" r="2.5" fill="#9ed9b8"/>
+  <circle cx="295" cy="250" r="2.5" fill="#9ed9b8"/>
+  <!-- caption -->
+  <text x="200" y="386" text-anchor="middle"
+        font-family="Georgia, serif" font-size="13" font-style="italic" fill="#1f4e6b">
+    Niveograph sibilans — basal face, etched channels
+  </text>
+</svg>

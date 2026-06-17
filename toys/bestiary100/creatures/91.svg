@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4f1ea"/>
+
+  <!-- etched ground track -->
+  <path d="M40 350 Q200 340 360 350" fill="none" stroke="#c9b894" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- sole (muscular foot), underside peek -->
+  <ellipse cx="200" cy="270" rx="150" ry="34" fill="#8a7a5e"/>
+  <ellipse cx="200" cy="268" rx="150" ry="30" fill="#a8946a"/>
+  <!-- foot margin ripple -->
+  <g stroke="#6e5f44" stroke-width="0.8" fill="none" opacity="0.7">
+    <path d="M70 270 Q90 274 110 270"/>
+    <path d="M120 272 Q140 276 160 272"/>
+    <path d="M170 272 Q190 276 210 272"/>
+    <path d="M220 272 Q240 276 260 272"/>
+    <path d="M270 270 Q290 274 310 270"/>
+    <path d="M320 268 Q335 272 345 268"/>
+  </g>
+
+  <!-- main body / mosaic dorsum -->
+  <ellipse cx="200" cy="230" rx="148" ry="58" fill="#e8dfc8" stroke="#5b4a32" stroke-width="1.4"/>
+
+  <!-- stratigraphic mosaic tiles: concentric bands, oldest center -->
+  <!-- central (oldest) tiles -->
+  <g fill="#d8c39a" stroke="#5b4a32" stroke-width="0.6">
+    <polygon points="200,210 214,218 210,238 190,238 186,218"/>
+    <polygon points="186,218 190,238 170,236 168,220"/>
+    <polygon points="214,218 232,220 230,236 210,238"/>
+    <polygon points="200,210 186,218 168,212 184,202"/>
+    <polygon points="200,210 214,218 232,212 216,202"/>
+  </g>
+  <!-- mid band tiles -->
+  <g fill="#cdb88a" stroke="#5b4a32" stroke-width="0.6">
+    <polygon points="168,212 150,216 146,234 170,236 168,220"/>
+    <polygon points="232,212 250,216 254,234 230,236 232,220"/>
+    <polygon points="184,202 168,212 158,200 178,194"/>
+    <polygon points="216,202 232,212 242,200 222,194"/>
+    <polygon points="150,216 130,222 128,232 146,234"/>
+    <polygon points="250,216 270,222 272,232 254,234"/>
+    <polygon points="158,200 142,206 138,198 156,192"/>
+    <polygon points="242,200 258,206 262,198 244,192"/>
+  </g>
+  <!-- outer (newest) band tiles -->
+  <g fill="#bfa777" stroke="#5b4a32" stroke-width="0.6">
+    <polygon points="130,222 108,228 106,236 128,232"/>
+    <polygon points="270,222 292,228 294,236 272,232"/>
+    <polygon points="142,206 122,212 114,202 138,198"/>
+    <polygon points="258,206 278,212 286,202 262,198"/>
+    <polygon points="178,194 156,192 162,182 182,186"/>
+    <polygon points="222,194 244,192 238,182 218,186"/>
+    <polygon points="108,228 92,234 92,240 106,236"/>
+    <polygon points="292,228 308,234 308,240 294,236"/>
+    <polygon points="122,212 104,210 110,200 114,202"/>
+    <polygon points="278,212 296,210 290,200 286,202"/>
+  </g>
+
+  <!-- acid pore droplets at leading edge -->
+  <g fill="#b9c46a" opacity="0.85">
+    <circle cx="120" cy="258" r="2.2"/>
+    <circle cx="150" cy="262" r="2.6"/>
+    <circle cx="185" cy="264" r="2.2"/>
+    <circle cx="215" cy="264" r="2.2"/>
+    <circle cx="250" cy="262" r="2.6"/>
+    <circle cx="280" cy="258" r="2.2"/>
+  </g>
+
+  <!-- scale bar + label -->
+  <g font-family="Georgia, serif" fill="#3a2e1c">
+    <line x1="60" y1="378" x2="180" y2="378" stroke="#3a2e1c" stroke-width="1"/>
+    <text x="120" y="392" font-size="10" text-anchor="middle">~2.5 m</text>
+    <text x="280" y="392" font-size="12" font-style="italic" text-anchor="middle">Osteobaphes stratiotes</text>
+  </g>
+</svg>

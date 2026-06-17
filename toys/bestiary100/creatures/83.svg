@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4efe2"/>
+  <!-- ground line -->
+  <line x1="20" y1="320" x2="380" y2="320" stroke="#8a7a5c" stroke-width="1"/>
+  <!-- body: low domed carapace built of mosaic fossil plates -->
+  <path d="M 90 320 Q 200 180 310 320 Z" fill="#c9bfa8" stroke="#3a3528" stroke-width="1.5"/>
+  <!-- mosaic plates: irregular fossil fragments fused along sutures -->
+  <g fill="none" stroke="#3a3528" stroke-width="1">
+    <path d="M 130 280 L 160 250 L 180 285 Z"/>
+    <path d="M 180 285 L 210 235 L 235 280 Z"/>
+    <path d="M 235 280 L 265 245 L 285 290 Z"/>
+    <path d="M 160 250 L 175 220 L 195 245 Z"/>
+    <path d="M 210 235 L 225 205 L 250 230 Z"/>
+    <path d="M 250 230 L 270 210 L 285 245 Z"/>
+    <path d="M 175 220 L 200 195 L 225 205 Z"/>
+    <path d="M 225 205 L 250 190 L 270 210 Z"/>
+    <path d="M 120 305 L 140 285 L 165 305 Z"/>
+    <path d="M 165 305 L 195 290 L 220 308 Z"/>
+    <path d="M 220 308 L 250 295 L 280 312 Z"/>
+  </g>
+  <!-- texture hash on a couple plates to suggest bone grain -->
+  <g stroke="#7a6a48" stroke-width="0.6" fill="none">
+    <line x1="148" y1="262" x2="158" y2="270"/>
+    <line x1="150" y1="268" x2="156" y2="263"/>
+    <line x1="218" y1="248" x2="228" y2="256"/>
+    <line x1="220" y1="254" x2="226" y2="249"/>
+    <line x1="258" y1="222" x2="266" y2="230"/>
+    <line x1="260" y1="228" x2="264" y2="223"/>
+  </g>
+  <!-- six chisel-edged legs -->
+  <g stroke="#3a3528" stroke-width="2" stroke-linecap="round" fill="none">
+    <line x1="110" y1="318" x2="98" y2="345"/>
+    <line x1="135" y1="318" x2="128" y2="350"/>
+    <line x1="175" y1="318" x2="170" y2="352"/>
+    <line x1="225" y1="318" x2="230" y2="352"/>
+    <line x1="265" y1="318" x2="272" y2="350"/>
+    <line x1="290" y1="318" x2="302" y2="345"/>
+  </g>
+  <!-- ventral grinding mouth-plate hint (small dark wedge at front) -->
+  <path d="M 96 322 L 112 322 L 104 332 Z" fill="#3a3528"/>
+  <!-- trail of shed fossil plates behind -->
+  <g fill="#c9bfa8" stroke="#8a7a5c" stroke-width="0.8">
+    <path d="M 55 335 L 68 330 L 70 340 Z"/>
+    <path d="M 35 348 L 48 345 L 45 356 Z"/>
+    <path d="M 15 360 L 26 357 L 24 367 Z"/>
+  </g>
+  <!-- label -->
+  <g font-family="Georgia, serif" fill="#2a2418">
+    <text x="200" y="50" text-anchor="middle" font-size="16" font-style="italic">Marrowquern</text>
+    <text x="200" y="68" text-anchor="middle" font-size="10">Bone Fields · lithotroph · large</text>
+  </g>
+</svg>

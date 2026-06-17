@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="400" viewBox="0 0 220 400">
+  <title>Volucalx — field guide</title>
+  <!-- palette: rock #2b2723, shell #e8e0c8, vent glow #d96a2a, sinter ring #b9ad8a -->
+  <rect x="0" y="0" width="220" height="400" fill="#f4efe3"/>
+
+  <!-- rock face block -->
+  <rect x="20" y="24" width="120" height="352" fill="#2b2723"/>
+  <path d="M20 24 L140 24 L140 376 L20 376 Z" fill="none" stroke="#1a1714" stroke-width="2"/>
+
+  <!-- vent glow at base of fissure -->
+  <ellipse cx="80" cy="372" rx="60" ry="14" fill="#d96a2a" opacity="0.55"/>
+
+  <!-- abandoned helical gallery (faint, behind) -->
+  <g stroke="#b9ad8a" stroke-width="1" fill="none" opacity="0.5">
+    <path d="M70 70 q20 8 0 16 q-20 8 0 16 q20 8 0 16 q-20 8 0 16"/>
+  </g>
+
+  <!-- active bore: helical shell, vertical, tip down -->
+  <g stroke="#b9ad8a" stroke-width="2.2" fill="none">
+    <path d="M78 60
+             q24 7 0 14
+             q-24 7 0 14
+             q24 7 0 14
+             q-24 7 0 14
+             q24 7 0 14
+             q-24 7 0 14
+             q24 7 0 14
+             q-24 7 0 14
+             q24 7 0 14
+             q-24 7 0 14
+             q24 7 0 14
+             q-24 7 0 14
+             q24 7 0 14
+             q-24 7 0 14
+             q24 7 0 14
+             q-24 7 0 14
+             q20 6 0 12
+             q-16 5 0 10
+             q10 3 0 6
+             q-4 2 0 4"/>
+  </g>
+
+  <!-- calcite ring highlights -->
+  <g fill="#e8e0c8" opacity="0.9">
+    <ellipse cx="78" cy="74" rx="3.2" ry="2"/>
+    <ellipse cx="78" cy="116" rx="3.2" ry="2"/>
+    <ellipse cx="78" cy="158" rx="3.2" ry="2"/>
+    <ellipse cx="78" cy="200" rx="3.2" ry="2"/>
+    <ellipse cx="78" cy="242" rx="3.2" ry="2"/>
+    <ellipse cx="78" cy="284" rx="3.2" ry="2"/>
+    <ellipse cx="78" cy="326" rx="3.2" ry="2"/>
+  </g>
+
+  <!-- warm exhaust at tail -->
+  <ellipse cx="78" cy="356" rx="10" ry="4" fill="#d96a2a" opacity="0.4"/>
+
+  <!-- scale bar -->
+  <g font-family="ui-serif, Georgia, serif" font-size="9" fill="#2b2723">
+    <line x1="170" y1="376" x2="170" y2="276" stroke="#2b2723" stroke-width="1.2"/>
+    <line x1="166" y1="376" x2="174" y2="376" stroke="#2b2723" stroke-width="1.2"/>
+    <line x1="166" y1="276" x2="174" y2="276" stroke="#2b2723" stroke-width="1.2"/>
+    <text x="180" y="328">~1 m</text>
+    <text x="20" y="18" font-style="italic">Volucalx</text>
+    <text x="20" y="392" font-size="8">the Vent · fissure wall</text>
+  </g>
+</svg>

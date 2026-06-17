@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#1a1410"/>
+  <!-- vent chimney -->
+  <path d="M150 380 L160 220 Q170 200 200 200 Q230 200 240 220 L250 380 Z" fill="none" stroke="#7a6a55" stroke-width="2"/>
+  <!-- thermal plume -->
+  <path d="M170 220 Q160 160 200 100 Q240 160 230 220" fill="none" stroke="#c9622d" stroke-width="1.5" opacity="0.5"/>
+  <!-- the braid: two interwoven filaments along the gradient -->
+  <path d="M195 360 Q205 340 195 320 Q185 300 195 280 Q205 260 195 240 Q185 220 195 205"
+        fill="none" stroke="#b87333" stroke-width="2.5"/>
+  <path d="M205 360 Q215 340 205 320 Q195 300 205 280 Q215 260 205 240 Q195 220 205 205"
+        fill="none" stroke="#8a8c7a" stroke-width="2.5"/>
+  <!-- electroplated scale nodes -->
+  <circle cx="195" cy="340" r="3" fill="#d4a050"/>
+  <circle cx="205" cy="320" r="3" fill="#d4a050"/>
+  <circle cx="195" cy="280" r="3" fill="#d4a050"/>
+  <circle cx="205" cy="260" r="3" fill="#d4a050"/>
+  <circle cx="195" cy="220" r="3" fill="#d4a050"/>
+  <!-- cold end marker -->
+  <line x1="180" y1="370" x2="220" y2="370" stroke="#3a5a6a" stroke-width="1" opacity="0.6"/>
+  <!-- hot end marker -->
+  <line x1="180" y1="205" x2="220" y2="205" stroke="#c9622d" stroke-width="1" opacity="0.6"/>
+  <!-- labels -->
+  <text x="260" y="208" fill="#c9622d" font-family="serif" font-size="11" font-style="italic">hot end · 340°C</text>
+  <text x="260" y="372" fill="#3a5a6a" font-family="serif" font-size="11" font-style="italic">cold end · 2°C</text>
+  <text x="40" y="40" fill="#d4c8b0" font-family="serif" font-size="14">Galvanoskein</text>
+  <text x="40" y="56" fill="#7a6a55" font-family="serif" font-size="9" font-style="italic">the Vent · thermocouple braid</text>
+</svg>

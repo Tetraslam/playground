@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f3ede0"/>
+
+  <!-- fossil skull, side profile -->
+  <g fill="none" stroke="#2b2622" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- cranium -->
+    <path d="M 110 200
+             C 110 150, 160 120, 215 125
+             C 260 130, 285 165, 282 200
+             L 278 215
+             C 270 222, 258 224, 250 222
+             L 245 235
+             C 230 240, 210 240, 195 232
+             L 180 240
+             C 165 244, 150 242, 142 232
+             L 135 238
+             C 122 238, 112 230, 110 218 Z"
+          fill="#e8dfca" stroke="#2b2622"/>
+    <!-- maxilla / jaw hint -->
+    <path d="M 135 238 L 145 252 C 165 258, 195 256, 220 248 L 232 240"
+          fill="#e8dfca"/>
+    <!-- orbital rim (the lure eye) -->
+    <circle cx="220" cy="180" r="26" fill="#f3ede0"/>
+    <circle cx="220" cy="180" r="12" fill="#2b2622"/>
+    <!-- nasal foramen -->
+    <ellipse cx="180" cy="215" rx="9" ry="13" fill="#2b2622"/>
+    <!-- foramen magnum (rear opening) -->
+    <ellipse cx="120" cy="205" rx="10" ry="14" fill="#2b2622"/>
+  </g>
+
+  <!-- knob clapper inside (visible through orbit) -->
+  <circle cx="208" cy="178" r="3.5" fill="#8a2f1f"/>
+
+  <!-- tentacles emerging from foramina -->
+  <g fill="none" stroke="#8a2f1f" stroke-width="3" stroke-linecap="round">
+    <!-- from orbit -->
+    <path d="M 246 180 C 280 178, 305 195, 300 225 C 297 245, 280 250, 270 235"/>
+    <path d="M 240 165 C 270 150, 295 160, 300 185"/>
+    <!-- from nasal -->
+    <path d="M 180 228 C 178 260, 195 280, 215 278 C 235 276, 245 260, 240 245"/>
+    <!-- from foramen magnum (rear, legs) -->
+    <path d="M 115 219 C 90 235, 75 270, 95 295 C 110 310, 135 305, 145 285"/>
+    <path d="M 120 190 C 95 185, 70 195, 60 220 C 52 240, 65 255, 85 250"/>
+  </g>
+
+  <!-- ground line / dust -->
+  <g stroke="#b8aa8c" stroke-width="1.2" stroke-linecap="round">
+    <line x1="40"  y1="320" x2="360" y2="320"/>
+    <line x1="60"  y1="332" x2="180" y2="332"/>
+    <line x1="210" y1="334" x2="340" y2="334"/>
+    <line x1="90"  y1="345" x2="160" y2="345"/>
+  </g>
+
+  <!-- caption -->
+  <text x="200" y="382" text-anchor="middle"
+        font-family="Georgia, serif" font-size="13" font-style="italic" fill="#2b2622">
+    Knellhermit — occupied fossil cranium, lateral aspect
+  </text>
+</svg>

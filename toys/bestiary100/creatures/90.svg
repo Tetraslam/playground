@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4efe4"/>
+
+  <!-- fossil bone substrate -->
+  <g>
+    <path d="M40 320 Q120 300 200 318 Q280 334 360 312 L360 360 L40 360 Z" fill="#d9cfb8" stroke="#9a8c6b" stroke-width="1.5"/>
+    <path d="M70 326 Q150 312 230 328 Q300 340 350 322" fill="none" stroke="#9a8c6b" stroke-width="1" opacity="0.6"/>
+    <!-- fossil foramina -->
+    <circle cx="120" cy="324" r="3" fill="#7a6b4a"/>
+    <circle cx="210" cy="330" r="2.5" fill="#7a6b4a"/>
+    <circle cx="285" cy="332" r="3" fill="#7a6b4a"/>
+  </g>
+
+  <!-- the Reel: elongated body, banded dorsal shell -->
+  <g>
+    <!-- soft body shadow -->
+    <ellipse cx="200" cy="278" rx="150" ry="26" fill="#b8ad94" opacity="0.5"/>
+    <!-- ventral soft tissue -->
+    <ellipse cx="200" cy="272" rx="148" ry="22" fill="#c9bfa6"/>
+    <!-- head palp cluster -->
+    <path d="M52 270 Q40 262 36 256 M52 272 Q38 272 32 270 M52 274 Q40 278 36 282" stroke="#7a6b4a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="58" cy="272" rx="8" ry="6" fill="#a89a78"/>
+
+    <!-- laminated shell: stacked bands (stratigraphy) -->
+    <g>
+      <rect x="60"  y="252" width="280" height="6" fill="#3a3530"/>
+      <rect x="60"  y="258" width="280" height="5" fill="#c9a36a"/>
+      <rect x="60"  y="263" width="280" height="4" fill="#e8dcc0"/>
+      <rect x="60"  y="267" width="280" height="7" fill="#7a3a2a"/>
+      <rect x="60"  y="274" width="280" height="5" fill="#e8dcc0"/>
+      <rect x="60"  y="279" width="280" height="6" fill="#3a3530"/>
+      <rect x="60"  y="285" width="280" height="4" fill="#c9a36a"/>
+      <rect x="60"  y="289" width="280" height="5" fill="#7a3a2a"/>
+      <rect x="60"  y="294" width="280" height="4" fill="#e8dcc0"/>
+    </g>
+    <!-- shell outline -->
+    <rect x="60" y="252" width="280" height="46" fill="none" stroke="#5a4a32" stroke-width="1.2" rx="3"/>
+
+    <!-- acid-dissolution trench under the sole -->
+    <path d="M90 300 Q120 312 150 300 Q180 290 210 302 Q240 312 270 300 Q300 290 330 302" fill="none" stroke="#9a8c6b" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+  </g>
+
+  <!-- cross-section callout -->
+  <g transform="translate(40,40)">
+    <circle cx="0" cy="0" r="34" fill="#f4efe4" stroke="#5a4a32" stroke-width="1"/>
+    <!-- concentric laminae -->
+    <circle cx="0" cy="0" r="30" fill="#3a3530"/>
+    <circle cx="0" cy="0" r="25" fill="#c9a36a"/>
+    <circle cx="0" cy="0" r="20" fill="#e8dcc0"/>
+    <circle cx="0" cy="0" r="15" fill="#7a3a2a"/>
+    <circle cx="0" cy="0" r="10" fill="#e8dcc0"/>
+    <circle cx="0" cy="0" r="5"  fill="#3a3530"/>
+    <line x1="34" y1="0" x2="78" y2="0" stroke="#5a4a32" stroke-width="1"/>
+    <text x="82" y="4" font-family="serif" font-size="11" fill="#3a3530" font-style="italic">laminae = meals</text>
+  </g>
+
+  <!-- caption -->
+  <text x="200" y="385" text-anchor="middle" font-family="serif" font-size="13" fill="#3a3530" font-style="italic">Lacunary Reel — palimpsest of the bonebed</text>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#1a1410"/>
+  <!-- vent fissure glow -->
+  <path d="M40 360 Q200 320 360 360 L360 400 L40 400 Z" fill="#3a2418" opacity="0.6"/>
+  <line x1="200" y1="40" x2="200" y2="360" stroke="#c4622a" stroke-width="2" opacity="0.25"/>
+  <!-- pyrite spiral shell, logarithmic -->
+  <g transform="translate(200,210)" fill="none" stroke="#c9a227" stroke-width="3">
+    <path d="M0 0
+             m0 0
+             q 0 -6 6 -6
+             q 12 0 12 12
+             q 0 24 -24 24
+             q -42 0 -42 -42
+             q 0 -66 66 -66
+             q 96 0 96 96
+             q 0 126 -126 126
+             q -168 0 -168 -168"/>
+    <circle cx="-6" cy="-6" r="2" fill="#c9a227"/>
+  </g>
+  <!-- muscular foot, bare, extending to thermal rim -->
+  <path d="M200 210 Q230 250 250 330 Q200 350 150 330 Q170 250 200 210 Z" fill="#7a3b2a" opacity="0.85"/>
+  <!-- radula scrape marks on chimney wall -->
+  <g stroke="#c4622a" stroke-width="1.5" opacity="0.5">
+    <line x1="180" y1="120" x2="195" y2="135"/>
+    <line x1="175" y1="150" x2="190" y2="165"/>
+    <line x1="182" y1="180" x2="197" y2="195"/>
+  </g>
+  <!-- operculum seal point -->
+  <circle cx="200" cy="210" r="3" fill="#1a1410" stroke="#c9a227" stroke-width="1.5"/>
+  <!-- label -->
+  <text x="20" y="385" font-family="monospace" font-size="11" fill="#c9a227">Sindervolute — vent-rim lithotroph</text>
+</svg>

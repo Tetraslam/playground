@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#d8d0c0"/>
+  <!-- bone-field scatter -->
+  <g fill="#c4baa6" opacity="0.6">
+    <ellipse cx="60" cy="80" rx="22" ry="6"/>
+    <ellipse cx="330" cy="110" rx="18" ry="5"/>
+    <ellipse cx="90" cy="330" rx="26" ry="7"/>
+    <ellipse cx="310" cy="320" rx="20" ry="6"/>
+    <path d="M 40 200 q 14 -4 28 0" fill="none" stroke="#c4baa6" stroke-width="3"/>
+    <path d="M 340 240 q 14 -4 28 0" fill="none" stroke="#c4baa6" stroke-width="3"/>
+  </g>
+  <!-- acid-etch trench -->
+  <path d="M 120 250 Q 200 256 285 248" fill="none" stroke="#8a7a55" stroke-width="2.5" opacity="0.5" stroke-dasharray="3 4"/>
+  <!-- shadow -->
+  <ellipse cx="202" cy="252" rx="92" ry="14" fill="#000" opacity="0.08"/>
+  <!-- legs -->
+  <g stroke="#2a2a2a" stroke-width="3" stroke-linecap="round" fill="none">
+    <path d="M 130 215 L 108 248"/>
+    <path d="M 150 232 L 132 268"/>
+    <path d="M 250 232 L 268 268"/>
+    <path d="M 270 215 L 292 248"/>
+    <path d="M 175 238 L 168 272"/>
+    <path d="M 225 238 L 232 272"/>
+  </g>
+  <!-- body: dark mortar substrate -->
+  <path d="M 200 150
+           C 250 150 285 180 285 210
+           C 285 240 250 250 200 250
+           C 150 250 115 240 115 210
+           C 115 180 150 150 200 150 Z"
+        fill="#2a2a2a" stroke="#1a1a1a" stroke-width="1.5"/>
+  <!-- fossil-fragment mosaic on the back -->
+  <g fill="#f0e8d0" stroke="#1a1a1a" stroke-width="1">
+    <!-- center (oldest) -->
+    <path d="M 192 188 L 212 190 L 208 208 L 190 206 Z"/>
+    <path d="M 175 195 L 192 188 L 190 206 L 174 205 Z"/>
+    <path d="M 212 190 L 228 196 L 224 212 L 208 208 Z"/>
+    <path d="M 174 205 L 190 206 L 188 222 L 172 220 Z"/>
+    <path d="M 208 208 L 224 212 L 220 228 L 204 226 Z"/>
+    <!-- mid ring -->
+    <path d="M 158 200 L 175 195 L 174 205 L 158 207 Z"/>
+    <path d="M 228 196 L 245 202 L 242 214 L 224 212 Z"/>
+    <path d="M 155 215 L 172 220 L 170 234 L 154 230 Z"/>
+    <path d="M 224 214 L 242 214 L 240 228 L 222 228 Z"/>
+    <path d="M 188 222 L 204 226 L 202 238 L 186 236 Z"/>
+    <!-- outer rim (newest) -->
+    <path d="M 140 208 L 158 200 L 158 207 L 142 214 Z"/>
+    <path d="M 245 202 L 262 210 L 258 220 L 242 214 Z"/>
+    <path d="M 142 214 L 154 230 L 140 226 Z"/>
+    <path d="M 258 220 L 270 224 L 262 234 L 248 232 Z"/>
+    <path d="M 170 234 L 186 236 L 182 246 L 168 244 Z"/>
+    <path d="M 214 236 L 232 238 L 228 248 L 212 246 Z"/>
+  </g>
+  <!-- one ochre accent fragment (a recognizable fossil shape: spiral) -->
+  <g fill="#b89060" stroke="#1a1a1a" stroke-width="1">
+    <path d="M 195 198
+             m -6 0 a 6 6 0 1 0 10 -2
+             a 4 4 0 1 0 -6 0 Z"/>
+  </g>
+  <!-- head nub -->
+  <ellipse cx="200" cy="148" rx="14" ry="6" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="1.5"/>
+  <!-- label -->
+  <text x="200" y="392" text-anchor="middle" font-family="monospace" font-size="11" fill="#5a5246">Strata Loom · Bone Fields</text>
+</svg>

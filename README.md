@@ -60,6 +60,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
 - **[primordia](./toys/primordia)** — a coevolutionary ecosystem where prey and
   predators have tiny evolved neural-net brains; foraging, fleeing, and hunting
   emerge from selection on genome weights (Python, numpy).
+- **[bestiary100](./toys/bestiary100)** — 100 creatures for an alien world
+  ("the Drift"), each invented by a separate subagent that could read the
+  others' work; convergent evolution emerges across independent agents (Python
+  assembler, markdown + SVG).
 
 ## Feedback
 

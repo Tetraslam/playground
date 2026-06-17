@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- palette: glass pale, shadow, body, accent -->
+  <rect width="400" height="400" fill="#f4ecd6"/>
+
+  <!-- glass crust band -->
+  <rect x="0" y="120" width="400" height="70" fill="#cfe3e6"/>
+  <g stroke="#9bbcc0" stroke-width="1" opacity="0.7">
+    <line x1="0" y1="135" x2="400" y2="138"/>
+    <line x1="0" y1="150" x2="400" y2="146"/>
+    <line x1="0" y1="165" x2="400" y2="168"/>
+    <line x1="0" y1="178" x2="400" y2="175"/>
+  </g>
+
+  <!-- sunlight rays refracting into caustics -->
+  <g stroke="#e8b84a" stroke-width="1" opacity="0.85" fill="none">
+    <line x1="80" y1="0" x2="150" y2="120"/>
+    <line x1="160" y1="0" x2="180" y2="120"/>
+    <line x1="260" y1="0" x2="220" y2="120"/>
+    <line x1="330" y1="0" x2="260" y2="120"/>
+    <!-- caustic convergence below crust onto creature -->
+    <line x1="150" y1="190" x2="200" y2="250"/>
+    <line x1="180" y1="190" x2="200" y2="250"/>
+    <line x1="220" y1="190" x2="200" y2="250"/>
+    <line x1="260" y1="190" x2="200" y2="250"/>
+  </g>
+
+  <!-- shadow zone below crust -->
+  <rect x="0" y="190" width="400" height="210" fill="#2b2a2e" opacity="0.92"/>
+
+  <!-- the creature: flat disc pressed to crust underside -->
+  <ellipse cx="200" cy="250" rx="110" ry="26" fill="#4a4648" stroke="#1c1b1e" stroke-width="1.5"/>
+
+  <!-- photoreceptor fringe (venter) -->
+  <g fill="#e8b84a">
+    <!-- left arc -->
+    <circle cx="100" cy="250" r="1.6"/>
+    <circle cx="108" cy="252" r="1.6"/>
+    <circle cx="118" cy="254" r="1.6"/>
+    <circle cx="130" cy="256" r="1.6"/>
+    <circle cx="143" cy="258" r="1.6"/>
+    <!-- right arc -->
+    <circle cx="300" cy="250" r="1.6"/>
+    <circle cx="292" cy="252" r="1.6"/>
+    <circle cx="282" cy="254" r="1.6"/>
+    <circle cx="270" cy="256" r="1.6"/>
+    <circle cx="257" cy="258" r="1.6"/>
+    <!-- top edge -->
+    <circle cx="170" cy="241" r="1.4"/>
+    <circle cx="185" cy="238" r="1.4"/>
+    <circle cx="200" cy="237" r="1.4"/>
+    <circle cx="215" cy="238" r="1.4"/>
+    <circle cx="230" cy="241" r="1.4"/>
+    <!-- bottom edge -->
+    <circle cx="170" cy="259" r="1.4"/>
+    <circle cx="185" cy="262" r="1.4"/>
+    <circle cx="200" cy="263" r="1.4"/>
+    <circle cx="215" cy="262" r="1.4"/>
+    <circle cx="230" cy="259" r="1.4"/>
+  </g>
+
+  <!-- central evertible sphincter -->
+  <circle cx="200" cy="250" r="6" fill="#1c1b1e"/>
+  <circle cx="200" cy="250" r="2.2" fill="#e8b84a"/>
+
+  <!-- scale & labels (field-guide) -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="9" fill="#1c1b1e">
+    <text x="14" y="20">Caustiphore · cross-section</text>
+    <text x="14" y="32" font-size="7" opacity="0.7">Glass Wastes — sub-crustal ambush</text>
+
+    <text x="320" y="118" text-anchor="end">glass crust</text>
+    <text x="320" y="190" text-anchor="end">shadow zone</text>
+    <line x1="60" y1="250" x2="60" y2="276" stroke="#1c1b1e" stroke-width="0.8"/>
+    <text x="64" y="266">~0.6 m</text>
+
+    <!-- caustic label -->
+    <text x="290" y="220" text-anchor="end" opacity="0.8">caustic focus</text>
+  </g>
+</svg>

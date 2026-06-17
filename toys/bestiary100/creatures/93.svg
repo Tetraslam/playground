@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <!-- field-guide sketch: Vagabunda specula -->
+  <rect width="400" height="400" fill="#f4efe1"/>
+
+  <!-- sun + arrow (context) -->
+  <circle cx="330" cy="55" r="14" fill="#d9b54a" stroke="#3a3326" stroke-width="1.5"/>
+  <line x1="300" y1="90" x2="225" y2="150" stroke="#3a3326" stroke-width="1" stroke-dasharray="4 4"/>
+  <polygon points="225,150 235,143 233,155" fill="#3a3326"/>
+
+  <!-- parabolic mirror dish (dorsal) -->
+  <ellipse cx="180" cy="170" rx="120" ry="34" fill="#e8d27a" stroke="#3a3326" stroke-width="2"/>
+  <ellipse cx="180" cy="166" rx="120" ry="34" fill="none" stroke="#3a3326" stroke-width="2"/>
+  <!-- highlight on mirror -->
+  <ellipse cx="150" cy="158" rx="34" ry="8" fill="#f6edc0" opacity="0.85"/>
+
+  <!-- neck-stalk -->
+  <path d="M 180 170 Q 182 190 178 210" fill="none" stroke="#3a3326" stroke-width="2"/>
+
+  <!-- ventral body / ash skirt -->
+  <ellipse cx="178" cy="222" rx="92" ry="20" fill="#b9a987" stroke="#3a3326" stroke-width="1.5"/>
+
+  <!-- six legs -->
+  <g stroke="#3a3326" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M 95 222 L 80 258 L 70 256"/>
+    <path d="M 135 226 L 124 264 L 114 263"/>
+    <path d="M 165 228 L 160 268 L 152 270"/>
+    <path d="M 191 228 L 196 268 L 204 270"/>
+    <path d="M 221 226 L 232 264 L 242 263"/>
+    <path d="M 261 222 L 276 258 L 286 256"/>
+  </g>
+
+  <!-- scorch trail (brown footprints on canopy leaves) -->
+  <g fill="#6b4a2b" opacity="0.7">
+    <ellipse cx="62" cy="338" rx="20" ry="6"/>
+    <ellipse cx="120" cy="352" rx="20" ry="6"/>
+    <ellipse cx="182" cy="344" rx="20" ry="6"/>
+    <ellipse cx="244" cy="356" rx="20" ry="6"/>
+    <ellipse cx="302" cy="348" rx="20" ry="6"/>
+  </g>
+  <!-- canopy leaf hints -->
+  <g stroke="#6b7d4a" stroke-width="1" fill="none" opacity="0.55">
+    <path d="M 30 360 Q 80 350 130 362"/>
+    <path d="M 150 360 Q 200 350 250 362"/>
+    <path d="M 270 360 Q 320 350 370 362"/>
+  </g>
+
+  <!-- caption -->
+  <text x="200" y="392" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#3a3326" font-style="italic">Vagabunda specula — dorsal view, with Pilgrim's Walk</text>
+</svg>

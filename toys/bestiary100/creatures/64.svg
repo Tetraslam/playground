@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#0d1418"/>
+  <!-- fissure glow -->
+  <ellipse cx="200" cy="372" rx="150" ry="14" fill="#c2410c" opacity="0.55"/>
+  <ellipse cx="200" cy="372" rx="90" ry="8" fill="#f97316" opacity="0.85"/>
+  <!-- column: stacked thermoelectric rings, tapering, hot base to cool apex -->
+  <g stroke="#1b2a33" stroke-width="1">
+    <!-- dead mineralized pedestal (darkest, widest) -->
+    <rect x="168" y="320" width="64" height="40" fill="#2a2118"/>
+    <rect x="172" y="300" width="56" height="22" fill="#3a2c1c"/>
+    <!-- living rings: ember to cyan up the column -->
+    <rect x="176" y="280" width="48" height="20" fill="#7c2d12"/>
+    <rect x="178" y="262" width="44" height="18" fill="#9a3412"/>
+    <rect x="180" y="246" width="40" height="16" fill="#b45309"/>
+    <rect x="182" y="231" width="36" height="15" fill="#a16207"/>
+    <rect x="184" y="217" width="32" height="14" fill="#3f6212" opacity="0.85"/>
+    <rect x="186" y="204" width="28" height="13" fill="#115e59"/>
+    <rect x="188" y="192" width="24" height="12" fill="#0e7490"/>
+    <rect x="190" y="181" width="20" height="11" fill="#0891b2"/>
+    <rect x="192" y="171" width="16" height="10" fill="#06b6d4"/>
+    <rect x="194" y="162" width="12" height="9" fill="#22d3ee"/>
+    <rect x="196" y="154" width="8" height="8" fill="#67e8f9"/>
+  </g>
+  <!-- bioluminescent traveling pulse (pale green-blue) -->
+  <rect x="184" y="217" width="32" height="14" fill="#34d399" opacity="0.35"/>
+  <rect x="190" y="181" width="20" height="11" fill="#34d399" opacity="0.22"/>
+  <!-- core channel glow -->
+  <rect x="198" y="162" width="4" height="178" fill="#fde68a" opacity="0.5"/>
+  <!-- root / magnetite anchor -->
+  <path d="M176 360 L200 372 L224 360 L220 356 L200 366 L180 356 Z" fill="#11151a"/>
+  <!-- rising plume-bud near apex -->
+  <circle cx="200" cy="140" r="5" fill="#67e8f9" opacity="0.8"/>
+  <circle cx="203" cy="120" r="3.5" fill="#a5f3fc" opacity="0.6"/>
+  <circle cx="198" cy="104" r="2.5" fill="#cffafe" opacity="0.45"/>
+  <!-- vent bubbles -->
+  <circle cx="150" cy="340" r="2" fill="#f97316" opacity="0.4"/>
+  <circle cx="252" cy="332" r="1.5" fill="#f97316" opacity="0.35"/>
+  <circle cx="138" cy="352" r="1.5" fill="#fb923c" opacity="0.3"/>
+  <!-- label -->
+  <text x="200" y="392" text-anchor="middle" font-family="monospace" font-size="10" fill="#64748b">Galvanostele fumarolicum</text>
+</svg>

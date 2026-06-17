@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4efe4"/>
+  <!-- fissure / hot substrate -->
+  <path d="M40 360 L360 360 L360 400 L40 400 Z" fill="#2b1a14"/>
+  <path d="M40 360 L120 340 L180 360 L250 335 L320 360 L360 350 L360 360 Z" fill="#c3501e"/>
+  <!-- thermocline ticks (field-guide convention) -->
+  <text x="20" y="120" font-family="serif" font-size="11" fill="#2b3a55">4°C</text>
+  <text x="20" y="340" font-family="serif" font-size="11" fill="#c3501e">300°C</text>
+  <line x1="42" y1="116" x2="120" y2="116" stroke="#2b3a55" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="42" y1="336" x2="120" y2="336" stroke="#c3501e" stroke-width="0.5" stroke-dasharray="3 3"/>
+
+  <!-- chimney stalk: alternating bimetallic rings -->
+  <g>
+    <rect x="188" y="338" width="24" height="22" fill="#2b1a14"/>
+    <rect x="186" y="316" width="28" height="22" fill="#b8862a"/>
+    <rect x="184" y="294" width="32" height="22" fill="#2b3a55"/>
+    <rect x="182" y="272" width="36" height="22" fill="#b8862a"/>
+    <rect x="180" y="250" width="40" height="22" fill="#2b3a55"/>
+    <rect x="178" y="228" width="44" height="22" fill="#b8862a"/>
+    <rect x="176" y="206" width="48" height="22" fill="#2b3a55"/>
+    <rect x="174" y="184" width="52" height="22" fill="#b8862a"/>
+    <rect x="172" y="162" width="56" height="22" fill="#2b3a55"/>
+    <rect x="170" y="140" width="60" height="22" fill="#b8862a"/>
+    <rect x="168" y="120" width="64" height="20" fill="#2b3a55"/>
+  </g>
+
+  <!-- crown: sulfur rime -->
+  <g fill="#e8c63a" stroke="#9a7a1a" stroke-width="0.6">
+    <polygon points="168,120 172,108 176,120"/>
+    <polygon points="178,118 184,104 190,118"/>
+    <polygon points="192,116 200,100 208,116"/>
+    <polygon points="210,118 216,106 222,118"/>
+    <polygon points="224,120 228,110 232,120"/>
+    <circle cx="200" cy="100" r="3"/>
+    <circle cx="186" cy="106" r="2.2"/>
+    <circle cx="214" cy="106" r="2.2"/>
+  </g>
+
+  <!-- voltage arrow -->
+  <line x1="250" y1="320" x2="250" y2="130" stroke="#2b1a14" stroke-width="1"/>
+  <polygon points="250,124 246,134 254,134" fill="#2b1a14"/>
+  <text x="258" y="228" font-family="serif" font-size="11" fill="#2b1a14" font-style="italic">~1 V</text>
+
+  <!-- caption -->
+  <text x="200" y="385" font-family="serif" font-size="12" fill="#2b1a14" text-anchor="middle" font-style="italic">Galvanocaulis pyroelectrica</text>
+</svg>

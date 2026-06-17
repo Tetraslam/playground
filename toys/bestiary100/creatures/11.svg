@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4ecd6"/>
+  <!-- glass desert facets -->
+  <g fill="none" stroke="#d9c98a" stroke-width="0.6" opacity="0.6">
+    <polygon points="0,40 90,10 140,70 60,110"/>
+    <polygon points="250,0 330,30 300,90 230,60"/>
+    <polygon points="300,200 400,170 400,240 320,260"/>
+    <polygon points="20,300 110,280 150,360 60,380"/>
+    <polygon points="280,300 370,290 400,360 310,380"/>
+  </g>
+  <!-- scratch trail (dawn repositioning) -->
+  <path d="M 60 60 Q 130 80 200 200" fill="none" stroke="#b8a36a" stroke-width="1.4" stroke-dasharray="3 4" opacity="0.7"/>
+  <!-- Fresnel lens body -->
+  <g transform="translate(200 200)">
+    <circle r="120" fill="#e8a93a" stroke="#6e4a12" stroke-width="2.2"/>
+    <circle r="100" fill="none" stroke="#8a5a16" stroke-width="0.9"/>
+    <circle r="82" fill="none" stroke="#8a5a16" stroke-width="0.9"/>
+    <circle r="64" fill="none" stroke="#8a5a16" stroke-width="0.9"/>
+    <circle r="46" fill="none" stroke="#8a5a16" stroke-width="0.9"/>
+    <circle r="28" fill="none" stroke="#8a5a16" stroke-width="0.9"/>
+    <!-- suture lines (radial fission) -->
+    <g stroke="#6e4a12" stroke-width="1.1" opacity="0.8">
+      <line x1="0" y1="-120" x2="0" y2="-28"/>
+      <line x1="104" y1="60" x2="24" y2="14"/>
+      <line x1="-104" y1="60" x2="-24" y2="14"/>
+    </g>
+    <!-- central pore + siphon -->
+    <circle r="10" fill="#3a2410"/>
+    <circle r="4" fill="#1a0e04"/>
+  </g>
+  <!-- focal point + prey silhouette above -->
+  <g opacity="0.85">
+    <line x1="200" y1="80" x2="200" y2="150" stroke="#b3541a" stroke-width="0.8" stroke-dasharray="2 3"/>
+    <circle cx="200" cy="80" r="3" fill="#b3541a"/>
+    <g transform="translate(200 60)" stroke="#5a3a0a" stroke-width="1" fill="none">
+      <ellipse cx="0" cy="0" rx="10" ry="4"/>
+      <line x1="-10" y1="0" x2="-16" y2="-4"/>
+      <line x1="10" y1="0" x2="16" y2="-4"/>
+      <line x1="-6" y1="3" x2="-9" y2="9"/>
+      <line x1="6" y1="3" x2="9" y2="9"/>
+    </g>
+  </g>
+  <!-- scale + label -->
+  <line x1="40" y1="370" x2="100" y2="370" stroke="#3a2410" stroke-width="1"/>
+  <text x="50" y="388" font-family="serif" font-size="11" fill="#3a2410">~ 8 cm</text>
+  <text x="200" y="388" text-anchor="middle" font-family="serif" font-style="italic" font-size="13" fill="#3a2410">Fresnel scorchcut</text>
+</svg>

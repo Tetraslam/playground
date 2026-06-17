@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#0c1410"/>
+  <!-- mire water sheen -->
+  <rect x="0" y="240" width="400" height="160" fill="#16201a" opacity="0.7"/>
+  <!-- founding knot -->
+  <circle cx="200" cy="280" r="6" fill="#7a1a2a"/>
+  <!-- main radiating capillaries, wine-red -->
+  <g stroke="#8a2230" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M200 280 Q150 240 110 200 Q90 180 70 150"/>
+    <path d="M200 280 Q170 230 140 190 Q120 160 95 120"/>
+    <path d="M200 280 Q200 220 200 170 Q200 140 200 100"/>
+    <path d="M200 280 Q230 230 260 190 Q280 160 305 120"/>
+    <path d="M200 280 Q250 240 290 200 Q310 180 330 150"/>
+    <path d="M200 280 Q160 300 120 320 Q95 335 70 350"/>
+    <path d="M200 280 Q240 300 280 320 Q305 335 330 350"/>
+  </g>
+  <!-- secondary branching -->
+  <g stroke="#6e1a26" stroke-width="1.2" fill="none" stroke-linecap="round">
+    <path d="M110 200 Q90 195 70 205"/>
+    <path d="M140 190 Q125 175 110 165"/>
+    <path d="M200 170 Q185 150 175 135"/>
+    <path d="M200 170 Q215 150 225 135"/>
+    <path d="M260 190 Q275 175 290 165"/>
+    <path d="M290 200 Q310 195 330 205"/>
+    <path d="M120 320 Q105 310 90 312"/>
+    <path d="M280 320 Q295 310 310 312"/>
+  </g>
+  <!-- graft seam: teal accent where two wefts fused -->
+  <path d="M40 360 Q200 250 360 360" stroke="#2a6a6a" stroke-width="1.5" fill="none" stroke-dasharray="3 4"/>
+  <circle cx="118" cy="305" r="3" fill="#2a6a6a"/>
+  <circle cx="282" cy="305" r="3" fill="#2a6a6a"/>
+  <!-- field-guide label -->
+  <text x="200" y="38" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="16" fill="#d8cdb0">Vascularium mirensis</text>
+  <text x="200" y="56" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#8a8470">mire surface · graft-chimera · ×0.08</text>
+</svg>

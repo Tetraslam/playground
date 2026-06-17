@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4ecd8"/>
+
+  <!-- bark texture lines -->
+  <g stroke="#6b4a2b" stroke-width="1" opacity="0.35" fill="none">
+    <path d="M0 70 Q200 60 400 78"/>
+    <path d="M0 150 Q200 142 400 158"/>
+    <path d="M0 250 Q200 244 400 258"/>
+    <path d="M0 330 Q200 322 400 338"/>
+  </g>
+
+  <!-- graft membrane (living bark), tilted rectangle -->
+  <g transform="rotate(-8 200 195)">
+    <rect x="95" y="120" width="210" height="150" fill="#9bbf6a" stroke="#5d7e3e" stroke-width="1.5" opacity="0.82"/>
+    <!-- red shade-induced patch showing beneath, at one end -->
+    <rect x="108" y="250" width="184" height="14" fill="#c25b3e" opacity="0.85"/>
+  </g>
+
+  <!-- chitin spine along upper long edge -->
+  <g stroke="#2a2118" stroke-width="4" fill="none" stroke-linecap="round">
+    <line x1="120" y1="135" x2="296" y2="110"/>
+  </g>
+
+  <!-- four splayed legs with bark hooks -->
+  <g stroke="#2a2118" stroke-width="2.2" fill="none" stroke-linecap="round">
+    <path d="M120 135 L78 96 L70 88"/>
+    <path d="M120 135 L74 150 L64 154"/>
+    <path d="M296 110 L336 76 L344 68"/>
+    <path d="M296 110 L342 130 L352 134"/>
+  </g>
+
+  <!-- mandibles beneath spine -->
+  <g stroke="#2a2118" stroke-width="1.4" fill="none">
+    <path d="M150 138 q4 8 -2 14"/>
+    <path d="M168 134 q4 8 -2 14"/>
+    <path d="M186 130 q4 8 -2 14"/>
+  </g>
+
+  <!-- rootlet tapping graft -->
+  <path d="M205 122 q-2 18 4 34" stroke="#5d7e3e" stroke-width="1.4" fill="none" opacity="0.8"/>
+
+  <!-- scale bar -->
+  <g stroke="#2a2118" stroke-width="1.4" fill="#2a2118" font-family="serif" font-size="11">
+    <line x1="60" y1="372" x2="140" y2="372"/>
+    <line x1="60" y1="367" x2="60" y2="377"/>
+    <line x1="140" y1="367" x2="140" y2="377"/>
+    <text x="100" y="390" text-anchor="middle" font-style="italic">5 cm</text>
+  </g>
+
+  <!-- label -->
+  <text x="340" y="390" text-anchor="end" font-family="serif" font-size="12" font-style="italic" fill="#2a2118">Umbravane, dorsal</text>
+</svg>

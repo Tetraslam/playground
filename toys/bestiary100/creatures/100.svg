@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4ecd8"/>
+
+  <!-- field-guide frame -->
+  <rect x="14" y="14" width="372" height="372" fill="none" stroke="#3a3326" stroke-width="1"/>
+
+  <!-- world-tree crown band (substrate) -->
+  <g stroke="#3a3326" stroke-width="2" stroke-linecap="round">
+    <line x1="40" y1="350" x2="360" y2="350"/>
+    <line x1="70"  y1="350" x2="70"  y2="362"/>
+    <line x1="120" y1="350" x2="120" y2="358"/>
+    <line x1="200" y1="350" x2="200" y2="364"/>
+    <line x1="270" y1="350" x2="270" y2="358"/>
+    <line x1="320" y1="350" x2="320" y2="362"/>
+  </g>
+
+  <!-- tether: living umbilicus from crown to kite, slightly bowed -->
+  <path d="M 200 350 Q 196 260 200 168" fill="none" stroke="#b8843a" stroke-width="2"/>
+  <!-- vascular pulse markers along tether -->
+  <circle cx="200" cy="300" r="2.5" fill="#b8843a"/>
+  <circle cx="199" cy="250" r="2.5" fill="#b8843a"/>
+  <circle cx="200" cy="210" r="2.5" fill="#b8843a"/>
+
+  <!-- Cymesail: rhombic membrane on a spar -->
+  <g>
+    <!-- membrane -->
+    <polygon points="200,60 282,168 200,276 118,168" fill="#f4ecd8" stroke="#3a3326" stroke-width="2"/>
+    <!-- dorsal photosynthetic mat (upper half) -->
+    <polygon points="200,60 282,168 200,168 118,168" fill="#6b8e4e" stroke="none"/>
+    <!-- spar -->
+    <line x1="200" y1="60" x2="200" y2="276" stroke="#3a3326" stroke-width="1.5"/>
+    <!-- cross-spar -->
+    <line x1="118" y1="168" x2="282" y2="168" stroke="#3a3326" stroke-width="1.5"/>
+    <!-- vein detail on ventral (lower) half -->
+    <line x1="200" y1="168" x2="160" y2="222" stroke="#3a3326" stroke-width="0.75"/>
+    <line x1="200" y1="168" x2="240" y2="222" stroke="#3a3326" stroke-width="0.75"/>
+  </g>
+
+  <!-- spore-kites drifting away (lifecycle note) -->
+  <g fill="#6b8e4e" stroke="#3a3326" stroke-width="1">
+    <polygon points="330,80 348,92 330,104 312,92"/>
+    <polygon points="352,120 364,128 352,136 340,128"/>
+  </g>
+  <path d="M 348 92 Q 360 100 352 128" fill="none" stroke="#3a3326" stroke-width="0.75" stroke-dasharray="2 3"/>
+
+  <!-- scale bar -->
+  <g stroke="#3a3326" stroke-width="1" fill="#3a3326" font-family="Georgia, serif" font-size="10">
+    <line x1="40" y1="382" x2="100" y2="382"/>
+    <line x1="40" y1="378" x2="40" y2="386"/>
+    <line x1="100" y1="378" x2="100" y2="386"/>
+    <text x="110" y="386" stroke="none">0.5 m</text>
+  </g>
+
+  <!-- caption -->
+  <text x="360" y="386" text-anchor="end" font-family="Georgia, serif" font-size="11"
+        font-style="italic" fill="#3a3326">Cymesail · Canopy</text>
+</svg>

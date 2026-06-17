@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <title>Catadioptra vitricola — field sketch</title>
+  <!-- palette: sand #d9c9a3, glass #a8c8d8, ink #2b2b3a, beam #f0a040 -->
+  <rect width="400" height="400" fill="#d9c9a3"/>
+
+  <!-- focal beam, behind carapace -->
+  <polygon points="200,150 188,360 212,360" fill="#f0a040" opacity="0.45"/>
+  <circle cx="200" cy="356" r="14" fill="#f0a040" opacity="0.55"/>
+
+  <!-- six legs: calcite splinters, thermal-ratchet joints -->
+  <g stroke="#2b2b3a" stroke-width="2.5" fill="#a8c8d8">
+    <polygon points="120,210 78,196 84,212 118,224"/>
+    <polygon points="120,250 80,252 86,268 122,266"/>
+    <polygon points="200,150 150,110 158,128 196,150" opacity="0.85"/>
+    <polygon points="200,150 250,110 242,128 204,150" opacity="0.85"/>
+    <polygon points="280,210 322,196 316,212 282,224"/>
+    <polygon points="280,250 320,252 314,268 278,266"/>
+  </g>
+
+  <!-- hexagonal prism carapace: tiled calcite facets -->
+  <g stroke="#2b2b3a" stroke-width="1.4" fill="#a8c8d8">
+    <polygon points="200,150 260,184 260,252 200,286 140,252 140,184"/>
+  </g>
+  <g stroke="#2b2b3a" stroke-width="0.8" fill="none" opacity="0.75">
+    <!-- facet lines radiating from a central prism -->
+    <polygon points="200,190 230,207 230,241 200,258 170,241 170,207"/>
+    <line x1="200" y1="150" x2="200" y2="190"/>
+    <line x1="260" y1="184" x2="230" y2="207"/>
+    <line x1="260" y1="252" x2="230" y2="241"/>
+    <line x1="200" y1="286" x2="200" y2="258"/>
+    <line x1="140" y1="252" x2="170" y2="241"/>
+    <line x1="140" y1="184" x2="170" y2="207"/>
+    <line x1="200" y1="190" x2="170" y2="207"/>
+    <line x1="200" y1="190" x2="230" y2="207"/>
+    <line x1="200" y1="258" x2="170" y2="241"/>
+    <line x1="200" y1="258" x2="230" y2="241"/>
+  </g>
+
+  <!-- a single highlighted prism catching the beam -->
+  <polygon points="200,190 230,207 230,241 200,258 170,241 170,207"
+           fill="#f0a040" opacity="0.35"/>
+
+  <!-- scale bar -->
+  <g stroke="#2b2b3a" stroke-width="1.2" fill="#2b2b3a">
+    <line x1="40" y1="372" x2="120" y2="372"/>
+    <line x1="40" y1="367" x2="40" y2="377"/>
+    <line x1="120" y1="367" x2="120" y2="377"/>
+    <text x="80" y="390" font-family="serif" font-size="12" text-anchor="middle">20 cm</text>
+  </g>
+
+  <!-- caption -->
+  <text x="360" y="38" font-family="serif" font-size="13" text-anchor="end" fill="#2b2b3a" font-style="italic">Catadioptra vitricola</text>
+  <text x="360" y="54" font-family="serif" font-size="10" text-anchor="end" fill="#2b2b3a">dorsal aspect, midday focus</text>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f4f1ea"/>
+  <!-- thin air horizon hint -->
+  <line x1="0" y1="300" x2="400" y2="300" stroke="#d8d0c0" stroke-width="1" stroke-dasharray="2 6"/>
+  <!-- distant landmass silhouette -->
+  <path d="M 0 305 Q 80 295, 160 304 Q 240 312, 400 302 L 400 320 L 0 320 Z" fill="#e4ddca"/>
+  <!-- the ribbon: long wavy electrostatic strip -->
+  <path d="M 30 130 Q 110 80, 200 140 Q 290 200, 370 110" fill="none" stroke="#3a4a5a" stroke-width="9" stroke-linecap="round"/>
+  <!-- charged edge cilia (upper) -->
+  <path d="M 30 130 Q 110 80, 200 140 Q 290 200, 370 110" fill="none" stroke="#7a8aa0" stroke-width="1.5" stroke-dasharray="1 5"/>
+  <!-- charged edge cilia (lower, offset) -->
+  <path d="M 30 138 Q 110 88, 200 148 Q 290 208, 370 118" fill="none" stroke="#7a8aa0" stroke-width="1.5" stroke-dasharray="1 5"/>
+  <!-- UV-absorbing pigment patches on upper surface -->
+  <ellipse cx="110" cy="100" rx="14" ry="3" fill="#5a3a2a" transform="rotate(-18 110 100)"/>
+  <ellipse cx="200" cy="142" rx="14" ry="3" fill="#5a3a2a" transform="rotate(8 200 142)"/>
+  <ellipse cx="290" cy="188" rx="14" ry="3" fill="#5a3a2a" transform="rotate(28 290 188)"/>
+  <!-- ionization sparks at trailing end -->
+  <circle cx="365" cy="108" r="1.6" fill="#c0563a"/>
+  <circle cx="372" cy="114" r="1.2" fill="#c0563a"/>
+  <circle cx="360" cy="118" r="1.4" fill="#c0563a"/>
+  <!-- a captured migrant dot near groove -->
+  <circle cx="200" cy="142" r="1.8" fill="#3a4a5a"/>
+  <!-- label -->
+  <text x="20" y="370" font-family="serif" font-size="14" fill="#3a4a5a" font-style="italic">Caelivex filans</text>
+  <text x="20" y="388" font-family="serif" font-size="11" fill="#6a7080">Aether — electrostatic ribbon, up to ~30 m</text>
+</svg>

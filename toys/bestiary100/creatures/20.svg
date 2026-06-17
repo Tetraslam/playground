@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#1a1410"/>
+  <!-- glass wastes: refractive shards -->
+  <g fill="#3a2f24" stroke="#5a4a38" stroke-width="0.8" opacity="0.9">
+    <polygon points="0,300 60,280 90,320 30,360"/>
+    <polygon points="90,320 170,300 210,340 140,380"/>
+    <polygon points="210,340 290,320 340,360 260,390"/>
+    <polygon points="340,360 400,340 400,400 280,400"/>
+    <polygon points="30,360 110,350 130,390 60,400"/>
+    <polygon points="250,360 320,355 340,395 270,400"/>
+  </g>
+  <!-- sun (high, hot) -->
+  <circle cx="330" cy="58" r="22" fill="#f2c14e" opacity="0.9"/>
+  <circle cx="330" cy="58" r="30" fill="#f2c14e" opacity="0.18"/>
+  <!-- focused sunbeam: dashed line from sun to focal point -->
+  <line x1="330" y1="80" x2="206" y2="232" stroke="#f2c14e" stroke-width="1" stroke-dasharray="3 3" opacity="0.55"/>
+  <!-- crater trail (prior hops) -->
+  <g fill="#241c16" stroke="#6b5638" stroke-width="0.7">
+    <ellipse cx="120" cy="300" rx="9" ry="3.5"/>
+    <ellipse cx="150" cy="288" rx="9" ry="3.5"/>
+    <ellipse cx="178" cy="270" rx="9" ry="3.5"/>
+  </g>
+  <!-- the lens: biconvex clear disc -->
+  <ellipse cx="206" cy="232" rx="62" ry="34" fill="#bfe3e8" opacity="0.28"/>
+  <ellipse cx="206" cy="232" rx="62" ry="34" fill="none" stroke="#7fc7d1" stroke-width="1.4"/>
+  <!-- lens highlight -->
+  <path d="M168 222 Q190 210 218 214" stroke="#eafcff" stroke-width="1.2" fill="none" opacity="0.7"/>
+  <!-- dark magnetite nucleoid (gut/ganglion) -->
+  <ellipse cx="206" cy="232" rx="9" ry="6" fill="#1a1410" stroke="#4a3a2a" stroke-width="0.6"/>
+  <!-- focal point on the glass: bright pip -->
+  <circle cx="206" cy="262" r="3" fill="#fff3b0"/>
+  <circle cx="206" cy="262" r="6" fill="#fff3b0" opacity="0.35"/>
+  <!-- current hop crater, molten rim -->
+  <ellipse cx="206" cy="262" rx="7" ry="2.6" fill="none" stroke="#e08a3c" stroke-width="1.2"/>
+  <!-- underside spicules -->
+  <g stroke="#7fc7d1" stroke-width="0.7" opacity="0.7">
+    <line x1="170" y1="244" x2="166" y2="252"/>
+    <line x1="186" y1="250" x2="184" y2="259"/>
+    <line x1="206" y1="252" x2="206" y2="262"/>
+    <line x1="226" y1="250" x2="228" y2="259"/>
+    <line x1="242" y1="244" x2="246" y2="252"/>
+  </g>
+  <!-- scale bar -->
+  <g stroke="#a1a1aa" stroke-width="1" fill="#a1a1aa" font-family="monospace" font-size="9">
+    <line x1="318" y1="372" x2="378" y2="372"/>
+    <line x1="318" y1="368" x2="318" y2="376"/>
+    <line x1="378" y1="368" x2="378" y2="376"/>
+    <text x="348" y="388" text-anchor="middle" stroke="none">~15 cm</text>
+  </g>
+  <!-- label -->
+  <text x="14" y="24" fill="#a1a1aa" font-family="monospace" font-size="11">Vitreofocus heliotaxis</text>
+  <text x="14" y="38" fill="#71717a" font-family="monospace" font-size="9">Kilnlens</text>
+</svg>
