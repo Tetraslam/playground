@@ -57,6 +57,9 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   (Python, stdlib only).
 - **[rrt-viz](./toys/rrt-viz)** — a motion-planning playground: A\*, RRT, and
   RRT\* grow paths through obstacles you draw (single-file HTML + p5.js).
+- **[primordia](./toys/primordia)** — a coevolutionary ecosystem where prey and
+  predators have tiny evolved neural-net brains; foraging, fleeing, and hunting
+  emerge from selection on genome weights (Python, numpy).
 
 ## Feedback
 

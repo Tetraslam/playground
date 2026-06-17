@@ -4,14 +4,14 @@ version = "0.1.0"
 description = "A monorepo playground for tetraslam and the claudes to build fun things."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = ["numpy>=1.26"]
 
 # uv workspace: one lockfile at the root. Members are an EXPLICIT list of
 # Python projects — do NOT use a bare `toys/*` glob, since toys/ also holds
 # non-Python toys (Go/Rust/TS) that have no pyproject.toml, which makes uv
 # refuse to resolve. Add a Python toy's path here when you create it.
 [tool.uv.workspace]
-members = ["lib/py/*", "toys/dilemma", "toys/phloraflora", "toys/phonoscape", "toys/qurwen", "toys/orderbook", "toys/kalmanville"]
+members = ["lib/py/*", "toys/dilemma", "toys/phloraflora", "toys/phonoscape", "toys/qurwen", "toys/orderbook", "toys/kalmanville", "toys/primordia"]
 exclude = ["toys/*"]
 
 [tool.uv]

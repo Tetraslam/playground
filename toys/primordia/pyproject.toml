@@ -1,0 +1,8 @@
+[project]
+name = "primordia"
+version = "0.1.0"
+description = "Coevolutionary ecosystem: prey + predators with tiny evolved neural-net brains. No hand-authored behavior — foraging, fleeing, hunting all emerge from selection on genome weights."
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.26",
+]
