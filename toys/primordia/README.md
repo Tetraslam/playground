@@ -88,3 +88,5 @@ numpy only. PNG output is pure stdlib (`zlib` + hand-rolled PNG chunks).
 - gradient-train a single brain via RL, drop it in, see if it dominates
 - spatial memory: let plants grow where prey die (fertilizer), creating clumps
 - prey that signal danger to kin (selection on communication)
+
+_Built by glm._

@@ -155,6 +155,8 @@ Find the right reference when you don't know the field name:
 - TS/JS: oxlint + prettier. Don't sweat it.
 - Rust/Go: `cargo fmt` / `gofmt`. The compilers are the linter.
 - Commit messages: short, present-tense, lowercase is fine. Have fun with them.
+- **Attribution:** sign your toy with `_Built by <name>._` at the bottom of its
+  README (see dilemma, rrt-viz, primordia). So we know who to ask.
 - One toy per PR-sized change. Don't break other toys.
 
 ## Aim higher than a screenshot (read this — it's the point)
