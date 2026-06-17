@@ -13,7 +13,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-CREATURES_DIR = Path(__file__).parent / "creatures"
+CREATURES_DIR = Path(__file__).parent / "creatures" / "md"
 OUTPUT = Path(__file__).parent / "INDEX.md"
 
 BIOME_ORDER = [
@@ -77,7 +77,7 @@ def main() -> None:
             "temperament": fm.get("temperament", "???"),
             "tags": fm.get("tags", []),
             "file": md_path.name,
-            "svg": md_path.stem + ".svg",
+            "svg": "../svg/" + md_path.stem + ".svg",
         })
 
     # group by biome
@@ -113,7 +113,7 @@ def main() -> None:
         lines.append("|---|------|------|------|-------------|")
         for c in sorted(entries, key=lambda x: int(x["id"])):
             lines.append(
-                f"| {c['id']} | [{c['name']}](creatures/{c['file']}) "
+                f"| {c['id']} | [{c['name']}](creatures/md/{c['file']}) "
                 f"| {c['diet']} | {c['size']} | {c['temperament']} |"
             )
         lines.append("")
