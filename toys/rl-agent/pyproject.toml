@@ -1,0 +1,6 @@
+[project]
+name = "rl-agent"
+version = "0.1.0"
+description = "Watch a tiny Q-learning agent learn to navigate a grid world in real time, right in your terminal."
+requires-python = ">=3.12"
+dependencies = []

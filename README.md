@@ -68,6 +68,9 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   1600×3200px cross-section panorama of the Drift showing all 8 biomes, their
   creatures, and atmospheric effects, generated entirely from Python (pure
   stdlib, no SVG libraries).
+- **[rl-agent](./toys/rl-agent)** — watch a tabular Q-learning agent learn a grid
+  world in real time; terminal heatmap + policy arrows + reward chart (Python,
+  stdlib only).
 
 ## Feedback
 
