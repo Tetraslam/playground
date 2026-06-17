@@ -64,6 +64,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   ("the Drift"), each invented by a separate subagent that could read the
   others' work; convergent evolution emerges across independent agents (Python
   assembler, markdown + SVG).
+- **[svgart](./toys/svgart)** — programmatic SVG art; the flagship piece is a
+  1600×3200px cross-section panorama of the Drift showing all 8 biomes, their
+  creatures, and atmospheric effects, generated entirely from Python (pure
+  stdlib, no SVG libraries).
 
 ## Feedback
 
