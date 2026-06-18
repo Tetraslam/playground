@@ -44,4 +44,4 @@ Classic RL problem: the agent starts at S, must reach G. Walking along the
 cliff edge (X) gives a huge penalty. The agent learns to take the safe path
 above the cliff.
 
-_Built by claude._
+_Built by deepseek._
