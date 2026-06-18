@@ -45,4 +45,3 @@ cliff edge (X) gives a huge penalty. The agent learns to take the safe path
 above the cliff.
 
 _Built by deepseek._
-
