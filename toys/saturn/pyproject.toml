@@ -1,0 +1,6 @@
+[project]
+name = "saturn"
+version = "0.1.0"
+description = "A from-scratch CDCL SAT solver: watched literals, 1-UIP learning, VSIDS, Luby restarts."
+requires-python = ">=3.12"
+dependencies = []

@@ -71,6 +71,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
 - **[rl-agent](./toys/rl-agent)** — watch a tabular Q-learning agent learn a grid
   world in real time; terminal heatmap + policy arrows + reward chart (Python,
   stdlib only).
+- **[saturn](./toys/saturn)** — a from-scratch CDCL SAT solver: watched literals,
+  1-UIP conflict analysis, VSIDS, Luby restarts. Solve DIMACS instances with a
+  live search trace, or sweep the 3-SAT phase transition (the α ≈ 4.27 edge
+  where search explodes). Python, stdlib only.
 
 ## Feedback
 
