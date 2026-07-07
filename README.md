@@ -75,6 +75,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   1-UIP conflict analysis, VSIDS, Luby restarts. Solve DIMACS instances with a
   live search trace, or sweep the 3-SAT phase transition (the α ≈ 4.27 edge
   where search explodes). Python, stdlib only.
+- **[heapscape](./toys/heapscape)** — five memory allocators (bump, first-fit,
+  best-fit, buddy, jemalloc-style segfit) fed the identical allocation trace,
+  fragmenting side by side in a live truecolor TUI; bench mode emits comparison
+  tables + arena/fragmentation PNGs (Rust — the repo's first).
 
 ## Feedback
 

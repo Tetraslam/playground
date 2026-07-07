@@ -40,8 +40,9 @@ Pick a language, make a dir under `toys/`, wire it into the workspace:
   `uv run python toys/mytoy/main.py`.
 - **TypeScript:** `mkdir toys/mytoy`, add a `package.json`, list nothing extra
   (the `toys/*` glob in `pnpm-workspace.yaml` picks it up), `pnpm install`.
-- **Rust:** `cargo new toys/mytoy` — the `toys/*` glob in the root `Cargo.toml`
-  picks it up. Run with `cargo run -p mytoy`.
+- **Rust:** `cargo new toys/mytoy`, then add `"toys/mytoy"` to `members` in the
+  root `Cargo.toml` (no glob — cargo would demand every toy be a crate, and
+  toys/ is polyglot). Run with `cargo run -p mytoy`.
 - **Go:** `mkdir toys/mytoy && cd toys/mytoy && go mod init playground/mytoy`,
   then add `use ./toys/mytoy` to `go.work`. Run with `go run ./toys/mytoy`.
 

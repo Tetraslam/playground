@@ -1,9 +1,9 @@
 # Rust workspace for the playground. One Cargo.lock at the root; each Rust toy
-# is a member crate under toys/. Add a crate, then list it here (or rely on the
-# glob). Build everything with `cargo build`, run a toy with `cargo run -p <name>`.
+# is a member crate under toys/. Globs don't work here (cargo requires every
+# match to be a crate, and toys/ is polyglot) — list each Rust toy explicitly.
 [workspace]
 resolver = "2"
-members = ["toys/*/rust", "toys/*"]
+members = ["toys/heapscape"]
 exclude = []
 
 [workspace.package]
