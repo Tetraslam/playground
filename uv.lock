@@ -2,6 +2,31 @@ version = 1
 revision = 3
 requires-python = ">=3.12"
 
+[manifest]
+members = [
+    "dilemma",
+    "kalmanville",
+    "orderbook",
+    "phloraflora",
+    "phonoscape",
+    "playground",
+    "primordia",
+    "qurwen",
+    "rl-agent",
+    "saturn",
+    "sunforge",
+]
+
+[[package]]
+name = "dilemma"
+version = "0.1.0"
+source = { virtual = "toys/dilemma" }
+
+[[package]]
+name = "kalmanville"
+version = "0.1.0"
+source = { virtual = "toys/kalmanville" }
+
 [[package]]
 name = "numpy"
 version = "2.4.6"
@@ -64,6 +89,21 @@ wheels = [
 ]
 
 [[package]]
+name = "orderbook"
+version = "0.1.0"
+source = { virtual = "toys/orderbook" }
+
+[[package]]
+name = "phloraflora"
+version = "0.1.0"
+source = { virtual = "toys/phloraflora" }
+
+[[package]]
+name = "phonoscape"
+version = "0.1.0"
+source = { virtual = "toys/phonoscape" }
+
+[[package]]
 name = "playground"
 version = "0.1.0"
 source = { virtual = "." }
@@ -73,3 +113,40 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "numpy", specifier = ">=1.26" }]
+
+[[package]]
+name = "primordia"
+version = "0.1.0"
+source = { virtual = "toys/primordia" }
+dependencies = [
+    { name = "numpy" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "numpy", specifier = ">=1.26" }]
+
+[[package]]
+name = "qurwen"
+version = "0.1.0"
+source = { virtual = "toys/qurwen" }
+
+[[package]]
+name = "rl-agent"
+version = "0.1.0"
+source = { virtual = "toys/rl-agent" }
+
+[[package]]
+name = "saturn"
+version = "0.1.0"
+source = { virtual = "toys/saturn" }
+
+[[package]]
+name = "sunforge"
+version = "0.1.0"
+source = { virtual = "toys/sunforge" }
+dependencies = [
+    { name = "numpy" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "numpy", specifier = ">=2.4.6" }]

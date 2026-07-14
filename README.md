@@ -84,6 +84,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   map: phonoscape's phonology→terrain math drives a vertex-colored Blender
   mesh with sea level, biome palette, and sky tint from the word (Python + bpy
   — the repo's first Blender toy, and the reference for the pattern).
+- **[sunforge](./toys/sunforge)** — a Dyson shell under construction, watched
+  for two minutes from a freighter window: a construction CA on a ~40k-cell
+  Goldberg lattice + drone swarms + an event timeline drive one continuous
+  120s shot (Python + bpy — designed, in progress).
 
 ## Feedback
 
