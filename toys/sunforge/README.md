@@ -6,8 +6,21 @@ swarms, and an event timeline all feed one continuous 120s shot: dark-side
 city lights → the live construction front → the blazing gap → a mass-driver
 launch → docking. Everything on screen is simulation output.
 
-**Status: designed, not yet built.** The full plan (shot table, systems,
-scale cheat, render budget, milestones) is in [DESIGN.md](./DESIGN.md).
+The full plan (shot table, systems, scale cheat, render budget, milestones)
+is in [DESIGN.md](./DESIGN.md).
+
+**Status: M1 done** — the sim runs headless. Goldberg lattice (23042 cells,
+12 pentagon foundries), first-passage construction CA staged so a finished
+city-lit hemisphere opposes the great unbuilt aperture, equirect statemaps +
+previews every 24 frames. `gen_scene.py --seed 7` reproduces everything in
+~15s.
+
+![construction CA over the film](examples/m1_ca_strip.png)
+
+The front, close up, at film start vs film end (hex cells popping VOID→TRUSS,
+ripening to plate, new city lights igniting):
+
+![front advance](examples/m1_front_advance.png)
 
 ## Run (target shape — lands with M1+)
 

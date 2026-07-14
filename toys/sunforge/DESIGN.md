@@ -49,8 +49,9 @@ Runs 2880 ticks (1 tick = 1 frame). Two outputs:
 - **far field:** equirect "state maps" (PNG, 4096×2048) every 24 frames →
   Blender image-sequence texture driving emission/albedo of the whole-sphere
   mesh. 120 images ≈ the entire animation of a 40k-cell process, for free.
-- **near field:** per-cell state-change events `(cell, frame, new_state)` for
-  the flight corridor only → real geometry pop-in + weld-flash lights.
+- **near field:** `ca.npz` stores per-cell stage-entry times in film frames
+  (the whole history, compactly); M4 extracts the flight-corridor subset for
+  real geometry pop-in + weld-flash lights.
 
 ### 2.3 Drone swarms (`sim/swarm.py`)
 Boids (separation/alignment/cohesion + goal-seek) with *jobs*: pick up at a
@@ -126,7 +127,7 @@ crane, foundry spire, dock clamp. All emission-textured (EEVEE-cheap).
 uv side (sunforge pkg, seeded, deterministic):
   gen_scene.py --seed 7
     -> renders/data/lattice.npz        cells, frames, adjacency
-    -> renders/data/states.npz         corridor cell state-change events
+    -> renders/data/ca.npz             per-cell stage-entry times (film frames)
     -> renders/data/statemap_####.png  equirect far-field emission sequence
     -> renders/data/drones.npz         per-frame near-drone transforms
     -> renders/data/path.json          per-frame camera/ship transform
