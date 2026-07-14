@@ -68,7 +68,7 @@ def render_statemaps(
     out_dir: Path,
     seed: int,
     every: int = 24,
-    size: tuple[int, int] = (2048, 1024),
+    size: tuple[int, int] = (4096, 2048),
     preview_scale: int = 2,
 ) -> list[Path]:
     """Write data maps + previews for frames 1, 1+every, ...; return data map paths."""

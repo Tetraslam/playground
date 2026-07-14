@@ -9,7 +9,19 @@ launch → docking. Everything on screen is simulation output.
 The full plan (shot table, systems, scale cheat, render budget, milestones)
 is in [DESIGN.md](./DESIGN.md).
 
-**Status: M1 done** — the sim runs headless. Goldberg lattice (23042 cells,
+**Status: M2 done** — the far layer lives in Blender. `build_scene.py` builds
+the whole-shell sphere whose shader decodes the statemaps (state → alpha +
+ember/city/commissioning emission with sub-cell "street" texture), the star
+and its light (the interior is lit physically — the terminator and the
+aperture blaze are free), a voronoi starfield, bloom via the 5.x group
+compositor, and a hero camera staged *against the CA state* (it finds the
+construction frontier by walking the equator arc — never eyeballed).
+
+![establishing shot](examples/m2_establishing.png)
+
+![the frontier from 350 up](examples/m2_hero_frontier.png)
+
+**M1** — the sim runs headless. Goldberg lattice (23042 cells,
 12 pentagon foundries), first-passage construction CA staged so a finished
 city-lit hemisphere opposes the great unbuilt aperture, equirect statemaps +
 previews every 24 frames. `gen_scene.py --seed 7` reproduces everything in

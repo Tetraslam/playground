@@ -1,14 +1,416 @@
 """sunforge stage 2 (Blender-side): renders/data/ -> renders/shell.blend.
 
-Run via:  tools/blender.sh run toys/sunforge/build_scene.py
+Run via:  tools/blender.sh run toys/sunforge/build_scene.py -- [--frame 1]
 
-bpy + bundled numpy + stdlib ONLY (house rule). Builds: far-layer sphere
-with statemap image-sequence emission, star + prominence, corridor
-instancing from the greeble kit, cockpit window rig, camera path from
-path.json, event-driven lights/lasers/pods, compositor (glare, vignette,
-exposure track). See DESIGN.md §2-3.
+bpy + bundled numpy + stdlib ONLY (house rule). M2 scope: the far layer —
+whole-shell sphere whose shader decodes the statemap (R=state, G=progress,
+B=city field; equirect per sim/statemaps.py convention), the star + its
+light, a procedural starfield world, hero camera, bloom compositor.
+M3 adds the corridor greebles, M4 the cockpit rig + statemap sequencing.
 """
 
-# M2 onward. Not yet implemented.
+import argparse
+import math
+import sys
+from pathlib import Path
 
-raise NotImplementedError("M2: far layer + star first")
+import bpy
+import numpy as np
+from mathutils import Vector
+
+TOY = Path(__file__).parent
+DATA = TOY / "renders" / "data"
+
+SHELL_R = 2000.0
+STAR_R = 250.0
+FPS = 24
+N_FRAMES = 2880
+STATEMAP_EVERY = 24
+
+EMBER = (1.0, 0.28, 0.05, 1.0)  # truss worklights
+CITY = (1.0, 0.72, 0.38, 1.0)  # city lights
+FURNACE = (1.0, 0.55, 0.25, 1.0)  # shell inner face
+STAR_COLOR = (1.0, 0.62, 0.32, 1.0)
+
+
+def parse_args() -> argparse.Namespace:
+    argv = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--frame", type=int, default=1, help="film frame to stage")
+    ap.add_argument("--out", type=Path, default=TOY / "renders" / "shell.blend")
+    return ap.parse_args(argv)
+
+
+def wipe() -> None:
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+
+
+def statemap_path(frame: int) -> Path:
+    """Nearest emitted statemap for a film frame (maps exist every 24f + final)."""
+    idx = round((frame - 1) / STATEMAP_EVERY) * STATEMAP_EVERY + 1
+    idx = max(1, min(idx, N_FRAMES))
+    p = DATA / f"statemap_{idx:04d}.png"
+    if not p.exists():
+        p = DATA / f"statemap_{N_FRAMES:04d}.png"
+    if not p.exists():
+        raise FileNotFoundError(f"no statemap for frame {frame} — run gen_scene.py first")
+    return p
+
+
+# ---------------------------------------------------------------- node helpers
+def _math(nodes, op, a, b=None, label="") -> bpy.types.ShaderNode:
+    n = nodes.new("ShaderNodeMath")
+    n.operation = op
+    n.label = label or op.lower()
+    for i, v in enumerate((a, b)):
+        if v is None:
+            continue
+        if isinstance(v, (int, float)):
+            n.inputs[i].default_value = v
+        else:
+            v.id_data.links.new(v, n.inputs[i])
+    return n
+
+
+def _band(nodes, state_sock, lo, hi, label) -> bpy.types.NodeSocket:
+    """Mask: lo < state < hi."""
+    gt = _math(nodes, "GREATER_THAN", state_sock, lo)
+    lt = _math(nodes, "LESS_THAN", state_sock, hi)
+    m = _math(nodes, "MULTIPLY", gt.outputs[0], lt.outputs[0], label)
+    return m.outputs[0]
+
+
+def shell_material(map_path: Path) -> bpy.types.Material:
+    mat = bpy.data.materials.new("shell_far")
+    mat.use_nodes = True
+    mat.surface_render_method = "DITHERED"
+    nt = mat.node_tree
+    nodes, links = nt.nodes, nt.links
+    nodes.clear()
+
+    # equirect UV from object-space direction (contract: sim/statemaps.py)
+    geo = nodes.new("ShaderNodeNewGeometry")
+    pos = nodes.new("ShaderNodeVectorMath")
+    pos.operation = "NORMALIZE"
+    links.new(geo.outputs["Position"], pos.inputs[0])
+    xyz = nodes.new("ShaderNodeSeparateXYZ")
+    links.new(pos.outputs["Vector"], xyz.inputs[0])
+    u = _math(
+        nodes,
+        "ADD",
+        _math(
+            nodes,
+            "DIVIDE",
+            _math(nodes, "ARCTAN2", xyz.outputs["Y"], xyz.outputs["X"]).outputs[0],
+            2.0 * math.pi,
+        ).outputs[0],
+        0.5,
+        "u",
+    )
+    v = _math(
+        nodes,
+        "ADD",
+        _math(
+            nodes, "DIVIDE", _math(nodes, "ARCSINE", xyz.outputs["Z"]).outputs[0], math.pi
+        ).outputs[0],
+        0.5,
+        "v",
+    )
+    uv = nodes.new("ShaderNodeCombineXYZ")
+    links.new(u.outputs[0], uv.inputs["X"])
+    links.new(v.outputs[0], uv.inputs["Y"])
+
+    img = bpy.data.images.load(str(map_path))
+    img.colorspace_settings.name = "Non-Color"
+    tex = nodes.new("ShaderNodeTexImage")
+    tex.image = img
+    tex.interpolation = "Closest"
+    tex.extension = "REPEAT"
+    links.new(uv.outputs[0], tex.inputs["Vector"])
+
+    rgb = nodes.new("ShaderNodeSeparateColor")
+    links.new(tex.outputs["Color"], rgb.inputs[0])
+    r, g, b = rgb.outputs
+
+    # sub-cell light texture: cells are ~47 units wide, so per-cell emission
+    # reads as glowing hexes; a fine world-space noise breaks lights into
+    # streets/specks. streets = noise^4 (sparse bright pockets).
+    streets_tex = nodes.new("ShaderNodeTexNoise")
+    streets_tex.inputs["Scale"].default_value = 0.05
+    streets_tex.inputs["Detail"].default_value = 3.0
+    links.new(geo.outputs["Position"], streets_tex.inputs["Vector"])
+    streets = _math(nodes, "POWER", streets_tex.outputs["Fac"], 8.0, "streets")
+
+    state = _math(nodes, "MULTIPLY", r, 3.0, "state")
+    void_m = _math(nodes, "LESS_THAN", state.outputs[0], 0.5, "void")
+    truss_m = _band(nodes, state.outputs[0], 0.5, 1.5, "truss")
+    live_m = _math(nodes, "GREATER_THAN", state.outputs[0], 2.5, "live")
+
+    # emission: ember worklights on truss (brighten with progress), city on live
+    ember_k = _math(
+        nodes,
+        "MULTIPLY",
+        _math(
+            nodes,
+            "MULTIPLY",
+            truss_m,
+            _math(
+                nodes, "ADD", _math(nodes, "MULTIPLY", g, 0.7).outputs[0], 0.3, "truss ramp"
+            ).outputs[0],
+            "ember cell",
+        ).outputs[0],
+        _math(nodes, "MULTIPLY", streets.outputs[0], 8.0, "work specks").outputs[0],
+        "ember",
+    )
+    city_ramp = nodes.new("ShaderNodeMapRange")
+    city_ramp.interpolation_type = "SMOOTHSTEP"
+    city_ramp.inputs["From Min"].default_value = 0.55
+    city_ramp.inputs["From Max"].default_value = 0.88
+    links.new(b, city_ramp.inputs["Value"])
+    city_cell = _math(nodes, "MULTIPLY", live_m.outputs[0], city_ramp.outputs[0], "city cell")
+    city_k = _math(
+        nodes,
+        "MULTIPLY",
+        city_cell.outputs[0],
+        _math(nodes, "MULTIPLY", streets.outputs[0], 20.0, "street gain").outputs[0],
+        "city",
+    )
+
+    ember_col = nodes.new("ShaderNodeMixRGB")
+    ember_col.blend_type = "MULTIPLY"
+    ember_col.inputs["Fac"].default_value = 1.0
+    ember_col.inputs["Color1"].default_value = EMBER
+    links.new(ember_k.outputs[0], ember_col.inputs["Color2"])
+    city_col = nodes.new("ShaderNodeMixRGB")
+    city_col.blend_type = "MULTIPLY"
+    city_col.inputs["Fac"].default_value = 1.0
+    city_col.inputs["Color1"].default_value = CITY
+    links.new(city_k.outputs[0], city_col.inputs["Color2"])
+    # plate cells: sparse pale commissioning lights, ramping with progress
+    plate_m = _band(nodes, state.outputs[0], 1.5, 2.5, "plate")
+    plate_k = _math(
+        nodes,
+        "MULTIPLY",
+        _math(nodes, "MULTIPLY", plate_m, g, "plate ramp").outputs[0],
+        _math(
+            nodes,
+            "MULTIPLY",
+            _math(nodes, "GREATER_THAN", b, 0.9, "plate sparse").outputs[0],
+            streets.outputs[0],
+            "plate specks",
+        ).outputs[0],
+        "plate lights",
+    )
+    plate_col = nodes.new("ShaderNodeMixRGB")
+    plate_col.blend_type = "MULTIPLY"
+    plate_col.inputs["Fac"].default_value = 1.0
+    plate_col.inputs["Color1"].default_value = (0.55, 0.75, 1.0, 1.0)
+    links.new(plate_k.outputs[0], plate_col.inputs["Color2"])
+    emis_a = nodes.new("ShaderNodeMixRGB")
+    emis_a.blend_type = "ADD"
+    emis_a.inputs["Fac"].default_value = 1.0
+    links.new(ember_col.outputs[0], emis_a.inputs["Color1"])
+    links.new(city_col.outputs[0], emis_a.inputs["Color2"])
+    emis_out = nodes.new("ShaderNodeMixRGB")
+    emis_out.blend_type = "ADD"
+    emis_out.inputs["Fac"].default_value = 1.0
+    links.new(emis_a.outputs[0], emis_out.inputs["Color1"])
+    links.new(plate_col.outputs[0], emis_out.inputs["Color2"])
+
+    # alpha: void 0, truss 0.85 (a hint of see-through, not a lightbox — the
+    # interior blaze belongs to the aperture alone), else 1
+    alpha = _math(
+        nodes,
+        "SUBTRACT",
+        _math(nodes, "SUBTRACT", 1.0, void_m.outputs[0]).outputs[0],
+        _math(nodes, "MULTIPLY", truss_m, 0.15).outputs[0],
+        "alpha",
+    )
+
+    # the star's point light physically lights the inner faces (terminator,
+    # falloff, spill through the gap); emission is only the decoded surface
+    # signage (ember worklights + city lights), visible from both sides.
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.inputs["Base Color"].default_value = (0.055, 0.05, 0.045, 1.0)
+    bsdf.inputs["Metallic"].default_value = 0.6
+    rough = _math(nodes, "ADD", _math(nodes, "MULTIPLY", b, 0.3).outputs[0], 0.35, "rough")
+    links.new(rough.outputs[0], bsdf.inputs["Roughness"])
+    links.new(emis_out.outputs[0], bsdf.inputs["Emission Color"])
+    bsdf.inputs["Emission Strength"].default_value = 2.5
+    links.new(alpha.outputs[0], bsdf.inputs["Alpha"])
+
+    out = nodes.new("ShaderNodeOutputMaterial")
+    links.new(bsdf.outputs[0], out.inputs["Surface"])
+    return mat
+
+
+def star_material() -> bpy.types.Material:
+    mat = bpy.data.materials.new("star")
+    mat.use_nodes = True
+    nt = mat.node_tree
+    nt.nodes.clear()
+    em = nt.nodes.new("ShaderNodeEmission")
+    em.inputs["Color"].default_value = STAR_COLOR
+    em.inputs["Strength"].default_value = 40.0
+    out = nt.nodes.new("ShaderNodeOutputMaterial")
+    nt.links.new(em.outputs[0], out.inputs["Surface"])
+    return mat
+
+
+def build_world() -> None:
+    world = bpy.data.worlds.new("space")
+    bpy.context.scene.world = world
+    world.use_nodes = True
+    nt = world.node_tree
+    nodes, links = nt.nodes, nt.links
+    nodes.clear()
+    # pinpoint stars: voronoi F1 distance thresholded to dots, brightness
+    # varied per-cell from the voronoi color channel
+    coord = nodes.new("ShaderNodeTexCoord")
+    vor = nodes.new("ShaderNodeTexVoronoi")
+    vor.feature = "F1"
+    vor.inputs["Scale"].default_value = 140.0
+    vor.inputs["Randomness"].default_value = 1.0
+    links.new(coord.outputs["Generated"], vor.inputs["Vector"])
+    dots = nodes.new("ShaderNodeMapRange")
+    dots.interpolation_type = "SMOOTHSTEP"
+    dots.inputs["From Min"].default_value = 0.035
+    dots.inputs["From Max"].default_value = 0.012
+    links.new(vor.outputs["Distance"], dots.inputs["Value"])
+    cell_val = _math(nodes, "POWER", None, 3.0, "brightness variety")
+    hsv = nodes.new("ShaderNodeSeparateColor")
+    links.new(vor.outputs["Color"], hsv.inputs[0])
+    links.new(hsv.outputs[0], cell_val.inputs[0])
+    star_i = _math(nodes, "MULTIPLY", dots.outputs["Result"], cell_val.outputs[0], "stars")
+    gain = _math(nodes, "MULTIPLY", star_i.outputs[0], 4.0, "star gain")
+    bg = nodes.new("ShaderNodeBackground")
+    bg.inputs["Color"].default_value = (0.85, 0.9, 1.0, 1.0)
+    links.new(gain.outputs[0], bg.inputs["Strength"])
+    out = nodes.new("ShaderNodeOutputWorld")
+    links.new(bg.outputs[0], out.inputs["Surface"])
+
+
+def add_sphere(name: str, radius: float, mat: bpy.types.Material, segments=256) -> bpy.types.Object:
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=segments, ring_count=segments // 2, radius=radius)
+    ob = bpy.context.active_object
+    ob.name = name
+    bpy.ops.object.shade_smooth()
+    ob.data.materials.append(mat)
+    return ob
+
+
+def add_star_light() -> None:
+    light = bpy.data.lights.new("star_light", type="POINT")
+    light.energy = 1e10
+    light.color = STAR_COLOR[:3]
+    light.shadow_soft_size = STAR_R
+    ob = bpy.data.objects.new("star_light", light)
+    bpy.context.collection.objects.link(ob)
+
+
+def look_at(ob: bpy.types.Object, target: Vector) -> None:
+    direction = target - ob.location
+    ob.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
+
+
+def add_camera(pos: Vector, target: Vector, lens=32.0) -> bpy.types.Object:
+    cam = bpy.data.cameras.new("cam")
+    cam.lens = lens
+    cam.clip_start = 0.5
+    cam.clip_end = 30000.0
+    ob = bpy.data.objects.new("cam", cam)
+    bpy.context.collection.objects.link(ob)
+    ob.location = pos
+    look_at(ob, target)
+    bpy.context.scene.camera = ob
+    return ob
+
+
+def build_compositor() -> None:
+    """Bloom via the 5.x group-based compositor (glare options are sockets now)."""
+    sc = bpy.context.scene
+    ng = bpy.data.node_groups.new("sunforge_comp", "CompositorNodeTree")
+    ng.interface.new_socket("Image", in_out="OUTPUT", socket_type="NodeSocketColor")
+    # NB: the group INPUT socket is not auto-fed the render (renders white);
+    # pull the pass from a Render Layers node inside the group instead.
+    rl = ng.nodes.new("CompositorNodeRLayers")
+    gout = ng.nodes.new("NodeGroupOutput")
+    glare = ng.nodes.new("CompositorNodeGlare")
+    glare.inputs["Type"].default_value = "Bloom"
+    glare.inputs["Threshold"].default_value = 1.5
+    glare.inputs["Strength"].default_value = 0.35
+    glare.inputs["Size"].default_value = 0.8
+    ng.links.new(rl.outputs["Image"], glare.inputs["Image"])
+    ng.links.new(glare.outputs["Image"], gout.inputs["Image"])
+    sc.compositing_node_group = ng
+    sc.render.use_compositing = True
+
+
+def stage_hero_camera(frame: int) -> tuple[Vector, Vector]:
+    """Camera + target from the actual CA state (never eyeball the void).
+
+    Walk the equator great circle from the far side toward the gap (+X);
+    the frontier is where the local built fraction drops below 0.5. Camera
+    hovers 300 over the cities behind it, aimed just past it into the band.
+    """
+    lat = np.load(DATA / "lattice.npz")
+    ca = np.load(DATA / "ca.npz")
+    centers = lat["centers"].astype(np.float64)
+
+    def frontier_of(done: np.ndarray) -> float:
+        """Largest gap-axis angle where the local done-fraction drops below 0.5."""
+        for theta in np.arange(178.0, 40.0, -1.0):
+            t = math.radians(theta)
+            p = np.array([math.cos(t), math.sin(t), 0.0])
+            near = centers @ p > math.cos(math.radians(6.0))
+            if near.any() and float(done[near].mean()) < 0.5:
+                return float(theta)
+        return 76.0
+
+    solid = frontier_of(ca["t_plate"] <= frame)  # opaque, city-bearing ground
+    band = frontier_of(ca["t_truss"] <= frame)  # skeletal frontier
+
+    def on_shell(theta_deg: float, around_deg: float, r: float) -> Vector:
+        """Point at polar angle theta from the gap axis, spun around_deg about +X."""
+        t, a = math.radians(theta_deg), math.radians(around_deg)
+        return Vector((math.cos(t), math.sin(t) * math.cos(a), math.sin(t) * math.sin(a))) * r
+
+    # shoot ALONG the band (tangentially around the gap axis): frame holds
+    # cities on one side, ember band center, aperture glow on the other.
+    cam_theta = (solid + band) / 2.0
+    cam_pos = on_shell(cam_theta, 0.0, SHELL_R + 350.0)
+    target = on_shell(cam_theta - 7.0, 14.0, SHELL_R)
+    print(
+        f"bsh: solid frontier {solid:.0f}°, truss frontier {band:.0f}°; camera over {cam_theta:.0f}°"
+    )
+    return cam_pos, target
+
+
+def main() -> None:
+    args = parse_args()
+    wipe()
+    sc = bpy.context.scene
+    sc.render.resolution_x, sc.render.resolution_y = 1920, 1080
+    sc.render.fps = FPS
+    sc.frame_start, sc.frame_end = 1, N_FRAMES
+    sc.frame_set(args.frame)
+
+    add_sphere("shell_far", SHELL_R, shell_material(statemap_path(args.frame)))
+    add_sphere("star", STAR_R, star_material(), segments=64)
+    add_star_light()
+    build_world()
+
+    # hero framing staged against the sim: find the construction frontier
+    # along the equator arc and shoot from the built side toward the band.
+    cam_pos, target = stage_hero_camera(args.frame)
+    add_camera(cam_pos, target, lens=28.0)
+    bpy.context.scene.view_settings.exposure = 0.0
+    build_compositor()
+
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.wm.save_as_mainfile(filepath=str(args.out))
+    print(f"BSH_OK build -> {args.out}")
+
+
+if __name__ == "__main__":
+    main()
