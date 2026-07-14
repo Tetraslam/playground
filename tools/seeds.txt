@@ -83,3 +83,9 @@ finance	a multi-agent market where strategies compete for PnL and the price emer
 robotics	a physics sim with agents that LEARN to locomote (not a hand-animated hopper)
 bio	an evolving ecosystem (genomes, mutation, selection) that surprises you after 10k ticks
 misc	a cellular automaton that's Turing-complete, with a compiler that targets it
+graphics	a geometry-nodes creature generator in Blender — parametric anatomy you can perturb, turntabled
+graphics	a Blender physics sandbox: rigid-body dominoes/avalanches driven by a config you tweak, rendered as loops
+graphics	a procedural-city grower in Blender — roads split, lots fill, buildings extrude over animated time
+worldbuilding	a Pocket Realms diorama pipeline: a realm spec (JSON) becomes a lit 3D scene in Blender
+worldbuilding	conlang glyphs extruded into carved-stone monuments in Blender (glyphgen -> 3D)
+graphics	an audio-reactive Blender scene: a track's spectrum drives displacement, keyframed per frame (SHFLA energy)

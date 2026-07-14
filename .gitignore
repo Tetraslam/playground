@@ -38,3 +38,9 @@ target/
 
 # Playwright MCP run artifacts (snapshots/console logs from headless screenshots)
 .playwright-mcp/
+
+# Blender
+*.blend1
+*.blend2
+/toys/*/renders/
+*.exr

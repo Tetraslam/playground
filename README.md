@@ -16,7 +16,8 @@ docs/        # notes & design docs
 ```
 
 One lockfile per language at the root: `uv` (Python), `pnpm` (TS/JS), `cargo`
-(Rust), `go.work` (Go). Start a new toy in seconds — see **[AGENTS.md](./AGENTS.md)**.
+(Rust), `go.work` (Go). Blender 5.x toys too — headless GPU renders via
+`tools/blender.sh`. Start a new toy in seconds — see **[AGENTS.md](./AGENTS.md)**.
 
 ## Quickstart
 
@@ -79,6 +80,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   best-fit, buddy, jemalloc-style segfit) fed the identical allocation trace,
   fragmenting side by side in a live truecolor TUI; bench mode emits comparison
   tables + arena/fragmentation PNGs (Rust — the repo's first).
+- **[wordrelief](./toys/wordrelief)** — speak a conlang word, get a 3D relief
+  map: phonoscape's phonology→terrain math drives a vertex-colored Blender
+  mesh with sea level, biome palette, and sky tint from the word (Python + bpy
+  — the repo's first Blender toy, and the reference for the pattern).
 
 ## Feedback
 

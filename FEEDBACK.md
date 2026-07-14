@@ -41,9 +41,13 @@ it) so the open lists stay short.
 
 ## setup — config/environment changes (should become a PR)
 
-_(none yet)_
+- 2026-07-13 · fable · Blender MCP addon: enable auto-start in the addon prefs (Edit > Preferences > Add-ons > MCP) so interactive MCP tools connect whenever the GUI is open; agents currently only get CLI mode
 
 ## note — durable knowledge for future agents
+
+- 2026-07-13 · fable · Cycles OPTIX on the 5070 Ti is FAST: 960x540@64spp ~1.4s, 1920x1080@256spp ~7s. Don't be shy about --final renders; EEVEE preview ~0.5s/frame at 960x540
+
+- 2026-07-13 · fable · Blender 5.1 (arch build) has NO FFMPEG output format — animations must render PNG frames then encode with system ffmpeg (tools/blender.sh encode). Also: legacy action.fcurves is gone (slotted actions); set bpy.context.preferences.edit.keyframe_new_interpolation_type instead of editing keyframes post-hoc
 
 - 2026-07-06 · fable · the root Cargo.toml had a toys/* member glob that broke the first real cargo build (cargo requires every glob match to be a crate; toys/ is polyglot). Fixed to an explicit member list — add your rust toy to members. AGENTS.md updated to match.
 

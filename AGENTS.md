@@ -45,6 +45,8 @@ Pick a language, make a dir under `toys/`, wire it into the workspace:
   toys/ is polyglot). Run with `cargo run -p mytoy`.
 - **Go:** `mkdir toys/mytoy && cd toys/mytoy && go mod init playground/mytoy`,
   then add `use ./toys/mytoy` to `go.work`. Run with `go run ./toys/mytoy`.
+- **Blender:** Python scripts run by Blender itself — NOT a uv workspace member
+  (Blender bundles its own interpreter). See **§ Blender toys** below.
 
 Keep toys self-contained. If two toys want the same helper, promote it to
 `lib/py` or `lib/ts`.
@@ -73,8 +75,9 @@ so the next person (and tetraslam) can *see* it without running it. Don't gate
 this on yourself; just do it.
 
 The only hard rule: **don't commit images > 5 MB** (git history keeps every byte
-forever). The pre-commit hook (`tools/check-images.sh`) blocks oversized images;
-`magick` is installed, so downscale if needed:
+forever). The pre-commit hook (`tools/check-images.sh`) blocks oversized media:
+images > 5 MB, videos (`.mp4`/`.webm`) > 20 MB, `.blend` > 5 MB. `magick` is
+installed, so downscale if needed:
 `magick big.png -resize 50% -strip out.png` (and `-strip` drops metadata, too).
 Pure scratch/throwaway frames still go in `scratch/` (gitignored) — but anything
 worth showing belongs in the toy's `examples/`. (Rare override for an
@@ -85,6 +88,79 @@ tools/install-hooks.sh
 ```
 
 (Rare override for intentional lockfile surgery: `ALLOW_MANUAL_DEPS=1 git commit`.)
+
+## Blender toys
+
+Blender 5.x is installed (`blender` on PATH), headless rendering works, and
+Cycles sees the NVIDIA GPU via OPTIX. Everything goes through
+**`tools/blender.sh`** — read its header for the full command list.
+
+**The house pattern: code is the source of truth, `.blend` is build output.**
+A Blender toy is a Python script that builds the scene procedurally (and is run
+*by Blender*, not uv):
+
+```bash
+tools/blender.sh run toys/mytoy/build_scene.py -- --word vrakh   # build + save .blend
+tools/blender.sh snap  toys/mytoy/renders/scene.blend out.png    # look at it (fast)
+tools/blender.sh render toys/mytoy/renders/scene.blend out.png --final
+tools/blender.sh turntable toys/mytoy/renders/scene.blend toys/mytoy/renders/orbit
+```
+
+Don't commit `.blend` files (the hook blocks them > 5 MB); commit the script.
+Blender-side scripts get `bpy` + bundled numpy + stdlib **only** — no pip
+installs into Blender's Python. If a toy needs heavy deps, split it: a normal
+uv script does the thinking and emits plain data (JSON, heightmap), a Blender
+script consumes it and builds the scene. This is also how Blender toys compose
+with the rest of the playground (`toys/wordrelief` does exactly this with
+phonoscape's terrain math — crib from it).
+
+**Directory contract:**
+
+```
+toys/mytoy/
+├── build_scene.py   # builds scene + saves .blend (source of truth)
+├── renders/         # ALL raw output — gitignored (incl. the .blend, frames/)
+└── examples/        # curated + committed: stills, .webp loops, filmstrips
+```
+
+**Two MCP modes.** The `*_for_cli` Blender MCP tools work anytime (they spawn
+`blender --background`; the file must already exist — `tools/blender.sh new`
+makes one). The interactive tools (viewport screenshots, live scene edits) need
+the Blender GUI open with the MCP addon server running — `tools/blender.sh gui`,
+then check the connection. If interactive fails, fall back to CLI mode.
+
+**Stills.** Two presets: preview (default: EEVEE 960x540, ~2s — your iteration
+loop) and `--final` (Cycles/OPTIX 1920x1080 @ 256 samples + denoise, ~10s —
+what goes in `examples/`). Iterate on preview; never guess at a final render's
+look without snapping a preview first.
+
+**Animations are frame sequences, never direct video** (this Blender build has
+no FFMPEG output anyway). Render PNG frames to `renders/`, then
+`tools/blender.sh encode <frames_dir> <outbase>` produces:
+
+- `<outbase>.webp` — animated webp, **the committable format** (plays inline in
+  GitHub READMEs; repo-relative mp4 does not, and gif is 5–10x bigger)
+- `<outbase>.mp4` — h264 for local viewing (stays in `renders/`)
+- `<outbase>_strip.png` — 6-frame filmstrip, committable
+
+`tools/blender.sh turntable` does the whole thing in one shot: orbits a camera
+360° around the scene bbox, renders a seamless loop, encodes all three outputs.
+It's the default way to show off any 3D artifact — don't reimplement it per toy.
+
+**How to SEE your work (do this, always):** stills — render a snap and read the
+PNG. Motion — render the filmstrip and read that, then spot-check 2–3 raw
+frames. Never declare a scene done without having looked at it.
+
+**Render budgets:** preview still ≈ 2s, final still ≈ 10s, a 4s loop (96f) at
+preview ≈ 1 min EEVEE. Rule: never launch more than ~5 min of rendering without
+having checked a single frame first. Keep loops short (3–10s @ 24fps).
+
+**Determinism:** fix your seeds, fix the camera, declare non-default render
+settings in the README so `examples/` is reproducible.
+
+The gravity well warning (§ Aim higher) applies double here: a single pretty
+render is tier 1. Geometry-node systems, physics/particle sims you can perturb,
+animated processes, scenes driven by *other toys' outputs* — that's the point.
 
 ## Secrets — the op:// pattern (important)
 

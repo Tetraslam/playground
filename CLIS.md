@@ -74,6 +74,11 @@ token cache is gone, launch `spotify_player` once to re-auth and repopulate it.
   Issues, PRs, releases, repo create. Full access — use it.
 - **go** / **cargo** / **zig** / **nim** — compilers, all present. (Go is the
   glyphgen toy's language.)
+- **blender** — Blender 5.x, headless-capable, Cycles renders on the NVIDIA GPU
+  (OPTIX). Use `tools/blender.sh` (new/run/render/snap/turntable/encode/gui)
+  rather than raw flags — see AGENTS.md § Blender toys. The Blender MCP's
+  `*_for_cli` tools work anytime; interactive tools need the GUI open with the
+  MCP addon server running.
 - **signal-cli** — Signal from the terminal (`~/signal-cli/bin/signal-cli`).
   Send/receive messages, manage groups.
 - **mosh** — resilient SSH (`mosh tetrabot-2`) for flaky connections.
