@@ -16,7 +16,10 @@ from pathlib import Path
 
 import bpy
 import numpy as np
-from mathutils import Vector
+from mathutils import Matrix, Vector
+
+sys.path.insert(0, str(Path(__file__).parent))
+from greebles import build_near_layer  # noqa: E402
 
 TOY = Path(__file__).parent
 DATA = TOY / "renders" / "data"
@@ -38,6 +41,13 @@ def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
     ap.add_argument("--frame", type=int, default=1, help="film frame to stage")
     ap.add_argument("--out", type=Path, default=TOY / "renders" / "shell.blend")
+    ap.add_argument(
+        "--shot",
+        default="hero",
+        choices=("hero", "s2", "s3"),
+        help="camera staging: hero (orbit height) or s2/s3 corridor flyover",
+    )
+    ap.add_argument("--seed", type=int, default=7)
     return ap.parse_args(argv)
 
 
@@ -217,13 +227,13 @@ def shell_material(map_path: Path) -> bpy.types.Material:
     links.new(emis_a.outputs[0], emis_out.inputs["Color1"])
     links.new(plate_col.outputs[0], emis_out.inputs["Color2"])
 
-    # alpha: void 0, truss 0.85 (a hint of see-through, not a lightbox — the
-    # interior blaze belongs to the aperture alone), else 1
+    # alpha: void 0, truss 0.35 (unplated frame is mostly open — the frontier
+    # deck is a lattice over the glowing interior), else 1
     alpha = _math(
         nodes,
         "SUBTRACT",
         _math(nodes, "SUBTRACT", 1.0, void_m.outputs[0]).outputs[0],
-        _math(nodes, "MULTIPLY", truss_m, 0.15).outputs[0],
+        _math(nodes, "MULTIPLY", truss_m, 0.65).outputs[0],
         "alpha",
     )
 
@@ -308,12 +318,21 @@ def add_star_light() -> None:
     bpy.context.collection.objects.link(ob)
 
 
-def look_at(ob: bpy.types.Object, target: Vector) -> None:
-    direction = target - ob.location
-    ob.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
+def look_at(ob: bpy.types.Object, target: Vector, up_hint: Vector | None = None) -> None:
+    """Aim -Z at target with an explicit up hint (default: radial, i.e. away
+    from the shell center — to_track_quat would roll the camera toward world
+    +Z, which is sideways for most points on a sphere)."""
+    f = (target - ob.location).normalized()
+    up = (up_hint or ob.location).normalized()
+    r = f.cross(up)
+    if r.length < 1e-6:
+        r = f.cross(Vector((1.0, 0.0, 0.0)))
+    r.normalize()
+    u = r.cross(f)
+    ob.rotation_euler = Matrix((r, u, -f)).transposed().to_euler()
 
 
-def add_camera(pos: Vector, target: Vector, lens=32.0) -> bpy.types.Object:
+def add_camera(pos: Vector, target: Vector, lens=32.0, ship_light=False) -> bpy.types.Object:
     cam = bpy.data.cameras.new("cam")
     cam.lens = lens
     cam.clip_start = 0.5
@@ -323,6 +342,17 @@ def add_camera(pos: Vector, target: Vector, lens=32.0) -> bpy.types.Object:
     ob.location = pos
     look_at(ob, target)
     bpy.context.scene.camera = ob
+    if ship_light:
+        # the freighter's floodlight: diegetic light source for night flyovers,
+        # parented to the camera so the deck below is always readable
+        light = bpy.data.lights.new("ship_light", type="POINT")
+        light.energy = 1.5e5
+        light.color = (1.0, 0.85, 0.65)
+        light.shadow_soft_size = 2.0
+        lob = bpy.data.objects.new("ship_light", light)
+        bpy.context.collection.objects.link(lob)
+        lob.parent = ob
+        lob.location = (0.0, -2.0, 2.0)  # slightly behind/above the lens
     return ob
 
 
@@ -346,19 +376,18 @@ def build_compositor() -> None:
     sc.render.use_compositing = True
 
 
-def stage_hero_camera(frame: int) -> tuple[Vector, Vector]:
-    """Camera + target from the actual CA state (never eyeball the void).
+def find_frontiers(frame: int) -> tuple[float, float]:
+    """(solid, band) frontier angles from the actual CA state (never eyeball).
 
-    Walk the equator great circle from the far side toward the gap (+X);
-    the frontier is where the local built fraction drops below 0.5. Camera
-    hovers 300 over the cities behind it, aimed just past it into the band.
+    Walk the equator great circle from the far side toward the gap (+X); a
+    frontier is where the local done-fraction drops below 0.5. `solid` uses
+    plated cells (opaque ground), `band` uses trusses (skeletal frontier).
     """
     lat = np.load(DATA / "lattice.npz")
     ca = np.load(DATA / "ca.npz")
     centers = lat["centers"].astype(np.float64)
 
     def frontier_of(done: np.ndarray) -> float:
-        """Largest gap-axis angle where the local done-fraction drops below 0.5."""
         for theta in np.arange(178.0, 40.0, -1.0):
             t = math.radians(theta)
             p = np.array([math.cos(t), math.sin(t), 0.0])
@@ -367,23 +396,53 @@ def stage_hero_camera(frame: int) -> tuple[Vector, Vector]:
                 return float(theta)
         return 76.0
 
-    solid = frontier_of(ca["t_plate"] <= frame)  # opaque, city-bearing ground
-    band = frontier_of(ca["t_truss"] <= frame)  # skeletal frontier
+    solid = frontier_of(ca["t_plate"] <= frame)
+    band = frontier_of(ca["t_truss"] <= frame)
+    print(f"bsh: solid frontier {solid:.0f}°, truss frontier {band:.0f}°")
+    return solid, band
 
-    def on_shell(theta_deg: float, around_deg: float, r: float) -> Vector:
-        """Point at polar angle theta from the gap axis, spun around_deg about +X."""
-        t, a = math.radians(theta_deg), math.radians(around_deg)
-        return Vector((math.cos(t), math.sin(t) * math.cos(a), math.sin(t) * math.sin(a))) * r
 
-    # shoot ALONG the band (tangentially around the gap axis): frame holds
-    # cities on one side, ember band center, aperture glow on the other.
-    cam_theta = (solid + band) / 2.0
-    cam_pos = on_shell(cam_theta, 0.0, SHELL_R + 350.0)
-    target = on_shell(cam_theta - 7.0, 14.0, SHELL_R)
-    print(
-        f"bsh: solid frontier {solid:.0f}°, truss frontier {band:.0f}°; camera over {cam_theta:.0f}°"
-    )
-    return cam_pos, target
+def on_shell(theta_deg: float, around_deg: float, r: float) -> Vector:
+    """Point at polar angle theta from the gap axis, spun around_deg about +X."""
+    t, a = math.radians(theta_deg), math.radians(around_deg)
+    return Vector((math.cos(t), math.sin(t) * math.cos(a), math.sin(t) * math.sin(a))) * r
+
+
+def stage_camera(shot: str, frame: int) -> tuple[Vector, Vector, float]:
+    """(position, target, lens) for a named shot, staged against the sim.
+
+    hero: 350 up, shooting along the band (cities | embers | aperture glow).
+    s2:   film altitude over the plated/commissioning corridor, terminator zone.
+    s3:   film altitude at the truss frontier itself.
+    The corridor arc is the z=0, y>0 equator great circle (sim/flightpath.py).
+    """
+    solid, band = find_frontiers(frame)
+    if shot == "hero":
+        cam_theta = (solid + band) / 2.0
+        return (
+            on_shell(cam_theta, 0.0, SHELL_R + 350.0),
+            on_shell(cam_theta - 7.0, 14.0, SHELL_R),
+            28.0,
+        )
+    # film altitude, with clearance over the tallest greebles (towers ~R+21)
+    # and a lateral check against corridor foundry spires (45+ tall)
+    theta = solid + 12.0 if shot == "s2" else band + 3.0
+    alt = 30.0 if shot == "s2" else 10.0
+    lat = np.load(DATA / "lattice.npz")
+    cor = np.load(DATA / "corridor.npz")
+    spires = lat["centers"][np.intersect1d(cor["ids"], lat["pentagons"])].astype(np.float64)
+
+    def clear_of_spires(t: float) -> bool:
+        p = np.array(on_shell(t, 0.0, 1.0))
+        return not len(spires) or np.degrees(np.arccos(np.clip(spires @ p, -1, 1))).min() > 3.5
+
+    for dt in (0.0, 4.0, -4.0, 8.0):
+        if clear_of_spires(theta + dt):
+            theta += dt
+            break
+    cam_pos = on_shell(theta, 0.0, SHELL_R + alt)
+    target = on_shell(theta - 2.2, 0.0, SHELL_R + 2.0)
+    return cam_pos, target, 30.0
 
 
 def main() -> None:
@@ -400,11 +459,13 @@ def main() -> None:
     add_star_light()
     build_world()
 
-    # hero framing staged against the sim: find the construction frontier
-    # along the equator arc and shoot from the built side toward the band.
-    cam_pos, target = stage_hero_camera(args.frame)
-    add_camera(cam_pos, target, lens=28.0)
-    bpy.context.scene.view_settings.exposure = 0.0
+    n = build_near_layer(DATA, args.frame, seed=args.seed)
+    print(f"bsh: near layer: {n} corridor cells built")
+
+    cam_pos, target, lens = stage_camera(args.shot, args.frame)
+    add_camera(cam_pos, target, lens=lens, ship_light=args.shot != "hero")
+    sc.view_settings.exposure = 0.0
+    sc.eevee.use_raytracing = True  # emissive lamps/ground light nearby geometry
     build_compositor()
 
     args.out.parent.mkdir(parents=True, exist_ok=True)

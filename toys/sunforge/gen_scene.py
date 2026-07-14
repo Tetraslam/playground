@@ -15,6 +15,7 @@ from pathlib import Path
 import numpy as np
 from sim import N_FRAMES
 from sim.construction import LIVE, TRUSS, run_ca, state_at
+from sim.flightpath import build_corridor
 from sim.lattice import build_lattice
 from sim.statemaps import render_statemaps
 
@@ -44,6 +45,10 @@ def main() -> None:
             f"[ca] frame {f}: built {np.mean(s >= TRUSS):.1%}"
             f"  live {np.mean(s == LIVE):.1%}  void {np.mean(s == 0):.1%}"
         )
+
+    corridor = build_corridor(lattice)
+    np.savez_compressed(DATA_DIR / "corridor.npz", **corridor)
+    print(f"[corridor] {len(corridor['ids'])} cells under the provisional arc")
 
     paths = render_statemaps(lattice, ca, DATA_DIR, seed=args.seed, every=args.statemap_every)
     print(f"[statemaps] {len(paths)} maps + previews -> {DATA_DIR}")
