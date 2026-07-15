@@ -130,7 +130,7 @@ uv side (sunforge pkg, seeded, deterministic):
     -> renders/data/ca.npz             per-cell stage-entry times (film frames)
     -> renders/data/statemap_####.png  equirect far-field emission sequence
     -> renders/data/drones.npz         per-frame near-drone transforms
-    -> renders/data/path.json          per-frame camera/ship transform
+    -> renders/data/path.npz           per-frame ship transform (pos + quat)
     -> renders/data/events.json        the score (pods, lasers, flare, exposure)
     -> renders/data/ambient.wav        (stretch) procedural soundtrack
 

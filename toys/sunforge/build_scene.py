@@ -43,9 +43,9 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--out", type=Path, default=TOY / "renders" / "shell.blend")
     ap.add_argument(
         "--shot",
-        default="hero",
-        choices=("hero", "s2", "s3"),
-        help="camera staging: hero (orbit height) or s2/s3 corridor flyover",
+        default="film",
+        choices=("film", "hero", "s2", "s3"),
+        help="film = the ship rig on path.npz; hero/s2/s3 = static staged stills",
     )
     ap.add_argument("--seed", type=int, default=7)
     return ap.parse_args(argv)
@@ -55,15 +55,11 @@ def wipe() -> None:
     bpy.ops.wm.read_factory_settings(use_empty=True)
 
 
-def statemap_path(frame: int) -> Path:
-    """Nearest emitted statemap for a film frame (maps exist every 24f + final)."""
-    idx = round((frame - 1) / STATEMAP_EVERY) * STATEMAP_EVERY + 1
-    idx = max(1, min(idx, N_FRAMES))
-    p = DATA / f"statemap_{idx:04d}.png"
+def first_statemap() -> Path:
+    """statemap_0001.png — the sequence anchor (maps are indexed 1..120)."""
+    p = DATA / "statemap_0001.png"
     if not p.exists():
-        p = DATA / f"statemap_{N_FRAMES:04d}.png"
-    if not p.exists():
-        raise FileNotFoundError(f"no statemap for frame {frame} — run gen_scene.py first")
+        raise FileNotFoundError("no statemaps — run gen_scene.py first")
     return p
 
 
@@ -130,12 +126,20 @@ def shell_material(map_path: Path) -> bpy.types.Material:
     links.new(u.outputs[0], uv.inputs["X"])
     links.new(v.outputs[0], uv.inputs["Y"])
 
+    # statemap SEQUENCE: map k covers frames [(k-1)*24+1, k*24]; a driver on
+    # frame_offset steps the displayed map (displayed = scene_frame + offset)
     img = bpy.data.images.load(str(map_path))
+    img.source = "SEQUENCE"
     img.colorspace_settings.name = "Non-Color"
     tex = nodes.new("ShaderNodeTexImage")
     tex.image = img
     tex.interpolation = "Closest"
     tex.extension = "REPEAT"
+    tex.image_user.frame_start = 1
+    tex.image_user.frame_duration = N_FRAMES // STATEMAP_EVERY
+    tex.image_user.use_auto_refresh = True
+    drv = tex.image_user.driver_add("frame_offset").driver
+    drv.expression = f"int((frame-1)//{STATEMAP_EVERY})+1-frame"
     links.new(uv.outputs[0], tex.inputs["Vector"])
 
     rgb = nodes.new("ShaderNodeSeparateColor")
@@ -356,6 +360,169 @@ def add_camera(pos: Vector, target: Vector, lens=32.0, ship_light=False) -> bpy.
     return ob
 
 
+def _bulk_keys(ob: bpy.types.Object, data_path: str, count: int, values: np.ndarray) -> None:
+    """Per-frame keyframes via the 5.x slotted-action API (action.fcurves is gone)."""
+    ad = ob.animation_data or ob.animation_data_create()
+    if ad.action is None:
+        act = bpy.data.actions.new(f"{ob.name}_act")
+        ad.action = act
+        slot = act.slots.new(id_type="OBJECT", name=ob.name)
+        ad.action_slot = slot
+        layer = act.layers.new("base")
+        layer.strips.new(type="KEYFRAME")
+    act = ad.action
+    bag = act.layers[0].strips[0].channelbag(ad.action_slot, ensure=True)
+    n = len(values)
+    co = np.empty((n, 2))
+    co[:, 0] = np.arange(1, n + 1)
+    for i in range(count):
+        fc = bag.fcurves.new(data_path=data_path, index=i)
+        fc.keyframe_points.add(n)
+        co[:, 1] = values[:, i]
+        fc.keyframe_points.foreach_set("co", co.ravel())
+        for kp in fc.keyframe_points:
+            kp.interpolation = "LINEAR"
+        fc.update()
+
+
+def build_ship_rig() -> bpy.types.Object:
+    """The freighter: an empty animated from path.npz, camera + cockpit window
+    parented to it. Ship orientation IS the camera convention (-Z fwd, +Y up)."""
+    path = np.load(DATA / "path.npz")
+    ship = bpy.data.objects.new("ship", None)
+    bpy.context.collection.objects.link(ship)
+    ship.rotation_mode = "QUATERNION"
+    _bulk_keys(ship, "location", 3, path["pos"].astype(np.float64))
+    _bulk_keys(ship, "rotation_quaternion", 4, path["quat"].astype(np.float64))
+
+    cam = bpy.data.cameras.new("cam")
+    cam.lens = 26.0
+    cam.clip_start = 0.1
+    cam.clip_end = 30000.0
+    cob = bpy.data.objects.new("cam", cam)
+    bpy.context.collection.objects.link(cob)
+    cob.parent = ship
+    bpy.context.scene.camera = cob
+
+    build_cockpit(ship)
+
+    # landing floodlight: a SPOT (points radiate backward onto the mullions)
+    light = bpy.data.lights.new("ship_light", type="SPOT")
+    light.energy = 2.5e5
+    light.color = (1.0, 0.85, 0.65)
+    light.shadow_soft_size = 2.0
+    light.spot_size = 2.4
+    light.spot_blend = 0.6
+    lob = bpy.data.objects.new("ship_light", light)
+    bpy.context.collection.objects.link(lob)
+    lob.parent = ship
+    lob.location = (0.0, -0.8, -4.0)  # outside the hull, ahead of the glass
+    lob.rotation_euler = (-0.30, 0.0, 0.0)  # pitched down at the deck
+    return ship
+
+
+def build_cockpit(ship: bpy.types.Object) -> None:
+    """Window mullions + console silhouette in camera space (z=-0.9 plane)."""
+    dark = bpy.data.materials.new("cockpit_dark")
+    dark.use_nodes = True
+    b = dark.node_tree.nodes["Principled BSDF"]
+    b.inputs["Base Color"].default_value = (0.008, 0.008, 0.01, 1.0)
+    b.inputs["Roughness"].default_value = 0.9
+    glow = bpy.data.materials.new("console_glow")
+    glow.use_nodes = True
+    g = glow.node_tree.nodes["Principled BSDF"]
+    g.inputs["Base Color"].default_value = (0.02, 0.02, 0.02, 1.0)
+    g.inputs["Emission Color"].default_value = (1.0, 0.55, 0.25, 1.0)
+    g.inputs["Emission Strength"].default_value = 1.2
+
+    verts: list[list[float]] = []
+    faces: list[list[int]] = []
+
+    def box(cx, cy, cz, hx, hy, hz):
+        i = len(verts)
+        for dz in (-hz, hz):
+            for dy in (-hy, hy):
+                for dx in (-hx, hx):
+                    verts.append([cx + dx, cy + dy, cz + dz])
+        faces.extend(
+            [
+                [i, i + 1, i + 3, i + 2],
+                [i + 4, i + 6, i + 7, i + 5],
+                [i, i + 2, i + 6, i + 4],
+                [i + 1, i + 5, i + 7, i + 3],
+                [i, i + 4, i + 5, i + 1],
+                [i + 2, i + 3, i + 7, i + 6],
+            ]
+        )
+
+    w, h, z, t = 0.60, 0.36, -0.9, 0.05  # window half-extents, plane, beam size
+    box(0, h + t / 2, z, w + t, t / 2, t)  # top
+    box(0, -h - t / 2, z, w + t, t / 2, t)  # bottom
+    box(-w - t / 2, 0, z, t / 2, h + t, t)  # left
+    box(w + t / 2, 0, z, t / 2, h + t, t)  # right
+    box(0.19, 0, z, 0.012, h, t * 0.7)  # off-center mullion
+    mesh = bpy.data.meshes.new("window_frame")
+    mesh.from_pydata(verts, [], faces)
+    mesh.materials.append(dark)
+    ob = bpy.data.objects.new("window_frame", mesh)
+    ob.parent = ship
+    bpy.context.collection.objects.link(ob)
+
+    verts2: list[list[float]] = []
+    faces2: list[list[int]] = []
+    i = len(verts2)
+    # console: angled slab under the window (from window sill toward viewer)
+    for y, zz in ((-h - t, z), (-h - 0.30, z + 0.42)):
+        verts2.extend([[-w - t, y, zz], [w + t, y, zz]])
+    faces2.append([i, i + 1, i + 3, i + 2])
+    mesh2 = bpy.data.meshes.new("console")
+    mesh2.from_pydata(verts2, [], faces2)
+    mesh2.materials.append(dark)
+    ob2 = bpy.data.objects.new("console", mesh2)
+    ob2.parent = ship
+    bpy.context.collection.objects.link(ob2)
+
+    # indicator strip on the console lip (dim warm interior presence)
+    verts3: list[list[float]] = []
+    faces3: list[list[int]] = []
+
+    def box3(cx, cy, cz, hx, hy, hz):
+        i = len(verts3)
+        for dz in (-hz, hz):
+            for dy in (-hy, hy):
+                for dx in (-hx, hx):
+                    verts3.append([cx + dx, cy + dy, cz + dz])
+        faces3.extend(
+            [
+                [i, i + 1, i + 3, i + 2],
+                [i + 4, i + 6, i + 7, i + 5],
+                [i, i + 2, i + 6, i + 4],
+                [i + 1, i + 5, i + 7, i + 3],
+                [i, i + 4, i + 5, i + 1],
+                [i + 2, i + 3, i + 7, i + 6],
+            ]
+        )
+
+    for k in range(7):
+        box3(-0.4 + k * 0.13, -h - 0.24, z + 0.36, 0.02, 0.008, 0.004)
+    mesh3 = bpy.data.meshes.new("console_lights")
+    mesh3.from_pydata(verts3, [], faces3)
+    mesh3.materials.append(glow)
+    ob3 = bpy.data.objects.new("console_lights", mesh3)
+    ob3.parent = ship
+    bpy.context.collection.objects.link(ob3)
+
+    # instrument glow: a tiny warm light at the console so the mullions read
+    inst = bpy.data.lights.new("instrument_glow", type="POINT")
+    inst.energy = 6.0
+    inst.color = (1.0, 0.55, 0.28)
+    inst.shadow_soft_size = 0.3
+    iob = bpy.data.objects.new("instrument_glow", inst)
+    bpy.context.collection.objects.link(iob)
+    iob.parent = ship
+    iob.location = (0.0, -0.40, -0.55)
+
+
 def build_compositor() -> None:
     """Bloom via the 5.x group-based compositor (glare options are sockets now)."""
     sc = bpy.context.scene
@@ -454,7 +621,7 @@ def main() -> None:
     sc.frame_start, sc.frame_end = 1, N_FRAMES
     sc.frame_set(args.frame)
 
-    add_sphere("shell_far", SHELL_R, shell_material(statemap_path(args.frame)))
+    add_sphere("shell_far", SHELL_R, shell_material(first_statemap()))
     add_sphere("star", STAR_R, star_material(), segments=64)
     add_star_light()
     build_world()
@@ -462,8 +629,11 @@ def main() -> None:
     n = build_near_layer(DATA, args.frame, seed=args.seed)
     print(f"bsh: near layer: {n} corridor cells built")
 
-    cam_pos, target, lens = stage_camera(args.shot, args.frame)
-    add_camera(cam_pos, target, lens=lens, ship_light=args.shot != "hero")
+    if args.shot == "film":
+        build_ship_rig()
+    else:
+        cam_pos, target, lens = stage_camera(args.shot, args.frame)
+        add_camera(cam_pos, target, lens=lens, ship_light=args.shot != "hero")
     sc.view_settings.exposure = 0.0
     sc.eevee.use_raytracing = True  # emissive lamps/ground light nearby geometry
     build_compositor()

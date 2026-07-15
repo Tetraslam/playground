@@ -9,7 +9,27 @@ launch → docking. Everything on screen is simulation output.
 The full plan (shot table, systems, scale cheat, render budget, milestones)
 is in [DESIGN.md](./DESIGN.md).
 
-**Status: M3 done** — the near layer. `sim/flightpath.py` extracts the flight
+**Status: M4 done** — the ship flies. `sim/flightpath.py` now emits the full
+2880-frame trajectory (`path.npz`): shot legs are *frontier-relative* control
+curves (re-seed the shell, restage the film), altitude is clearance-checked
+against what's actually built beneath each frame at pass time, banking falls
+out of lateral acceleration, micro-shake is seeded noise that gets louder
+when low, and the finale parks beside the dock spire at clamp height.
+Blender-side: the ship is an empty bulk-keyframed via the 5.x slotted-action
+API, with the camera, window mullions, console, instrument glow, and a
+forward spot floodlight parented to it; the far-layer statemap steps through
+its 120-map sequence with a driver on `frame_offset`. `render_anim.py`
+renders any frame range in one process and skips existing frames (resume
+proven: a killed run continued exactly where it died).
+
+A 5-second S2 test through the window (city towers, radiator banks, the dock
+spire's beacon dead ahead):
+
+![S2 window loop](examples/m4_s2_window_loop.webp)
+
+![S2 strip](examples/m4_s2_strip.png)
+
+**M3** — the near layer. `sim/flightpath.py` extracts the flight
 corridor (478 cells under the provisional arc) with *exact* dual-cell
 polygons (corners shared between neighbors — seamless tiling), and
 `greebles.py` grows real geometry per CA state: skeletal truss frames with

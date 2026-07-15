@@ -1,6 +1,9 @@
 """Equirect statemaps: the far-field animation, and human-viewable previews.
 
-Data maps (statemap_####.png, RGB, one per 24 film frames):
+Data maps (statemap_####.png, RGB): #### is the MAP INDEX 1..120 (contiguous
+— Blender image sequences demand it); map k covers film frames
+[(k-1)·24 + 1, k·24]. The shader steps through them with a driver on the
+image user's frame_offset (see build_scene.py).
   R = state * 85          (VOID 0 / TRUSS 85 / PLATE 170 / LIVE 255)
   G = stage progress * 255
   B = per-cell hash        (stable variation channel for shading)
@@ -77,26 +80,24 @@ def render_statemaps(
     pix = pixel_to_cell(lattice["centers"], width, height)
     hashes = city_field(lattice, seed)
 
-    frames = list(range(1, N_FRAMES + 1, every))
-    if frames[-1] != N_FRAMES:
-        frames.append(N_FRAMES)
-
+    n_maps = N_FRAMES // every
     paths = []
     previews = []
-    for f in frames:
+    for k in range(1, n_maps + 1):
+        f = (k - 1) * every + 1  # state sampled at the window's first frame
         state = state_at(ca, f)
         prog = progress_at(ca, f)
         rgb = np.empty((height, width, 3), dtype=np.uint8)
         rgb[..., 0] = (state * 85)[pix]
         rgb[..., 1] = (prog * 255).astype(np.uint8)[pix]
         rgb[..., 2] = hashes[pix]
-        path = out_dir / f"statemap_{f:04d}.png"
+        path = out_dir / f"statemap_{k:04d}.png"
         Image.fromarray(rgb).save(path)
         paths.append(path)
 
         pv = _colorize(state, prog, hashes)[pix][::preview_scale, ::preview_scale]
         pv_img = Image.fromarray(pv)
-        pv_img.save(out_dir / f"preview_{f:04d}.png")
+        pv_img.save(out_dir / f"preview_{k:04d}.png")
         previews.append(pv_img)
 
     _strip(previews, out_dir / "preview_strip.png")
