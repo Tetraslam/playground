@@ -93,6 +93,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   cells, chains, and oscillating clusters emerge from random matrices, and a
   one-line tweak flips the whole ecology. Live ASCII sim + deterministic webp
   loops (Python, numpy).
+- **[cerebra](./toys/cerebra)** — gradient brains for the Drift: predators and
+  prey with tiny MLP policies trained by hand-derived REINFORCE (no autograd)
+  in a self-play toroidal world. The arms race is visible: prey return climbs
+  3x while predator return drops as prey learn to flee (Python, numpy).
 
 ## Feedback
 

@@ -1,0 +1,6 @@
+[project]
+name = "cerebra"
+version = "0.1.0"
+description = "Gradient brains for the Drift — REINFORCE self-play hunters vs foragers."
+requires-python = ">=3.12"
+dependencies = ["numpy>=1.26"]
