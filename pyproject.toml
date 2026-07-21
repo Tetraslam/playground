@@ -15,7 +15,7 @@ dependencies = ["numpy>=1.26"]
 # members, so it silently kicked every explicitly-listed toy out of the
 # workspace (uv.lock had only the root deps). Members are explicit; that's
 # enough to skip the non-Python toys.
-members = ["lib/py/*", "toys/dilemma", "toys/phloraflora", "toys/phonoscape", "toys/qurwen", "toys/orderbook", "toys/kalmanville", "toys/primordia", "toys/rl-agent", "toys/saturn", "toys/sunforge"]
+members = ["lib/py/*", "toys/dilemma", "toys/phloraflora", "toys/phonoscape", "toys/qurwen", "toys/orderbook", "toys/kalmanville", "toys/primordia", "toys/rl-agent", "toys/saturn", "toys/sunforge", "toys/partilife"]
 
 [tool.uv]
 # Keep the root virtualenv at .venv (activated by .envrc).

@@ -1,0 +1,8 @@
+[project]
+name = "partilife"
+version = "0.1.0"
+description = "Particle life: N particles, K colors, one inter-color attraction matrix. The matrix is the genome — cells, chains, oscillators, and swarming crystals emerge by tuning it."
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.26",
+]

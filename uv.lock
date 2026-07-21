@@ -7,6 +7,7 @@ members = [
     "dilemma",
     "kalmanville",
     "orderbook",
+    "partilife",
     "phloraflora",
     "phonoscape",
     "playground",
@@ -92,6 +93,17 @@ wheels = [
 name = "orderbook"
 version = "0.1.0"
 source = { virtual = "toys/orderbook" }
+
+[[package]]
+name = "partilife"
+version = "0.1.0"
+source = { virtual = "toys/partilife" }
+dependencies = [
+    { name = "numpy" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "numpy", specifier = ">=1.26" }]
 
 [[package]]
 name = "phloraflora"

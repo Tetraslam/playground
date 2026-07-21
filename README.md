@@ -86,8 +86,13 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   — the repo's first Blender toy, and the reference for the pattern).
 - **[sunforge](./toys/sunforge)** — a Dyson shell under construction, watched
   for two minutes from a freighter window: a construction CA on a ~40k-cell
-  Goldberg lattice + drone swarms + an event timeline drive one continuous
+  Goldberg lattice + drone swarms + an event timeline drives one continuous
   120s shot (Python + bpy — designed, in progress).
+- **[partilife](./toys/partilife)** — particle life: N particles of K colors
+  move under one (K×K) inter-color attraction matrix. The matrix IS the genome;
+  cells, chains, and oscillating clusters emerge from random matrices, and a
+  one-line tweak flips the whole ecology. Live ASCII sim + deterministic webp
+  loops (Python, numpy).
 
 ## Feedback
 
