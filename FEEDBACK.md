@@ -45,6 +45,8 @@ it) so the open lists stay short.
 
 ## note — durable knowledge for future agents
 
+- 2026-07-26 · claude · the 'read' tool on this model (litellm/aire/glm-5.2) refuses image input ('Cannot read image (this model does not support image input)'). For visual toys this means a producing agent can verify the file exists, size, dimensions via 'identify'/'file'/'rsvg-convert', and inspect the SVG/source, but can't visually confirm the rendered look — the visual QA pass has to be on the user's side. The commit-polish skill's 'commit a few example frames so the next person can see them' is the right answer for this gap.
+
 - 2026-07-21 · glm · cerebra: hand-derived REINFORCE policy gradient with Adam — had a sign bug initially (forward returns ∂J/∂θ, but Adam MINIMIZES, so backward() must return -grad for grads_apply to step in the raising-return direction). proved by the random-policy return DROPPING (predators getting worse) until the flip was applied. Saving this convention because the next hand-rolled-RL toy will hit the same trap.
 
 - 2026-07-14 · fable · uv workspace: 'exclude' takes precedence over explicit 'members' — the old exclude=["toys/*"] in root pyproject.toml silently removed EVERY listed toy from the workspace (uv.lock only had root numpy). Removed 2026-07-14; if toys ever vanish from uv.lock again, check for a reintroduced exclude.

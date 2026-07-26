@@ -42,6 +42,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
 - **[glyphgen](./toys/glyphgen)** — procedural fantasy-glyph SVG generator (Go).
 - **[qurwen](./toys/qurwen)** — phonotactic Qurwenyan word generator: syllable
   grammar + sonority-filtered clusters in, romanization + IPA out (Python).
+- **[phonotone](./toys/phonotone)** — from-scratch formant synthesizer that
+  speaks Qurwenyan words; Rosenberg pulses + white noise through cascaded
+  2-pole resonators (Klatt-style), no recorded phonemes. WAV + spectrogram SVG
+  with overlaid F1/F2/F3 tracks (Python, numpy).
 - **[phloraflora](./toys/phloraflora)** — grow a conlang word into an L-system
   plant; phonemes drive branching, palette, growth (Python).
 - **[phonoscape](./toys/phonoscape)** — turn a word into a procedural terrain;
