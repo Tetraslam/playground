@@ -9,6 +9,7 @@ members = [
     "kalmanville",
     "orderbook",
     "partilife",
+    "persist",
     "phloraflora",
     "phonoscape",
     "phonotone",
@@ -117,6 +118,17 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "numpy", specifier = ">=1.26" }]
+
+[[package]]
+name = "persist"
+version = "0.1.0"
+source = { virtual = "toys/persist" }
+dependencies = [
+    { name = "numpy" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "numpy", specifier = ">=2.4.6" }]
 
 [[package]]
 name = "phloraflora"

@@ -29,3 +29,10 @@ as the upstream feed so the two merge cleanly.
 - **URL**: https://opentui.com
 
 ---
+
+### Perea & Harer, Sliding Windows and Persistence — the theory behind persist's Takens-embedding trick: delay coordinates of a periodic/chaotic series have provable loop structure
+
+- **Tags**: math,paper
+- **URL**: https://arxiv.org/abs/1304.5252
+
+---

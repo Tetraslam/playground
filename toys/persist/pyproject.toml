@@ -1,0 +1,8 @@
+[project]
+name = "persist"
+version = "0.1.0"
+description = "Persistent homology from scratch: Vietoris-Rips filtration, GF(2) boundary reduction, Takens embedding."
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.4.6",
+]

@@ -101,6 +101,12 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   prey with tiny MLP policies trained by hand-derived REINFORCE (no autograd)
   in a self-play toroidal world. The arms race is visible: prey return climbs
   3x while predator return drops as prey learn to flee (Python, numpy).
+- **[persist](./toys/persist)** — persistent homology from scratch: a
+  Vietoris–Rips filtration (bitmask clique expansion) + boundary-matrix
+  reduction over GF(2), no topology library. Point clouds reveal their loops
+  as barcodes; a Takens embedding recovers the Lorenz attractor's holes from
+  one scalar — and the orderbook toy's tape as the negative control (Python,
+  numpy).
 
 ## Feedback
 
