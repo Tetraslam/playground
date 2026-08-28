@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 members = [
     "cerebra",
     "dilemma",
+    "hexloom",
     "kalmanville",
     "orderbook",
     "partilife",
@@ -36,6 +37,11 @@ requires-dist = [{ name = "numpy", specifier = ">=1.26" }]
 name = "dilemma"
 version = "0.1.0"
 source = { virtual = "toys/dilemma" }
+
+[[package]]
+name = "hexloom"
+version = "0.1.0"
+source = { virtual = "toys/hexloom" }
 
 [[package]]
 name = "kalmanville"

@@ -107,6 +107,10 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   as barcodes; a Takens embedding recovers the Lorenz attractor's holes from
   one scalar — and the orderbook toy's tape as the negative control (Python,
   numpy).
+- **[hexloom](./toys/hexloom)** — a deterministic ecology assembled by six
+  agents: four plugin species forage, fight, migrate, and reproduce on one
+  finite toroidal hex grid, weaving an unauthored population history (Python,
+  stdlib only).
 
 ## Feedback
 
