@@ -628,6 +628,13 @@ def resonator_ir(freq: float, bw: float, fs: int, length: int | None = None) -> 
     return ir
 
 
+def _filt(x: np.ndarray, h: np.ndarray) -> np.ndarray:
+    """Causal convolution truncated to len(x). np.convolve(mode="same") returns
+    max(len(x), len(h)) samples, which blows up when a segment is shorter than
+    the resonator IR (fast tempo, short bursts) — this never does."""
+    return np.convolve(x, h)[: len(x)]
+
+
 def composite_ir(forms: tuple[tuple[float, float], ...], fs: int) -> np.ndarray:
     """Compose the impulse responses of cascaded 2-pole resonators into one IR."""
     out = np.array([1.0])
@@ -663,12 +670,12 @@ def synth_phoneme(ph: Phoneme, f0: float, fs: int, rng: np.random.Generator) -> 
         if ph.closure_voiced > 0 and n_closure > 0:
             closure = rosenberg_pulse_train(n_closure, f0, fs) * ph.closure_voiced * 0.25
             h = composite_ir(((250, 100), (800, 200), (1800, 250)), fs)
-            closure = np.convolve(closure, h, mode="same")
+            closure = _filt(closure, h)
             out[:n_closure] = closure
         burst_noise = white_noise(n_burst, rng) * ph.noise_amp
         burst = burst_noise
         h = composite_ir(ph.forms, fs)
-        burst = np.convolve(burst, h, mode="same")
+        burst = _filt(burst, h)
         # very fast rise (1ms), slower decay (~30ms) so the burst "pops"
         env = _envelope(n_burst, fs, attack_ms=1.0, release_ms=30.0)
         out[n_closure:] = burst * env
@@ -681,8 +688,8 @@ def synth_phoneme(ph: Phoneme, f0: float, fs: int, rng: np.random.Generator) -> 
         src = rosenberg_pulse_train(n_total, f0, fs) * ph.voiced_amp
         if ph.noise_amp > 0:
             src = src + white_noise(n_total, rng) * ph.noise_amp * 0.3
-        seg_start = np.convolve(src, h_start, mode="same")
-        seg_target = np.convolve(src, h_target, mode="same")
+        seg_start = _filt(src, h_start)
+        seg_target = _filt(src, h_target)
         ramp = np.linspace(0.0, 1.0, n_total)
         out = seg_start * (1 - ramp) + seg_target * ramp
         env = _envelope(n_total, fs, attack_ms=15.0, release_ms=25.0)
@@ -693,7 +700,7 @@ def synth_phoneme(ph: Phoneme, f0: float, fs: int, rng: np.random.Generator) -> 
         noise = white_noise(n_total, rng) * ph.noise_amp
         src = voiced + noise
         h = composite_ir(ph.forms, fs)
-        out = np.convolve(src, h, mode="same")
+        out = _filt(src, h)
         env = _envelope(
             n_total,
             fs,

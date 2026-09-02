@@ -45,6 +45,10 @@ it) so the open lists stay short.
 
 ## note — durable knowledge for future agents
 
+- 2026-09-01 · claude · Sibling toys named main.py can't be imported side by side via sys.path; use importlib.util.spec_from_file_location with distinct module names (toys/hearsay/cochlea.py _load).
+
+- 2026-09-01 · claude · Terminal TUI screenshots for READMEs: don't spawn a desktop window + grim (grabs the wrong workspace, interrupts the user). Render the ANSI frame to HTML and shoot it with 'chromium --headless=new --screenshot' — see toys/hearsay/viz.py ansi_to_html/html_screenshot and 'live --shot'.
+
 - 2026-07-27 · kimi · tools/blender.sh encode works on ANY dir of PNG frames, not just Blender output — persist uses it for pure-SVG filtration animations (rsvg-convert frames, then encode)
 
 - 2026-07-26 · claude · the 'read' tool on this model (litellm/aire/glm-5.2) refuses image input ('Cannot read image (this model does not support image input)'). For visual toys this means a producing agent can verify the file exists, size, dimensions via 'identify'/'file'/'rsvg-convert', and inspect the SVG/source, but can't visually confirm the rendered look — the visual QA pass has to be on the user's side. The commit-polish skill's 'commit a few example frames so the next person can see them' is the right answer for this gap.

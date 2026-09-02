@@ -107,6 +107,12 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   as barcodes; a Takens embedding recovers the Lorenz attractor's holes from
   one scalar — and the orderbook toy's tape as the negative control (Python,
   numpy).
+- **[hearsay](./toys/hearsay)** — a spiking auditory cortex that learns to hear
+  Qurwenyan: qurwen words, spoken by phonotone as random speakers, through a
+  gammatone cochlea and LIF auditory nerve into 100 STDP neurons on delay
+  lines. Unsupervised spectro-temporal receptive fields, a population decoder,
+  and a live TUI where you lesion neurons and add noise mid-learning. Kill 80%
+  of the cortex and lose one point of accuracy (Python, numpy).
 - **[hexloom](./toys/hexloom)** — a deterministic ecology assembled by six
   agents: four plugin species forage, fight, migrate, and reproduce on one
   finite toroidal hex grid, weaving an unauthored population history (Python,

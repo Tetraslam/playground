@@ -32,6 +32,7 @@ members = [
     "toys/phonotone",
     "toys/persist",
     "toys/hexloom",
+    "toys/hearsay",
 ]
 
 [tool.uv]

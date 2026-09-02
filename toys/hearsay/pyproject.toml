@@ -1,0 +1,6 @@
+[project]
+name = "hearsay"
+version = "0.1.0"
+description = "A spiking auditory cortex that learns to hear Qurwenyan: gammatone cochlea -> LIF nerve -> STDP cortex -> population decoder."
+requires-python = ">=3.12"
+dependencies = ["numpy>=1.26"]
