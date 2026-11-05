@@ -104,7 +104,7 @@ tools/blender.sh encode frames/ out   # -> out.webp, out.mp4, out_strip.png
   3, tie 1, loss 0.
 - **`warriors/`** has the classic families: bombers (dwarf, stone, twindwarf),
   a scanner (scout), imps and an imp ring, and paper/replicators (mice,
-  paperimp). Two anti-paper warriors lay `SPL $0` / `JMP $-1` stun traps and
+  paperimp, and papestone, whose every copy starts its own stone). Two anti-paper warriors lay `SPL $0` / `JMP $-1` stun traps and
   then DAT-clear the core: carpet bombs blind, lurker CMP-scans first. At
   `--rounds 20 --seed 1`, paper beats the bombers, the bombers beat the
   scanners, carpet and lurker beat paper, and the plain imp ties almost
