@@ -117,6 +117,11 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   agents: four plugin species forage, fight, migrate, and reproduce on one
   finite toroidal hex grid, weaving an unauthored population history (Python,
   stdlib only).
+- **[coreloom](./toys/coreloom)** — a Core War arena built by six agents: an
+  ICWS'88 Redcode VM, a deterministic round-robin tournament, hand-written
+  bombers, scanners, imps and paper, and a genetic evolver that breeds warriors
+  from noise against the hill. Watch battles live in a truecolor TUI or as
+  spacetime plots (Python, stdlib only).
 
 ## Feedback
 
