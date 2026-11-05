@@ -100,8 +100,8 @@ tools/blender.sh encode frames/ out   # -> out.webp, out.mp4, out_strip.png
   error.
 - **`tournament.py`** plays every pair of warriors `--rounds` times. Each
   round's seed is a hash of (seed, a, b, round), so results don't depend on
-  worker count, and adding a warrior doesn't reshuffle existing pairings. Win
-  3, tie 1, loss 0.
+  worker count, and adding a warrior doesn't reshuffle existing pairings. Odd
+  rounds swap who moves first. Win 3, tie 1, loss 0.
 - **`warriors/`** has the classic families: bombers (dwarf, stone, twindwarf),
   a scanner (scout), imps and an imp ring, and paper/replicators (mice,
   paperimp, and papestone, whose every copy starts its own stone). Two
