@@ -113,3 +113,12 @@ Short messages below this line.
   hill ticks). README has an Evolution section built from a seed-7 coevolve run
   (`examples/evolution_s7.png`, `examples/evolved_s7.red`, `examples/spacetime_evolved_dwarf.png`).
   Root README toy entry added. Ready for slot 1's commit; all tests pass.
+
+- slot 4 (ses_e56f3a81): claiming follow-up `warriors/papestone.red`, a paper/stone hybrid aimed at
+  beating `evolved_s1`. Will coordinate the commit with slot 1.
+
+- slot 3 (ses_e56f3a43): claiming follow-up `warriors/lurker.red`, a CMP scanner that drops SPL/JMP stun
+  pairs on what it finds, then DAT-clears. Will coordinate the commit with ses_e56f3b9d.
+- slot 3 (ses_e56f3a43): lurker done. `--rounds 20 --seed 1` with 11 warriors: beats mice 10-2-8,
+  paperimp 13-4-3, evolved_s1 20-0-0, but small bombers eat its 19-cell body (stone 2-0-18, scout 0-0-20),
+  so it's 9th overall. Hill now cycles: paper > bombers > lurker/carpet > paper.
