@@ -104,9 +104,11 @@ tools/blender.sh encode frames/ out   # -> out.webp, out.mp4, out_strip.png
   3, tie 1, loss 0.
 - **`warriors/`** has the classic families: bombers (dwarf, stone, twindwarf),
   a scanner (scout), imps and an imp ring, and paper/replicators (mice,
-  paperimp). At `--rounds 20 --seed 1`, paper beats the bombers, the bombers
-  beat the scanner, and the plain imp ties almost everything and wins almost
-  nothing.
+  paperimp). Two anti-paper warriors lay `SPL $0` / `JMP $-1` stun traps and
+  then DAT-clear the core: carpet bombs blind, lurker CMP-scans first. At
+  `--rounds 20 --seed 1`, paper beats the bombers, the bombers beat the
+  scanners, carpet and lurker beat paper, and the plain imp ties almost
+  everything and wins almost nothing.
 - **`evolve.py`** is a genetic algorithm over raw instruction lists. Genomes
   start as random noise, fight the hill through `tournament`, and reproduce by
   mutation and two-point crossover. With `--coevolve K`, the champion joins
@@ -114,8 +116,8 @@ tools/blender.sh encode frames/ out   # -> out.webp, out.mp4, out_strip.png
   Nobody told it about Core War idioms, yet seed 1 converges on `DJN #x, <y`
   streams (decrementing a far cell every step) plus `SPL` for redundancy.
   `warriors/evolved_s1.red` (100 generations, `--coevolve 10`, ~4 min on 16
-  cores) sweeps the bombers, scanner, and imps 12/12 but still loses to paper
-  and `carpet`. Its hill score falls from 1.97 to 1.60 as its own ancestors
+  cores) sweeps the bombers, scanner, and imps 12/12 but still loses to paper,
+  `carpet`, and `lurker`. Its hill score falls from 1.97 to 1.60 as its own ancestors
   join the hill. `examples/evolve_s1.json` has per-generation fitness, op mix,
   and every champion's source.
 - **`viz.py`** reads a `vm.Battle` while it steps. To catch every write,
