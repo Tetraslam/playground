@@ -55,6 +55,12 @@ because a dead microcontroller doesn't stop thermodynamics.
 
 ![fault run](examples/fault_run.png)
 
+One bad day: the door opens, a bit flip halts the CPU at 12 s and the
+watchdog reboots it. The sensor sticks four times and the firmware cuts the
+heater each time. Another halt comes at 36 s, and the tank still ends at 60 °C.
+`uv run python -m rtosaurus run --seed 1 --seconds 40 --inject
+data-flip:0.3,reg-flip:0.2,stuck-sensor:0.1 --at 20:knob=60 --plot run.png`
+
 A campaign runs every (fault kind, rate, seed) for 40 sim seconds with the
 setpoint at 45 °C, starting injections after 10 s. A run **survives** if the
 tank never boils, the CPU is running at the end, and the temperature is within
