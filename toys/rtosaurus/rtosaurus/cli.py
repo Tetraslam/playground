@@ -1,10 +1,10 @@
 """rtosaurus CLI (owner: agent 1).
 
-    uv run python -m rtosaurus run [--seconds 30] [--inject data-flip:0.5] [--at 10:s60] [--plot run.png]
-    uv run python -m rtosaurus dash [--inject ...]
-    uv run python -m rtosaurus campaign [--kinds ...] [--rates 0,0.5,1,2] [--seeds 6] [--plot c.png]
-    uv run python -m rtosaurus asm [file.s] [--listing]
-    uv run python -m rtosaurus disasm [--start ADDR] [--count N]
+uv run python -m rtosaurus run [--seconds 30] [--inject data-flip:0.5] [--at 10:s60] [--plot run.png]
+uv run python -m rtosaurus dash [--inject ...]
+uv run python -m rtosaurus campaign [--kinds ...] [--rates 0,0.5,1,2] [--seeds 6] [--plot c.png]
+uv run python -m rtosaurus asm [file.s] [--listing]
+uv run python -m rtosaurus disasm [--start ADDR] [--count N]
 """
 
 from __future__ import annotations
@@ -22,7 +22,11 @@ def _machine(a):
     from rtosaurus.faults import FaultSchedule, parse_spec
     from rtosaurus.machine import Machine, build_firmware
 
-    m = Machine(build_firmware(a.firmware) if a.firmware else build_firmware(), seed=a.seed)
+    m = Machine(
+        build_firmware(a.firmware) if a.firmware else build_firmware(),
+        seed=a.seed,
+        safety=not a.no_safety,
+    )
     if a.setpoint is not None:
         m.plant.setpoint = a.setpoint
     if a.inject:
@@ -61,7 +65,10 @@ def cmd_run(a) -> int:
                 shown = len(text)
     wall = time.time() - t0
     s = m.summary()
-    print(f"\n--- {m.t:.2f} sim s in {wall:.1f} s wall ({m.bus.cycles / max(wall, 1e-9) / 1e3:.0f}k cycles/s)", file=sys.stderr)
+    print(
+        f"\n--- {m.t:.2f} sim s in {wall:.1f} s wall ({m.bus.cycles / max(wall, 1e-9) / 1e3:.0f}k cycles/s)",
+        file=sys.stderr,
+    )
     print(json.dumps(s), file=sys.stderr)
     for t, e in m.event_log:
         if not e.startswith("uart>") or a.verbose:
@@ -74,10 +81,16 @@ def cmd_run(a) -> int:
             plots.plot_run(m.trace, a.plot, title=a.title or _title(a))
             print(f"wrote {a.plot}", file=sys.stderr)
         if a.gantt:
-            plots.plot_gantt(m.trace, a.gantt, **({"names": names} if _accepts(plots.plot_gantt, "names") else {}))
+            plots.plot_gantt(
+                m.trace,
+                a.gantt,
+                **({"names": names} if _accepts(plots.plot_gantt, "names") else {}),
+            )
             print(f"wrote {a.gantt}", file=sys.stderr)
     if a.trace_json:
-        Path(a.trace_json).write_text(json.dumps({"summary": s, "events": m.event_log, "trace": m.trace}))
+        Path(a.trace_json).write_text(
+            json.dumps({"summary": s, "events": m.event_log, "trace": m.trace})
+        )
     return 0 if not s["boiled"] else 2
 
 
@@ -104,7 +117,16 @@ def cmd_campaign(a) -> int:
     kinds = a.kinds.split(",")
     rates = [float(x) for x in a.rates.split(",")]
     t0 = time.time()
-    res = campaign(kinds, rates, a.seeds, a.seconds, settle=a.settle, jobs=a.jobs, log=lambda s: print(s, file=sys.stderr))
+    res = campaign(
+        kinds,
+        rates,
+        a.seeds,
+        a.seconds,
+        settle=a.settle,
+        jobs=a.jobs,
+        log=lambda s: print(s, file=sys.stderr),
+        safety=not a.no_safety,
+    )
     print(survival_table(res))
     print(f"({len(res)} runs, {time.time() - t0:.0f} s wall)", file=sys.stderr)
     if a.json:
@@ -129,7 +151,9 @@ def cmd_asm(a) -> int:
 
         for addr in sorted(img.lines):
             w0, w1 = img.words.get(addr, 0), img.words.get(addr + 1, 0)
-            print(f"{addr:04x}  {w0:04x} {w1:04x}  {disasm(w0, w1, img.symbols):<28} {img.lines[addr]}")
+            print(
+                f"{addr:04x}  {w0:04x} {w1:04x}  {disasm(w0, w1, img.symbols):<28} {img.lines[addr]}"
+            )
     if a.symbols:
         consts = isa.mmio_constants()
         for k, v in sorted(img.symbols.items(), key=lambda kv: kv[1]):
@@ -154,20 +178,36 @@ def cmd_disasm(a) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="rtosaurus", description="an emulated MCU + RTOS keeping a water tank from boiling")
+    ap = argparse.ArgumentParser(
+        prog="rtosaurus", description="an emulated MCU + RTOS keeping a water tank from boiling"
+    )
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     def machine_args(p):
         p.add_argument("--seed", type=int, default=0)
         p.add_argument("--firmware", help="top-level .s (default firmware/main.s)")
-        p.add_argument("--inject", help="fault spec, e.g. data-flip:0.5,stuck-sensor:0.1 (events per sim second)")
-        p.add_argument("--settle", type=float, default=10.0, help="no injections before this sim time")
+        p.add_argument(
+            "--inject",
+            help="fault spec, e.g. data-flip:0.5,stuck-sensor:0.1 (events per sim second)",
+        )
+        p.add_argument(
+            "--settle", type=float, default=10.0, help="no injections before this sim time"
+        )
         p.add_argument("--setpoint", type=float, help="initial setpoint knob (degC)")
+        p.add_argument(
+            "--no-safety",
+            action="store_true",
+            help="naive firmware: skip sensor plausibility checks",
+        )
 
     p = sub.add_parser("run", help="run headless, stream UART, optional plots")
     machine_args(p)
     p.add_argument("--seconds", type=float, default=30.0, help="sim seconds")
-    p.add_argument("--at", action="append", help="scripted input TIME:TEXT (uart line) or TIME:knob=DEGC; repeatable")
+    p.add_argument(
+        "--at",
+        action="append",
+        help="scripted input TIME:TEXT (uart line) or TIME:knob=DEGC; repeatable",
+    )
     p.add_argument("--plot", help="write temp/heater plot PNG")
     p.add_argument("--gantt", help="write task-schedule PNG")
     p.add_argument("--title")
@@ -181,12 +221,17 @@ def main(argv: list[str] | None = None) -> int:
     p.set_defaults(fn=cmd_dash)
 
     p = sub.add_parser("campaign", help="many seeded fault runs -> survival table")
-    p.add_argument("--kinds", default="data-flip,code-flip,stack-flip,reg-flip,stuck-sensor,irq-storm")
+    p.add_argument(
+        "--kinds", default="data-flip,code-flip,stack-flip,reg-flip,stuck-sensor,irq-storm"
+    )
     p.add_argument("--rates", default="0,0.25,1,4")
     p.add_argument("--seeds", type=int, default=4)
     p.add_argument("--seconds", type=float, default=40.0)
     p.add_argument("--settle", type=float, default=10.0)
     p.add_argument("--jobs", type=int)
+    p.add_argument(
+        "--no-safety", action="store_true", help="naive firmware: skip sensor plausibility checks"
+    )
     p.add_argument("--json")
     p.add_argument("--plot")
     p.set_defaults(fn=cmd_campaign)

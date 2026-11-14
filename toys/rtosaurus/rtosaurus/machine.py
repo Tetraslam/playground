@@ -30,12 +30,19 @@ class Machine:
         plant: Plant | None = None,
         sample_cycles: int = 1000,
         trace_limit: int = 200_000,
+        safety: bool = True,
     ):
         self.image = image if image is not None else build_firmware()
         self.seed = seed
         self.plant = plant if plant is not None else Plant(seed=seed)
         self.bus = Bus(self.plant, seed=seed)
         self.bus.load(self.image.words)
+        if not safety:  # naive controller: firmware skips its sensor plausibility checks
+            addr = self.image.symbols.get("app_cfg_safety")
+            if addr is None:
+                raise ValueError("firmware has no app_cfg_safety switch")
+            self.bus.mem[addr] = 0
+        self.safety = safety
         self.cpu = CPU(self.bus)
         self.cpu.reset()  # pc = mem[VEC_RESET], after the image is loaded
         self.sample_cycles = sample_cycles

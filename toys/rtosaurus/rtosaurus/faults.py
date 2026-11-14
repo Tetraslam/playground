@@ -61,7 +61,11 @@ class Injector:
         raise ValueError(f"unknown fault kind {k!r} (choose from {KINDS})")
 
     def update(self, m) -> str | None:
-        if self.kind == "stuck-sensor" and m.plant.sensor_override is not None and m.t >= self._stuck_until:
+        if (
+            self.kind == "stuck-sensor"
+            and m.plant.sensor_override is not None
+            and m.t >= self._stuck_until
+        ):
             m.plant.sensor_override = None
             return "sensor recovered"
         return None
@@ -162,26 +166,35 @@ def survived(s: dict, tol: float = 5.0) -> bool:
 
 
 def one_run(args: tuple) -> dict:
-    kind, rate, seed, seconds, settle = args
+    kind, rate, seed, seconds, settle, safety = args
     from rtosaurus.machine import Machine, build_firmware
 
-    m = Machine(build_firmware(), seed=seed, sample_cycles=2000)
+    m = Machine(build_firmware(), seed=seed, sample_cycles=2000, safety=safety)
     if rate > 0:
         m.hooks.append(FaultSchedule([Injector(kind, rate)], seed=seed, start=settle))
     m.run_seconds(seconds)
     s = m.summary()
-    s |= {"kind": kind, "rate": rate, "seed": seed, "setpoint": m.plant.setpoint}
+    s |= {"kind": kind, "rate": rate, "seed": seed, "setpoint": m.plant.setpoint, "safety": safety}
     s["survived"] = survived(s)
     return s
 
 
 def campaign(
-    kinds: list[str], rates: list[float], seeds: int, seconds: float, settle: float = 10.0, jobs: int | None = None, log=print
+    kinds: list[str],
+    rates: list[float],
+    seeds: int,
+    seconds: float,
+    settle: float = 10.0,
+    jobs: int | None = None,
+    log=print,
+    safety: bool = True,
 ) -> list[dict]:
     """Every (kind, rate, seed) run, in parallel processes. Returns summaries."""
     from concurrent.futures import ProcessPoolExecutor, as_completed
 
-    jobs_list = [(k, r, s, seconds, settle) for k in kinds for r in rates for s in range(seeds)]
+    jobs_list = [
+        (k, r, s, seconds, settle, safety) for k in kinds for r in rates for s in range(seeds)
+    ]
     results = []
     with ProcessPoolExecutor(max_workers=jobs) as ex:
         futs = {ex.submit(one_run, j): j for j in jobs_list}
@@ -200,7 +213,11 @@ def campaign(
 def survival_table(results: list[dict]) -> str:
     rates = sorted({r["rate"] for r in results})
     kinds = sorted({r["kind"] for r in results})
-    lines = ["kind          " + "".join(f"{r:>8g}" for r in rates) + "   (survival by rate, events/sim-s)"]
+    lines = [
+        "kind          "
+        + "".join(f"{r:>8g}" for r in rates)
+        + "   (survival by rate, events/sim-s)"
+    ]
     for k in kinds:
         cells = []
         for rate in rates:
