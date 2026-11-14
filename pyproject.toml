@@ -33,6 +33,7 @@ members = [
     "toys/persist",
     "toys/hexloom",
     "toys/hearsay",
+    "toys/rtosaurus",
 ]
 
 [tool.uv]
