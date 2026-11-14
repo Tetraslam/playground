@@ -303,3 +303,139 @@ def test_encode_roundtrip_every_opcode_executes():
         cpu.regs[2] = 3
         cpu.step()
         assert not cpu.double_fault, name
+
+
+def test_self_modifying_code_and_bit_flips_invalidate_cache():
+    # loop: LDI r1, 5 ; JMP loop  -- then patch the immediate and flip the opcode
+    cpu, bus = machine(("LDI", 1, 0, 5), ("JMP", 0, 0, isa.CODE_BASE))
+    run(cpu, 2)
+    assert cpu.regs[1] == 5
+    bus.mem[isa.CODE_BASE + 1] = 9  # imm word changes
+    run(cpu, 2)
+    assert cpu.regs[1] == 9
+    bus.mem[isa.CODE_BASE] = E("MOV", 1, 2)[0]  # opcode word changes
+    cpu.regs[2] = 77
+    run(cpu, 2)
+    assert cpu.regs[1] == 77
+    # the program patching itself via ST
+    cpu, bus = machine(
+        ("LDI", 3, 0, 42),
+        ("ST", isa.ZERO_BASE, 3, isa.CODE_BASE + 7),  # patch imm of the next LDI
+        ("NOP",),
+        ("LDI", 4, 0, 0),
+    )
+    run(cpu, 4)
+    assert cpu.regs[4] == 42
+
+
+class NmiBus(FakeBus):
+    def __init__(self):
+        super().__init__()
+        self.nmi = False
+
+    def pending_nmi(self):
+        return self.nmi
+
+    def ack_irq(self, vec):
+        if vec == isa.VEC_WDOG:
+            self.nmi = False
+        super().ack_irq(vec)
+
+
+def test_watchdog_nmi_ignores_interrupt_mask():
+    cpu, _ = machine(("NOP",), ("NOP",), vectors={isa.VEC_WDOG: 0xD00})
+    bus = NmiBus()
+    bus.mem = cpu.bus.mem
+    cpu.bus = bus
+    bus.irqs = {isa.VEC_TIMER}
+    bus.nmi = True
+    assert not cpu.flags & isa.FLAG_I
+    assert cpu.step() == isa.IRQ_ENTRY_CYCLES
+    assert cpu.pc == 0xD00 and bus.cause == isa.CAUSE_WDOG and not bus.nmi
+    assert bus.irqs == {isa.VEC_TIMER}  # maskable irq still waiting
+
+
+class TickBus(FakeBus):
+    def __init__(self):
+        super().__init__()
+        self.cycles = 0
+        self.timer_at = 50
+
+    def tick(self, c):
+        self.cycles += c
+        if self.cycles >= self.timer_at:
+            self.irqs.add(isa.VEC_TIMER)
+            self.timer_at += 50
+
+
+def _loop_program(bus):
+    prog = [
+        ("LDI", 7, 0, 0x8000),
+        ("EI",),
+        ("LD", 2, isa.ZERO_BASE, 0x4000),
+        ("ADDI", 2, 0, 1),
+        ("ST", isa.ZERO_BASE, 2, 0x4000),
+        ("LDI", 3, 0, 3),
+        ("DIV", 2, 3),
+        ("CALL", 0, 0, 0x2000),
+        ("JMP", 0, 0, isa.CODE_BASE + 4),
+    ]
+    a = isa.CODE_BASE
+    for ins in prog:
+        bus.mem[a], bus.mem[a + 1] = E(*ins)
+        a += 2
+    for i, ins in enumerate([("PUSH", 0, 2), ("XOR", 4, 2), ("POP", 2), ("RET",)]):
+        bus.mem[0x2000 + 2 * i], bus.mem[0x2001 + 2 * i] = E(*ins)
+    for i, ins in enumerate(
+        [
+            ("LD", 0, isa.ZERO_BASE, 0x4100),
+            ("ADDI", 0, 0, 1),
+            ("ST", isa.ZERO_BASE, 0, 0x4100),
+            ("IRET",),
+        ]
+    ):
+        bus.mem[0x3000 + 2 * i], bus.mem[0x3001 + 2 * i] = E(*ins)
+    bus.mem[isa.VEC_RESET] = isa.CODE_BASE
+    bus.mem[isa.VEC_TIMER] = 0x3000
+
+
+def test_run_matches_step_loop():
+    results = []
+    for fast in (True, False):
+        bus = TickBus()
+        _loop_program(bus)
+        cpu = CPU(bus)
+        cpu.reset()
+        if fast:
+            spent = cpu.run(5000)
+        else:
+            spent = 0
+            while spent < 5000:
+                c = cpu.step()
+                bus.tick(c)
+                spent += c
+        results.append(
+            (
+                spent,
+                bus.cycles,
+                cpu.pc,
+                cpu.regs,
+                cpu.flags,
+                cpu.instret,
+                bus.mem[0x4000],
+                bus.mem[0x4100],
+            )
+        )
+    assert results[0] == results[1]
+    assert results[0][7] > 50  # timer isr actually ran
+
+
+def test_run_stops_on_halt_and_halt_request():
+    bus = TickBus()
+    cpu, _ = machine(("NOP",), ("HALT",))
+    bus.mem = cpu.bus.mem
+    cpu.bus = bus
+    assert cpu.run(1000) == 2 and cpu.halted
+    cpu.reset()
+    bus.halt_requested = True
+    assert cpu.run(1000) == 0 and cpu.halted
