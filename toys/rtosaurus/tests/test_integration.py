@@ -114,3 +114,20 @@ def test_faults_are_survivable_and_deterministic(fw):
     a, b = go(), go()
     assert a == b, "same seed must replay exactly"
     assert a[1]["injections"] > 0
+
+
+@needs_fw
+def test_hw_watchdog_revives_a_halted_cpu(fw):
+    m = Machine(fw, seed=5)
+    m.run_seconds(3.0)
+    m.cpu.halted = True  # e.g. a corrupted return address landed on HALT
+    m.run_seconds(2.0)
+    kinds = [e for _, e in m.event_log]
+    assert "halt" in kinds and "wdog hw reset" in kinds
+    assert not m.halted and kinds.count("boot") == 2
+
+    dead = Machine(fw, seed=5, hw_watchdog=False)
+    dead.run_seconds(3.0)
+    dead.cpu.halted = True
+    dead.run_seconds(2.0)
+    assert dead.halted

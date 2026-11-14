@@ -31,7 +31,9 @@ class Machine:
         sample_cycles: int = 1000,
         trace_limit: int = 200_000,
         safety: bool = True,
+        hw_watchdog: bool = True,
     ):
+        self.hw_watchdog = hw_watchdog  # watchdog can reset a halted CPU
         self.image = image if image is not None else build_firmware()
         self.seed = seed
         self.plant = plant if plant is not None else Plant(seed=seed)
@@ -59,7 +61,8 @@ class Machine:
         self._k_tcb = sym.get("k_tcb")
         self._k_current = sym.get("k_current")
         self._k_ticks = sym.get("k_ticks")
-        self._task_cycles: dict[int, int] = {}  # task id -> cycles since last sample
+        self._task_cycles: dict[int, int] = {}
+        self._halt_logged = False  # task id -> cycles since last sample
 
     # ---- time ----------------------------------------------------------
     @property
@@ -85,6 +88,40 @@ class Machine:
     def run(self, cycles: int) -> None:
         """Advance `cycles` cycles. If the CPU halts, the plant keeps running (outputs latched)."""
         end = self.bus.cycles + cycles
+        while self.bus.cycles < end:
+            self._run_live(end)
+            if self.cpu.halted:
+                self._run_halted(end)
+
+    def _run_halted(self, end: int) -> None:
+        """A dead CPU doesn't stop physics: PWM outputs stay latched and the plant keeps going.
+        The watchdog is separate hardware, so if it was armed it still bites and
+        resets the chip (like a real WDT reset). RAM survives a reset, as on silicon."""
+        bus = self.bus
+        while bus.cycles < end:
+            bus.tick(min(self._next_sample, end) - bus.cycles)
+            if self.hw_watchdog and bus.pending_nmi():
+                self.hw_reset("wdog hw reset")
+                return
+            if bus.cycles >= self._next_sample:
+                self._sample()
+
+    def hw_reset(self, why: str = "hw reset") -> None:
+        """Chip reset: actuators off, CPU back to the reset vector. RAM is kept."""
+        bus = self.bus
+        bus.ack_irq(isa.VEC_WDOG)
+        for reg in (
+            isa.MMIO_PWM_HEATER,
+            isa.MMIO_PWM_FAN,
+            isa.MMIO_TIMER_CTRL,
+            isa.MMIO_WDOG_TIMEOUT,
+        ):
+            bus.write(reg, 0)
+        self.cpu.reset()
+        self._halt_logged = False
+        self.event(why)
+
+    def _run_live(self, end: int) -> None:
         cpu, bus = self.cpu, self.bus
         mem, kc, acc = bus.mem, self._k_current, self._task_cycles
         while bus.cycles < end and not cpu.halted:
@@ -102,11 +139,7 @@ class Machine:
             if bus.cycles >= self._next_sample:
                 self._sample()
         if cpu.halted:
-            # a dead CPU doesn't stop physics: PWM outputs stay latched, the plant keeps going
-            while bus.cycles < end:
-                bus.tick(min(self._next_sample, end) - bus.cycles)
-                if bus.cycles >= self._next_sample:
-                    self._sample()
+            self._sample()  # record the halt event promptly
 
     def run_seconds(self, seconds: float) -> None:
         self.run(int(seconds * isa.CLOCK_HZ))
@@ -201,7 +234,8 @@ class Machine:
         if pop is not None:
             for e in pop():
                 self.event(e)
-        if self.cpu.halted and not any(e.startswith("halt") for _, e in self.event_log[-3:]):
+        if self.cpu.halted and not self._halt_logged:
+            self._halt_logged = True
             self.event("halt (double fault)" if self.cpu.double_fault else "halt")
         st = self.plant.state()
         self.trace.append(
@@ -242,5 +276,6 @@ class Machine:
             "double_fault": self.cpu.double_fault,
             "task_faults": sum(k.startswith("fault") for k in kinds),
             "wdog_resets": sum(k.startswith("wdog") for k in kinds),
+            "halts": sum(k.startswith("halt") for k in kinds),
             "injections": sum(k.startswith("inject") for k in kinds),
         }

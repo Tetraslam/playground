@@ -26,6 +26,7 @@ def _machine(a):
         build_firmware(a.firmware) if a.firmware else build_firmware(),
         seed=a.seed,
         safety=not a.no_safety,
+        hw_watchdog=not a.no_hw_watchdog,
     )
     if a.setpoint is not None:
         m.plant.setpoint = a.setpoint
@@ -126,6 +127,7 @@ def cmd_campaign(a) -> int:
         jobs=a.jobs,
         log=lambda s: print(s, file=sys.stderr),
         safety=not a.no_safety,
+        hw_watchdog=not a.no_hw_watchdog,
     )
     print(survival_table(res))
     print(f"({len(res)} runs, {time.time() - t0:.0f} s wall)", file=sys.stderr)
@@ -199,6 +201,11 @@ def main(argv: list[str] | None = None) -> int:
             action="store_true",
             help="naive firmware: skip sensor plausibility checks",
         )
+        p.add_argument(
+            "--no-hw-watchdog",
+            action="store_true",
+            help="a halted CPU stays dead (the watchdog can't reset the chip)",
+        )
 
     p = sub.add_parser("run", help="run headless, stream UART, optional plots")
     machine_args(p)
@@ -231,6 +238,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--jobs", type=int)
     p.add_argument(
         "--no-safety", action="store_true", help="naive firmware: skip sensor plausibility checks"
+    )
+    p.add_argument(
+        "--no-hw-watchdog", action="store_true", help="a halted CPU stays dead (the watchdog can't reset the chip)"
     )
     p.add_argument("--json")
     p.add_argument("--plot")

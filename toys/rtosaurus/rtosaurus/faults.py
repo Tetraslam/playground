@@ -166,15 +166,22 @@ def survived(s: dict, tol: float = 5.0) -> bool:
 
 
 def one_run(args: tuple) -> dict:
-    kind, rate, seed, seconds, settle, safety = args
+    kind, rate, seed, seconds, settle, safety, hw_wdog = args
     from rtosaurus.machine import Machine, build_firmware
 
-    m = Machine(build_firmware(), seed=seed, sample_cycles=2000, safety=safety)
+    m = Machine(build_firmware(), seed=seed, sample_cycles=2000, safety=safety, hw_watchdog=hw_wdog)
     if rate > 0:
         m.hooks.append(FaultSchedule([Injector(kind, rate)], seed=seed, start=settle))
     m.run_seconds(seconds)
     s = m.summary()
-    s |= {"kind": kind, "rate": rate, "seed": seed, "setpoint": m.plant.setpoint, "safety": safety}
+    s |= {
+        "kind": kind,
+        "rate": rate,
+        "seed": seed,
+        "setpoint": m.plant.setpoint,
+        "safety": safety,
+        "hw_watchdog": hw_wdog,
+    }
     s["survived"] = survived(s)
     return s
 
@@ -188,12 +195,16 @@ def campaign(
     jobs: int | None = None,
     log=print,
     safety: bool = True,
+    hw_watchdog: bool = True,
 ) -> list[dict]:
     """Every (kind, rate, seed) run, in parallel processes. Returns summaries."""
     from concurrent.futures import ProcessPoolExecutor, as_completed
 
     jobs_list = [
-        (k, r, s, seconds, settle, safety) for k in kinds for r in rates for s in range(seeds)
+        (k, r, s, seconds, settle, safety, hw_watchdog)
+        for k in kinds
+        for r in rates
+        for s in range(seeds)
     ]
     results = []
     with ProcessPoolExecutor(max_workers=jobs) as ex:

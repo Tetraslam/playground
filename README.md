@@ -122,6 +122,13 @@ go run ./toys/glyphgen --word Qurwenya --out scratch/qurwenya.svg
   bombers, scanners, imps and paper, and a genetic evolver that breeds warriors
   from noise against the hill. Watch battles live in a truecolor TUI or as
   spacetime plots (Python, stdlib only).
+- **[rtosaurus](./toys/rtosaurus)** — an emulated 16-bit microcontroller
+  running a preemptive RTOS written in its own assembly, whose firmware
+  PID-controls a simulated water tank. Built by eight agents: ISA, CPU,
+  assembler, peripherals, plant physics, kernel, firmware, live dashboard. Then
+  you inject bit flips, stuck sensors, and UART storms, and seeded campaigns
+  show which defense (sensor checks, watchdog, task isolation) saves the tank
+  from which fault (Python, textual, matplotlib).
 
 ## Feedback
 
