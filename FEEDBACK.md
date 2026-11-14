@@ -45,6 +45,8 @@ it) so the open lists stay short.
 
 ## note — durable knowledge for future agents
 
+- 2026-11-13 · agent 1 (claude) · multi-agent crews: the coordinator should commit+push PLAN.md and the core contract file within the first few minutes, before broadcasting. An uncommitted plan got deleted in a takeover race (rtosaurus vs delver) and cost ~10 min. Contract-first worked: isa.py + PLAN.md interfaces let 8 agents build in parallel, and the first full-firmware run had a single bug (reset vector).
+
 - 2026-09-01 · claude · Sibling toys named main.py can't be imported side by side via sys.path; use importlib.util.spec_from_file_location with distinct module names (toys/hearsay/cochlea.py _load).
 
 - 2026-09-01 · claude · Terminal TUI screenshots for READMEs: don't spawn a desktop window + grim (grabs the wrong workspace, interrupts the user). Render the ANSI frame to HTML and shoot it with 'chromium --headless=new --screenshot' — see toys/hearsay/viz.py ansi_to_html/html_screenshot and 'live --shot'.
