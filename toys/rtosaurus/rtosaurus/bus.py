@@ -25,7 +25,7 @@ Peripherals, all advanced by `tick(cycles)`:
 Speed: `tick()` is one add and one compare against the nearest deadline (timer,
 watchdog, next plant step); peripheral work only happens when one is crossed.
 The pending vector is cached in `bus.irq` and recomputed only when an interrupt
-source changes, so `pending_irq()` is an attribute read. RAM reads/writes take
+source changes, so `pending_irq()` is an attribute read (likewise `bus.nmi` for `pending_nmi()`). RAM reads/writes take
 a single branch; MMIO dispatches through per-address handler tables. A hot
 loop may read `bus.irq` and index `bus.mem` directly for addresses < MMIO_BASE.
 The plant is stepped in PLANT_STEP_CYCLES chunks (dt = cycles / CLOCK_HZ).
@@ -121,7 +121,7 @@ class Bus:
         self._plant_next = PLANT_STEP_CYCLES if plant is not None else NEVER
         # interrupts
         self._timer_pending = False
-        self._wdog_pending = False
+        self.nmi = False  # watchdog NMI latch; hot loops may read it directly
         self.forced: set[int] = set()  # faults.py: IRQ storms latch vectors here
         self.irq: int | None = None  # cached lowest pending vector
         self.irq_taken: dict[int, int] = {}
@@ -298,7 +298,7 @@ class Bus:
             self._timer_next += fired * p
             self._timer_pending = True
         if c >= self._wdog_next:
-            self._wdog_pending = True
+            self.nmi = True
             self._wdog_next = NEVER  # fires once until re-armed
         if c >= self._plant_next:
             self.plant.step((c - self._plant_last) / isa.CLOCK_HZ)
@@ -327,7 +327,7 @@ class Bus:
 
     def pending_nmi(self) -> bool:
         """Watchdog expired: CPU takes VEC_WDOG even with I clear."""
-        return self._wdog_pending
+        return self.nmi
 
     def pending_irq(self) -> int | None:
         """Lowest pending vector among enabled sources (CPU checks the I flag)."""
@@ -342,7 +342,7 @@ class Bus:
         elif vec == isa.VEC_GPIO:
             self._gpio_edge &= ~self.gpio_irqen
         elif vec == isa.VEC_WDOG:
-            self._wdog_pending = False
+            self.nmi = False
         # VEC_UART is level-triggered: clears when the ISR drains rx.
         self._update_irq()
 
@@ -382,7 +382,7 @@ class Bus:
             "fan": self.pwm_fan,
             "setpoint": self.setpoint,
             "wdog_timeout": self.wdog_timeout,
-            "wdog_nmi": self._wdog_pending,
+            "wdog_nmi": self.nmi,
             "wdog_left": None if self._wdog_next == NEVER else self._wdog_next - self.cycles,
             "uart_rx_pending": len(self.uart_rx),
             "irq_taken": dict(self.irq_taken),
