@@ -38,6 +38,20 @@ def test_bare_metal_hello():
     assert m.trace, "halt should still record a final sample"
 
 
+def test_inject_now_logs_and_recovers():
+    import random
+
+    from rtosaurus.faults import inject_now
+
+    m = Machine(assemble(TINY.replace("    HALT\n", "spin: JMP spin\n")), seed=0)
+    msg = inject_now(m, "stuck-sensor", random.Random(1))
+    assert msg and m.plant.sensor_override is not None
+    assert m.event_log[-1][1] == msg
+    m.run_seconds(9.0)
+    assert m.plant.sensor_override is None
+    assert any(e == "sensor recovered" for _, e in m.event_log)
+
+
 def test_parse_spec():
     inj = parse_spec("ram-flip:0.5,stuck-sensor")
     assert [(i.kind, i.rate) for i in inj] == [("ram-flip", 0.5), ("stuck-sensor", 1.0)]

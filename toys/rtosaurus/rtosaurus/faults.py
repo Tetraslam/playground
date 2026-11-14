@@ -103,6 +103,31 @@ class FaultSchedule:
                     m.event(msg)
 
 
+def inject_now(m, kind: str, rng: random.Random | None = None) -> str | None:
+    """Fire one fault immediately (for the dashboard's 'f' key). Logs it as a machine event.
+
+    Registers a recovery hook once per machine so a stuck sensor un-sticks on its own.
+    """
+    if kind not in KINDS:
+        raise ValueError(f"unknown fault kind {kind!r} (choose from {KINDS})")
+    manual = getattr(m, "_manual_injectors", None)
+    if manual is None:
+        manual = m._manual_injectors = {}
+
+        def recover(mm, dt):
+            for inj in manual.values():
+                msg = inj.update(mm)
+                if msg:
+                    mm.event(msg)
+
+        m.hooks.append(recover)
+    inj = manual.setdefault(kind, Injector(kind, 0.0))
+    msg = inj.fire(m, rng or random.Random())
+    if msg:
+        m.event(msg)
+    return msg
+
+
 def parse_spec(spec: str) -> list[Injector]:
     """'ram-flip:0.5,stuck-sensor:0.1' -> injectors."""
     out = []
