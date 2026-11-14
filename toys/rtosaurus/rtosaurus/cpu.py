@@ -145,6 +145,7 @@ class CPU:
         bus = self.bus
         tick = bus.tick
         nmi = getattr(bus, "pending_nmi", None)
+        nmi_attr = hasattr(bus, "nmi")  # cached latch: skip the method call per instruction
         irq_attr = hasattr(bus, "irq")
         pending = bus.pending_irq
         cache = self._cache
@@ -164,7 +165,7 @@ class CPU:
                 if self.halted:
                     break
                 # interrupts: NMI always, IRQ only with I set
-                if (nmi is not None and nmi()) or (
+                if (bus.nmi if nmi_attr else (nmi is not None and nmi())) or (
                     self.flags & FI and (bus.irq if irq_attr else pending()) is not None
                 ):
                     c = self._interrupt(bus)
