@@ -11,7 +11,6 @@ def boot(app: str, seed: int = 0) -> Machine:
     src = f'.include "{FIRMWARE / "kernel.s"}"\n' + app
     img = assemble(src, path="<kernel-test>")
     m = Machine(image=img, seed=seed)
-    m.cpu.reset()  # idempotent; guards against a CPU that doesn't reset in __init__
     return m
 
 
@@ -236,7 +235,6 @@ idle_ish: JMP idle_ish
 
 def test_real_firmware_boots():
     m = Machine(seed=1)
-    m.cpu.reset()
     m.run(50 * TICK)
     assert not m.halted
     assert m.uart_text().startswith("!boot\n")
