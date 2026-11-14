@@ -261,6 +261,9 @@ app_ctl_range:
     LDI r0, APP_F_SENSOR
     AND r3, r0
     JZ app_ctl_hot
+    LD r3, [app_stuck_n]        ; latched: only a reading that moved can clear it
+    CMPI r3, 0
+    JNZ app_ctl_failsafe
     LDI r3, APP_F_SENSOR        ; sensor recovered
     CALL app_flag_clr
     LDI r3, APP_LED_SENSOR
@@ -460,18 +463,45 @@ app_log_loop:
     LDI r0, 0
     ST [app_events], r0
     EI
+    ; Events are batched per line. If both halves of a pair are pending, the one
+    ; matching the CURRENT state happened last, so print it second.
+    LD r4, [app_flags]
+    LDI r0, APP_F_HOT
+    AND r0, r4
+    JNZ app_log_hot_now
     LDI r2, APP_EV_HOT
     LDI r1, app_s_ev_hot
     CALL app_log_ev
     LDI r2, APP_EV_COOL
     LDI r1, app_s_ev_cool
     CALL app_log_ev
+    JMP app_log_sensor
+app_log_hot_now:
+    LDI r2, APP_EV_COOL
+    LDI r1, app_s_ev_cool
+    CALL app_log_ev
+    LDI r2, APP_EV_HOT
+    LDI r1, app_s_ev_hot
+    CALL app_log_ev
+app_log_sensor:
+    LDI r0, APP_F_SENSOR
+    AND r0, r4
+    JNZ app_log_sensor_bad_now
     LDI r2, APP_EV_SENSOR
     LDI r1, app_s_ev_sensor
     CALL app_log_ev
     LDI r2, APP_EV_SENSOR_OK
     LDI r1, app_s_ev_sensor_ok
     CALL app_log_ev
+    JMP app_log_line
+app_log_sensor_bad_now:
+    LDI r2, APP_EV_SENSOR_OK
+    LDI r1, app_s_ev_sensor_ok
+    CALL app_log_ev
+    LDI r2, APP_EV_SENSOR
+    LDI r1, app_s_ev_sensor
+    CALL app_log_ev
+app_log_line:
 
     LDI r1, app_s_T
     CALL lib_puts
