@@ -227,9 +227,11 @@ def plot_gantt(
     fig, ax = plt.subplots(figsize=(11, 0.5 * max(len(lanes), 2) + 1.4))
     _style(fig, (ax,))
     names = {int(k): v for k, v in (names or {}).items()}
+    # sub-pixel bars get dropped by the rasterizer on long runs: floor at ~1.5 px
+    min_w = (trace[-1]["t"] - trace[0]["t"]) / 700 if len(trace) > 1 else 0.0
     for y, k in enumerate(lanes):
         xs = [a for a, _, _ in iv[k]]
-        ws = [w for _, w, _ in iv[k]]
+        ws = [max(w, min_w) for _, w, _ in iv[k]]
         # sqrt so a 2% task is still a visible sliver; floor keeps any run visible
         hs = [0.8 * max(0.12, math.sqrt(sh)) for _, _, sh in iv[k]]
         ax.bar(
