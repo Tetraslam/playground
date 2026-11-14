@@ -271,7 +271,7 @@ class Dash(App):
         self.uart_seen = 0
         self.uart_partial = ""
         self.trace_seen = 0
-        self.achieved = 0.0
+        self.achieved: float | None = None  # measured sim/real ratio, None until 0.5 s of wall time
         self._wall = time.perf_counter()
         self._cyc0 = self.cycles()
         self.sym_by_addr = {}
@@ -382,7 +382,8 @@ class Dash(App):
         if ticks is not None:
             t.append(f"  tick {ticks}", "#8a7d6a")
         t.append(f"  speed x{SPEEDS[self.speed_i]:g}", "#e8dcc8")
-        t.append(f" (got x{self.achieved:.2f})", "#6b5f50")
+        if self.achieved is not None and not self.paused:
+            t.append(f" (got x{self.achieved:.2f})", "#6b5f50")
         if self.halted():
             df = safe(lambda: self.m.cpu.double_fault, False)
             t.append("  ■ DOUBLE FAULT" if df else "  ■ HALTED", "bold #d0533f")
