@@ -58,7 +58,8 @@ class Bus:
     def read(self, addr: int) -> int           # bad MMIO read -> raise BusError
     def write(self, addr: int, val: int) -> None   # bad MMIO write -> raise BusError
     def tick(self, cycles: int) -> None        # cycles += n; advance timer, watchdog, plant (dt = n/CLOCK_HZ)
-    def pending_irq(self) -> int | None        # lowest pending vector among enabled sources
+    def pending_irq(self) -> int | None        # lowest pending maskable vector among enabled sources
+    def pending_nmi(self) -> bool              # watchdog expired; CPU takes VEC_WDOG even with I clear
     def ack_irq(self, vec: int) -> None
     def uart_feed(self, text: str) -> None     # host -> firmware rx
     def press(self, button: int) -> None       # momentary press (edge irq if enabled)

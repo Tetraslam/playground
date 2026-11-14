@@ -101,6 +101,8 @@ IRQ_ENTRY_CYCLES = 4
 # A fault raised while entering the fault handler (e.g. stack push bus error)
 # -> cpu.double_fault = cpu.halted = True.
 # IRQs are only taken between instructions when I is set; lowest vector wins.
+# EXCEPTION: the watchdog is non-maskable. CPU checks bus.pending_nmi() before
+# anything else each step and takes VEC_WDOG regardless of I (then bus.ack_irq(VEC_WDOG)).
 VEC_RESET = 0x0000     # mem[0] = reset entry point
 VEC_TRAP = 0x0001
 VEC_TIMER = 0x0002
