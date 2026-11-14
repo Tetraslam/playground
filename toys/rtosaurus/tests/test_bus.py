@@ -210,3 +210,29 @@ def test_irq_priority_and_forced():
     b.ack_irq(isa.VEC_GPIO)
     assert b.pending_irq() is None
     assert b.irq_taken[isa.VEC_GPIO] == 1
+
+
+def test_timer_rearm_and_disable():
+    b = Bus()
+    b.write(isa.MMIO_TIMER_PERIOD, 100)
+    b.write(isa.MMIO_TIMER_CTRL, 1)
+    b.tick(50)
+    b.write(isa.MMIO_TIMER_PERIOD, 200)  # restarts the countdown
+    b.tick(150)
+    assert b.pending_irq() is None
+    b.tick(50)
+    assert b.pending_irq() == isa.VEC_TIMER
+    b.ack_irq(isa.VEC_TIMER)
+    b.write(isa.MMIO_TIMER_CTRL, 0)
+    b.tick(10_000)
+    assert b.pending_irq() is None
+    assert b.read(isa.MMIO_TIMER_TICKS) == 1
+
+
+def test_negative_address_is_masked():
+    b = Bus()
+    with pytest.raises(BusError):
+        b.write(-1, 5)  # 0xFFFF: unmapped MMIO, not mem[-1]
+    assert b.mem[-1] == 0
+    b.write(-0x100 - 1, 7)  # 0xFEFF: plain RAM
+    assert b.read(0xFEFF) == 7

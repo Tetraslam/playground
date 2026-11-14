@@ -19,8 +19,13 @@ Peripherals, all advanced by `tick(cycles)`:
 - watchdog: if TIMEOUT != 0 and nobody writes KICK within TIMEOUT*256 cycles,
   latch VEC_WDOG once (re-armed by a kick or a TIMEOUT write)
 
-The plant is stepped in PLANT_STEP_CYCLES chunks (dt = cycles / CLOCK_HZ) so
-per-instruction ticks stay cheap.
+Speed: `tick()` is one add and one compare against the nearest deadline (timer,
+watchdog, next plant step); peripheral work only happens when one is crossed.
+The pending vector is cached in `bus.irq` and recomputed only when an interrupt
+source changes, so `pending_irq()` is an attribute read. RAM reads/writes take
+a single branch; MMIO dispatches through per-address handler tables. A hot
+loop may read `bus.irq` and index `bus.mem` directly for addresses < MMIO_BASE.
+The plant is stepped in PLANT_STEP_CYCLES chunks (dt = cycles / CLOCK_HZ).
 """
 
 from __future__ import annotations
@@ -72,26 +77,7 @@ def _duty(w: int) -> int:
     return max(0, min(255, _signed(w)))
 
 
-# Register access tables. Anything in MMIO space not listed is unmapped.
-_READABLE = {
-    isa.MMIO_CAUSE, isa.MMIO_TRAPARG, isa.MMIO_CYCLE_LO, isa.MMIO_CYCLE_HI,
-    isa.MMIO_FAULTPC,
-    isa.MMIO_TIMER_PERIOD, isa.MMIO_TIMER_CTRL, isa.MMIO_TIMER_TICKS,
-    isa.MMIO_UART_RX, isa.MMIO_UART_STATUS, isa.MMIO_UART_CTRL,
-    isa.MMIO_GPIO_OUT, isa.MMIO_GPIO_IN, isa.MMIO_GPIO_IRQEN,
-    isa.MMIO_ADC_TEMP, isa.MMIO_ADC_AMBIENT, isa.MMIO_ADC_SETPOINT,
-    isa.MMIO_PWM_HEATER, isa.MMIO_PWM_FAN,
-    isa.MMIO_WDOG_TIMEOUT,
-}  # fmt: skip
-_WRITABLE = {
-    isa.MMIO_HALT,
-    isa.MMIO_TIMER_PERIOD, isa.MMIO_TIMER_CTRL,
-    isa.MMIO_UART_TX, isa.MMIO_UART_CTRL,
-    isa.MMIO_GPIO_OUT, isa.MMIO_GPIO_IRQEN,
-    isa.MMIO_ADC_SETPOINT,
-    isa.MMIO_PWM_HEATER, isa.MMIO_PWM_FAN,
-    isa.MMIO_WDOG_KICK, isa.MMIO_WDOG_TIMEOUT,
-}  # fmt: skip
+NEVER = 1 << 62  # deadline sentinel
 
 
 class Bus:
@@ -110,7 +96,7 @@ class Bus:
         self.timer_period = 0
         self.timer_ctrl = 0
         self.timer_ticks = 0
-        self._timer_count = 0
+        self._timer_next = NEVER
         # UART
         self.uart_out: list[str] = []
         self.uart_rx: deque[int] = deque()
@@ -126,36 +112,83 @@ class Bus:
         self.pwm_fan = 0
         # watchdog
         self.wdog_timeout = 0
-        self._wdog_count = 0
-        self._wdog_armed = True
-        # irq lines (edge-latched sources)
+        self._wdog_next = NEVER
+        # plant
+        self._plant_last = 0
+        self._plant_next = PLANT_STEP_CYCLES if plant is not None else NEVER
+        # interrupts
         self._timer_pending = False
         self._wdog_pending = False
         self.forced: set[int] = set()  # faults.py: IRQ storms latch vectors here
-        # stats
+        self.irq: int | None = None  # cached lowest pending vector
         self.irq_taken: dict[int, int] = {}
-        self._plant_acc = 0
+        self._next_event = NEVER
+        self._reschedule()
+
+        self._rd = {
+            isa.MMIO_CAUSE: lambda: self.cause,
+            isa.MMIO_TRAPARG: lambda: self.traparg,
+            isa.MMIO_CYCLE_LO: lambda: self.cycles & MASK,
+            isa.MMIO_CYCLE_HI: lambda: (self.cycles >> 16) & MASK,
+            isa.MMIO_FAULTPC: lambda: self.faultpc,
+            isa.MMIO_TIMER_PERIOD: lambda: self.timer_period,
+            isa.MMIO_TIMER_CTRL: lambda: self.timer_ctrl,
+            isa.MMIO_TIMER_TICKS: lambda: self.timer_ticks,
+            isa.MMIO_UART_RX: self._rx_pop,
+            isa.MMIO_UART_STATUS: lambda: 1 if self.uart_rx else 0,
+            isa.MMIO_UART_CTRL: lambda: self.uart_ctrl,
+            isa.MMIO_GPIO_OUT: lambda: self.gpio_out,
+            isa.MMIO_GPIO_IN: self.buttons_held,
+            isa.MMIO_GPIO_IRQEN: lambda: self.gpio_irqen,
+            isa.MMIO_ADC_TEMP: self._adc_temp,
+            isa.MMIO_ADC_AMBIENT: self._adc_ambient,
+            isa.MMIO_ADC_SETPOINT: lambda: to_q88(self.setpoint),
+            isa.MMIO_PWM_HEATER: lambda: self.pwm_heater,
+            isa.MMIO_PWM_FAN: lambda: self.pwm_fan,
+            isa.MMIO_WDOG_TIMEOUT: lambda: self.wdog_timeout,
+        }
+        self._wr = {
+            isa.MMIO_HALT: self._w_halt,
+            isa.MMIO_TIMER_PERIOD: self._w_timer_period,
+            isa.MMIO_TIMER_CTRL: self._w_timer_ctrl,
+            isa.MMIO_UART_TX: self._w_uart_tx,
+            isa.MMIO_UART_CTRL: self._w_uart_ctrl,
+            isa.MMIO_GPIO_OUT: self._w_gpio_out,
+            isa.MMIO_GPIO_IRQEN: self._w_gpio_irqen,
+            isa.MMIO_ADC_SETPOINT: self._w_setpoint,
+            isa.MMIO_PWM_HEATER: self._w_heater,
+            isa.MMIO_PWM_FAN: self._w_fan,
+            isa.MMIO_WDOG_KICK: self._w_kick,
+            isa.MMIO_WDOG_TIMEOUT: self._w_wdog_timeout,
+        }
 
     # ---- memory ---------------------------------------------------------
     def read(self, addr: int) -> int:
+        if 0 <= addr < 0xFF00:  # isa.MMIO_BASE, inlined
+            return self.mem[addr]
         addr &= MASK
         if addr < isa.MMIO_BASE:
             return self.mem[addr]
-        if addr not in _READABLE:
-            why = "write-only register" if addr in _WRITABLE else "unmapped"
+        h = self._rd.get(addr)
+        if h is None:
+            why = "write-only register" if addr in self._wr else "unmapped"
             raise BusError(addr, False, why)
-        return self._mmio_read(addr) & MASK
+        return h() & MASK
 
     def write(self, addr: int, val: int) -> None:
+        if 0 <= addr < 0xFF00:  # isa.MMIO_BASE, inlined
+            self.mem[addr] = val & MASK
+            return
         addr &= MASK
         val &= MASK
         if addr < isa.MMIO_BASE:
             self.mem[addr] = val
             return
-        if addr not in _WRITABLE:
-            why = "read-only register" if addr in _READABLE else "unmapped"
+        h = self._wr.get(addr)
+        if h is None:
+            why = "read-only register" if addr in self._rd else "unmapped"
             raise BusError(addr, True, why)
-        self._mmio_write(addr, val)
+        h(val)
 
     def load(self, words: dict[int, int]) -> None:
         for addr, w in words.items():
@@ -163,87 +196,77 @@ class Bus:
                 raise ValueError(f"image word at 0x{addr:04X} outside RAM")
             self.mem[addr] = w & MASK
 
-    # ---- MMIO -----------------------------------------------------------
-    def _mmio_read(self, a: int) -> int:
-        if a == isa.MMIO_CAUSE:
-            return self.cause
-        if a == isa.MMIO_TRAPARG:
-            return self.traparg
-        if a == isa.MMIO_CYCLE_LO:
-            return self.cycles & MASK
-        if a == isa.MMIO_CYCLE_HI:
-            return (self.cycles >> 16) & MASK
-        if a == isa.MMIO_FAULTPC:
-            return self.faultpc
-        if a == isa.MMIO_TIMER_PERIOD:
-            return self.timer_period
-        if a == isa.MMIO_TIMER_CTRL:
-            return self.timer_ctrl
-        if a == isa.MMIO_TIMER_TICKS:
-            return self.timer_ticks & MASK
-        if a == isa.MMIO_UART_RX:
-            return self.uart_rx.popleft() if self.uart_rx else 0xFFFF
-        if a == isa.MMIO_UART_STATUS:
-            return 1 if self.uart_rx else 0
-        if a == isa.MMIO_UART_CTRL:
-            return self.uart_ctrl
-        if a == isa.MMIO_GPIO_OUT:
-            return self.gpio_out
-        if a == isa.MMIO_GPIO_IN:
-            return self.buttons_held()
-        if a == isa.MMIO_GPIO_IRQEN:
-            return self.gpio_irqen
-        if a == isa.MMIO_ADC_TEMP:
-            t = self.plant.read_temp() if self.plant is not None else DEFAULT_TEMP
-            return to_q88(t)
-        if a == isa.MMIO_ADC_AMBIENT:
-            t = self.plant.ambient() if self.plant is not None else DEFAULT_TEMP
-            return to_q88(t)
-        if a == isa.MMIO_ADC_SETPOINT:
-            return to_q88(self.setpoint)
-        if a == isa.MMIO_PWM_HEATER:
-            return self.pwm_heater
-        if a == isa.MMIO_PWM_FAN:
-            return self.pwm_fan
-        if a == isa.MMIO_WDOG_TIMEOUT:
-            return self.wdog_timeout
-        raise BusError(a, False, "unmapped")  # pragma: no cover
+    # ---- MMIO handlers --------------------------------------------------
+    def _rx_pop(self) -> int:
+        if not self.uart_rx:
+            return 0xFFFF
+        v = self.uart_rx.popleft()
+        if not self.uart_rx:
+            self._update_irq()
+        return v
 
-    def _mmio_write(self, a: int, v: int) -> None:
-        if a == isa.MMIO_HALT:
-            self.halt_requested = True
-        elif a == isa.MMIO_TIMER_PERIOD:
-            self.timer_period = v
-            self._timer_count = 0
-        elif a == isa.MMIO_TIMER_CTRL:
-            if (v & 1) and not (self.timer_ctrl & 1):
-                self._timer_count = 0
-            self.timer_ctrl = v & 1
-        elif a == isa.MMIO_UART_TX:
-            self.uart_out.append(chr(v & 0xFF))
-        elif a == isa.MMIO_UART_CTRL:
-            self.uart_ctrl = v & 1
-        elif a == isa.MMIO_GPIO_OUT:
-            self.gpio_out = v & 0xFF
-        elif a == isa.MMIO_GPIO_IRQEN:
-            self.gpio_irqen = v & ((1 << NUM_BUTTONS) - 1)
-        elif a == isa.MMIO_ADC_SETPOINT:
-            self.setpoint = from_q88(v)
-        elif a == isa.MMIO_PWM_HEATER:
-            self.pwm_heater = _duty(v)
-            if self.plant is not None:
-                self.plant.heater = self.pwm_heater / 255
-        elif a == isa.MMIO_PWM_FAN:
-            self.pwm_fan = _duty(v)
-            if self.plant is not None:
-                self.plant.fan = self.pwm_fan / 255
-        elif a == isa.MMIO_WDOG_KICK:
-            self._wdog_count = 0
-            self._wdog_armed = True
-        elif a == isa.MMIO_WDOG_TIMEOUT:
-            self.wdog_timeout = v
-            self._wdog_count = 0
-            self._wdog_armed = True
+    def _adc_temp(self) -> int:
+        return to_q88(self.plant.read_temp() if self.plant is not None else DEFAULT_TEMP)
+
+    def _adc_ambient(self) -> int:
+        return to_q88(self.plant.ambient() if self.plant is not None else DEFAULT_TEMP)
+
+    def _w_halt(self, v: int) -> None:
+        self.halt_requested = True
+
+    def _w_timer_period(self, v: int) -> None:
+        self.timer_period = v
+        self._arm_timer()
+
+    def _w_timer_ctrl(self, v: int) -> None:
+        was = self.timer_ctrl
+        self.timer_ctrl = v & 1
+        if self.timer_ctrl != was:
+            self._arm_timer()
+
+    def _arm_timer(self) -> None:
+        on = self.timer_ctrl & 1 and self.timer_period
+        self._timer_next = self.cycles + self.timer_period if on else NEVER
+        self._reschedule()
+
+    def _w_uart_tx(self, v: int) -> None:
+        self.uart_out.append(chr(v & 0xFF))
+
+    def _w_uart_ctrl(self, v: int) -> None:
+        self.uart_ctrl = v & 1
+        self._update_irq()
+
+    def _w_gpio_out(self, v: int) -> None:
+        self.gpio_out = v & 0xFF
+
+    def _w_gpio_irqen(self, v: int) -> None:
+        self.gpio_irqen = v & ((1 << NUM_BUTTONS) - 1)
+        self._update_irq()
+
+    def _w_setpoint(self, v: int) -> None:
+        self.setpoint = from_q88(v)
+
+    def _w_heater(self, v: int) -> None:
+        self.pwm_heater = _duty(v)
+        if self.plant is not None:
+            self.plant.heater = self.pwm_heater / 255
+
+    def _w_fan(self, v: int) -> None:
+        self.pwm_fan = _duty(v)
+        if self.plant is not None:
+            self.plant.fan = self.pwm_fan / 255
+
+    def _w_kick(self, v: int) -> None:
+        self._arm_wdog()
+
+    def _w_wdog_timeout(self, v: int) -> None:
+        self.wdog_timeout = v
+        self._arm_wdog()
+
+    def _arm_wdog(self) -> None:
+        t = self.wdog_timeout
+        self._wdog_next = self.cycles + t * 256 if t else NEVER
+        self._reschedule()
 
     # ---- setpoint is shared with the plant ------------------------------
     @property
@@ -258,64 +281,75 @@ class Bus:
 
     # ---- time -----------------------------------------------------------
     def tick(self, cycles: int) -> None:
-        if cycles <= 0:
-            return
-        self.cycles += cycles
+        c = self.cycles + cycles
+        self.cycles = c
+        if c >= self._next_event:
+            self._service()
 
-        if self.timer_ctrl & 1 and self.timer_period:
-            self._timer_count += cycles
-            if self._timer_count >= self.timer_period:
-                fired, self._timer_count = divmod(self._timer_count, self.timer_period)
-                self.timer_ticks = (self.timer_ticks + fired) & MASK
-                self._timer_pending = True
+    def _service(self) -> None:
+        c = self.cycles
+        if c >= self._timer_next:
+            p = self.timer_period
+            fired = 1 + (c - self._timer_next) // p
+            self.timer_ticks = (self.timer_ticks + fired) & MASK
+            self._timer_next += fired * p
+            self._timer_pending = True
+        if c >= self._wdog_next:
+            self._wdog_pending = True
+            self._wdog_next = NEVER  # fires once until re-armed
+        if c >= self._plant_next:
+            self.plant.step((c - self._plant_last) / isa.CLOCK_HZ)
+            self._plant_last = c
+            self._plant_next = c + PLANT_STEP_CYCLES
+        self._reschedule()
+        self._update_irq()
 
-        if self.wdog_timeout and self._wdog_armed:
-            self._wdog_count += cycles
-            if self._wdog_count >= self.wdog_timeout * 256:
-                self._wdog_pending = True
-                self._wdog_armed = False
-
-        if self.plant is not None:
-            self._plant_acc += cycles
-            if self._plant_acc >= PLANT_STEP_CYCLES:
-                self.plant.step(self._plant_acc / isa.CLOCK_HZ)
-                self._plant_acc = 0
+    def _reschedule(self) -> None:
+        self._next_event = min(self._timer_next, self._wdog_next, self._plant_next)
 
     # ---- interrupts -----------------------------------------------------
+    def _update_irq(self) -> None:
+        if self._timer_pending:
+            v = isa.VEC_TIMER
+        elif self.uart_rx and self.uart_ctrl & 1:
+            v = isa.VEC_UART
+        elif self._gpio_edge & self.gpio_irqen:
+            v = isa.VEC_GPIO
+        elif self._wdog_pending:
+            v = isa.VEC_WDOG
+        else:
+            v = None
+        if self.forced:
+            f = min(self.forced)
+            v = f if v is None else min(v, f)
+        self.irq = v
+
     def pending_irq(self) -> int | None:
         """Lowest pending vector among enabled sources (CPU checks the I flag)."""
-        if self._timer_pending:
-            return isa.VEC_TIMER
-        if self.uart_rx and self.uart_ctrl & 1:
-            return isa.VEC_UART
-        if self._gpio_edge & self.gpio_irqen:
-            return isa.VEC_GPIO
-        if self._wdog_pending:
-            return isa.VEC_WDOG
-        if self.forced:
-            return min(self.forced)
-        return None
+        return self.irq
 
     def ack_irq(self, vec: int) -> None:
         self.irq_taken[vec] = self.irq_taken.get(vec, 0) + 1
         if vec in self.forced:
             self.forced.discard(vec)
-            return
-        if vec == isa.VEC_TIMER:
+        elif vec == isa.VEC_TIMER:
             self._timer_pending = False
         elif vec == isa.VEC_GPIO:
             self._gpio_edge &= ~self.gpio_irqen
         elif vec == isa.VEC_WDOG:
             self._wdog_pending = False
         # VEC_UART is level-triggered: clears when the ISR drains rx.
+        self._update_irq()
 
     def raise_irq(self, vec: int) -> None:
         """Spuriously latch an interrupt (fault injection: IRQ storms)."""
         self.forced.add(vec)
+        self._update_irq()
 
     # ---- host side ------------------------------------------------------
     def uart_feed(self, text: str) -> None:
         self.uart_rx.extend(ord(c) & 0xFF for c in text)
+        self._update_irq()
 
     def uart_text(self) -> str:
         return "".join(self.uart_out)
@@ -325,6 +359,7 @@ class Bus:
             raise ValueError(f"button {button} out of range 0..{NUM_BUTTONS - 1}")
         self._button_until[button] = self.cycles + BUTTON_HOLD_CYCLES
         self._gpio_edge |= 1 << button
+        self._update_irq()
 
     def buttons_held(self) -> int:
         return sum(1 << i for i, t in enumerate(self._button_until) if self.cycles < t)
@@ -342,11 +377,7 @@ class Bus:
             "fan": self.pwm_fan,
             "setpoint": self.setpoint,
             "wdog_timeout": self.wdog_timeout,
-            "wdog_left": (
-                max(0, self.wdog_timeout * 256 - self._wdog_count)
-                if self.wdog_timeout and self._wdog_armed
-                else None
-            ),
+            "wdog_left": None if self._wdog_next == NEVER else self._wdog_next - self.cycles,
             "uart_rx_pending": len(self.uart_rx),
             "irq_taken": dict(self.irq_taken),
         }
