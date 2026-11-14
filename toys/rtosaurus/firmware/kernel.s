@@ -204,6 +204,31 @@ k_resched_keep:
         CALL k_pick
         ; fall through
 
+; k_resume: return to the current task untouched (no scheduling decision needed).
+k_resume:
+        LD r1, [k_current]
+        LDI r0, K_TCB_WORDS
+        MUL r1, r0
+        ADDI r1, k_tcb
+        LDI r0, 0
+        ST [k_in_kernel], r0
+        LD sp, [r1+T_SP]
+        POP r6
+        POP r5
+        POP r4
+        POP r3
+        POP r2
+        POP r1
+        POP r0
+        IRET
+
+; k_resched_woke: resume directly unless k_wake just readied someone.
+k_resched_woke:
+        LD r0, [k_woke]
+        CMPI r0, 0
+        JZ k_resume
+        JMP k_resched_keep
+
 ; k_switch: r0 = task to run. Demotes the old task, restores the new frame, IRETs.
 k_switch:
         LD r1, [k_current]
@@ -272,8 +297,11 @@ k_pick_wrap:
         RET
 
 ; k_wake: r1 = queue, r2 = blocked state. Every task blocked on that queue in
-; that state becomes ready (it re-executes its TRAP). clobbers r0, r3, r4.
+; that state becomes ready (it re-executes its TRAP); k_woke = 1 if any did.
+; clobbers r0, r3, r4.
 k_wake:
+        LDI r3, 0
+        ST [k_woke], r3
         LDI r3, k_tcb
         LDI r4, K_NTASKS
 k_wake_loop:
@@ -285,6 +313,7 @@ k_wake_loop:
         JNZ k_wake_next
         LDI r0, S_READY
         ST [r3+T_STATE], r0
+        ST [k_woke], r0
 k_wake_next:
         ADDI r3, K_TCB_WORDS
         ADDI r4, -1
@@ -364,7 +393,7 @@ k_ua_done:
         LDI r1, 7
         LDI r2, S_BRECV
         CALL k_wake
-        JMP k_resched_keep
+        JMP k_resched_woke
 
 ; ---- spurious / unused vectors ---------------------------------------------------------
 k_ignore:
@@ -395,7 +424,7 @@ k_sys_table:
 k_sys_bad:
         LDI r0, 0xFFFF
         ST [r6+F_R0], r0
-        JMP k_resched_keep
+        JMP k_resume
 
 k_sys_yield:
         JMP k_resched_rr
@@ -413,16 +442,16 @@ k_sys_sleep:
 k_sys_ticks:
         LD r0, [k_ticks]
         ST [r6+F_R0], r0
-        JMP k_resched_keep
+        JMP k_resume
 
 k_sys_putc:
         ST [MMIO_UART_TX], r1
-        JMP k_resched_keep
+        JMP k_resume
 
 k_sys_task_id:
         LD r0, [k_current]
         ST [r6+F_R0], r0
-        JMP k_resched_keep
+        JMP k_resume
 
 k_sys_exit:
         LDI r0, S_DEAD
@@ -451,7 +480,7 @@ k_sys_send:
         ST [r6+F_R0], r0
         LDI r2, S_BRECV
         CALL k_wake
-        JMP k_resched_keep
+        JMP k_resched_woke
 k_block_send:
         LDI r0, S_BSEND
         JMP k_block
@@ -478,7 +507,7 @@ k_sys_recv:
         ST [r3+1], r4
         LDI r2, S_BSEND
         CALL k_wake
-        JMP k_resched_keep
+        JMP k_resched_woke
 k_block_recv:
         LDI r0, S_BRECV
         ; fall through
@@ -604,6 +633,7 @@ k_in_kernel:  .word 0
 k_switches:   .word 0
 k_faults:     .word 0
 k_uart_drops: .word 0
+k_woke:       .word 0
 k_stack_low:  .word 0                   ; lowest task stack address handed out
 k_tcb:        .zero K_NTASKS * K_TCB_WORDS
 k_queues:     .zero 8 * K_QWORDS
