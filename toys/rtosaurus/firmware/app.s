@@ -216,7 +216,10 @@ app_ctl_step:
     LD r1, [MMIO_ADC_TEMP]
     ST [app_temp], r1
 
-    ; -- sensor health
+    ; -- sensor health (skipped when app_cfg_safety = 0; the 90 C latch stays)
+    LD r3, [app_cfg_safety]
+    CMPI r3, 0
+    JZ app_ctl_hot
     LD r3, [app_last_raw]
     ST [app_last_raw], r1
     CMP r1, r3
@@ -715,6 +718,10 @@ app_s_st_unknown:   .string "?"
 app_state_names:
     .word app_s_st_free, app_s_st_ready, app_s_st_running, app_s_st_sleeping
     .word app_s_st_blk_send, app_s_st_blk_recv, app_s_st_dead
+
+; ---- config (NOT touched by app_init: the host may poke it before/while running)
+
+app_cfg_safety: .word 1         ; 0 = trust the sensor blindly (no stuck/range checks)
 
 ; ---- state (zeroed by app_init, so a watchdog reset starts clean) ----------
 
