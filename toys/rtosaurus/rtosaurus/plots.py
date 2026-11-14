@@ -190,40 +190,70 @@ def plot_run(trace: list[dict], out_png: str, title: str = "") -> None:
     plt.close(fig)
 
 
+def _gantt_intervals(trace: list[dict]) -> dict[int, list[tuple[float, float, float]]]:
+    """task -> [(start, width, share)]. With `task_cycles` (cycles per task since the
+    previous sample) each interval (t_prev, t] gets a bar in every lane that ran, with
+    share = that task's fraction of the interval's cycles. Without it, fall back to
+    point-sampled `task` (share 1)."""
+    out: dict[int, list[tuple[float, float, float]]] = defaultdict(list)
+    first_dt = trace[1]["t"] - trace[0]["t"] if len(trace) > 1 else 1e-3
+    for i, s in enumerate(trace):
+        t0 = trace[i - 1]["t"] if i else s["t"] - first_dt
+        w = s["t"] - t0
+        tc = s.get("task_cycles")
+        if tc is not None:
+            total = sum(tc.values())
+            for k, c in tc.items():
+                if c > 0 and total > 0:
+                    out[int(k)].append((t0, w, c / total))
+        elif s.get("task") is not None:
+            # point sample: the task seen at t runs until the next sample
+            w2 = trace[i + 1]["t"] - s["t"] if i + 1 < len(trace) else first_dt
+            out[int(s["task"])].append((s["t"], w2, 1.0))
+    return out
+
+
 def plot_gantt(
     trace: list[dict], out_png: str, title: str = "task schedule", names: dict | None = None
 ) -> None:
-    """One lane per task index; a bar wherever that task was the running one.
-    Index 8 is the kernel idle task; None (kernel / unknown) is not drawn."""
+    """One lane per task index (8 = kernel idle). Bar height = the task's share of the
+    CPU in that sample interval; the lane label carries its overall CPU share."""
     if not trace:
         raise ValueError("empty trace")
-    spans: dict[int, list[tuple[float, float]]] = defaultdict(list)
-    last_dt = trace[-1]["t"] - trace[-2]["t"] if len(trace) > 1 else 1e-3
-    prev = None
-    for i, s0 in enumerate(trace):
-        task = s0.get("task")
-        end = trace[i + 1]["t"] if i + 1 < len(trace) else s0["t"] + last_dt
-        if task is not None:
-            lst = spans[task]
-            if prev == task and lst:  # same task as previous sample: extend its bar
-                lst[-1] = (lst[-1][0], end - lst[-1][0])
-            else:
-                lst.append((s0["t"], end - s0["t"]))
-        prev = task
-    lanes = sorted(spans)
-    fig, ax = plt.subplots(figsize=(11, 0.45 * max(len(lanes), 2) + 1.4))
+    iv = _gantt_intervals(trace)
+    lanes = sorted(iv)
+    busy = {k: sum(w * sh for _, w, sh in iv[k]) for k in lanes}
+    tot = sum(busy.values()) or 1.0
+    fig, ax = plt.subplots(figsize=(11, 0.5 * max(len(lanes), 2) + 1.4))
     _style(fig, (ax,))
-    names = names or {}
-    for y, task in enumerate(lanes):
-        ax.broken_barh(spans[task], (y - 0.38, 0.76), color=TASK_COLORS[task % len(TASK_COLORS)])
+    names = {int(k): v for k, v in (names or {}).items()}
+    for y, k in enumerate(lanes):
+        xs = [a for a, _, _ in iv[k]]
+        ws = [w for _, w, _ in iv[k]]
+        # sqrt so a 2% task is still a visible sliver; floor keeps any run visible
+        hs = [0.8 * max(0.12, math.sqrt(sh)) for _, _, sh in iv[k]]
+        ax.bar(
+            xs,
+            hs,
+            width=ws,
+            bottom=[y + 0.4 - h for h in hs],
+            align="edge",
+            color=TASK_COLORS[k % len(TASK_COLORS)],
+            lw=0,
+        )
     ax.set_yticks(range(len(lanes)))
-    ax.set_yticklabels([names.get(k, "idle" if k == 8 else f"t{k}") for k in lanes])
+    ax.set_yticklabels(
+        [
+            f"{names.get(k, 'idle' if k == 8 else f't{k}')}  {100 * busy[k] / tot:.1f}%"
+            for k in lanes
+        ]
+    )
     for te, _ev, kind in _events(trace):
-        if kind in ("fault", "wdog", "inject"):
+        if kind in ("fault", "wdog", "inject", "boot", "halt"):
             ax.axvline(te, color=EVENT_COLORS[kind], lw=0.9, alpha=0.8)
     ax.set_xlabel("sim time (s)")
     ax.set_ylim(-0.6, len(lanes) - 0.4)
-    ax.set_title(title, fontsize=11)
+    ax.set_title(title + "  (bar height = CPU share per sample)", fontsize=11)
     ax.invert_yaxis()
     fig.savefig(out_png, dpi=120, bbox_inches="tight", facecolor=BG)
     plt.close(fig)

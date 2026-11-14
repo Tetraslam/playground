@@ -127,6 +127,26 @@ def test_plots_write_pngs(tmp_path):
         assert (tmp_path / f).stat().st_size > 5000
 
 
+def test_gantt_uses_task_cycles(tmp_path):
+    tr = [
+        {
+            "t": 0.01 * (i + 1),
+            "task": 8,
+            "events": [],
+            "task_cycles": {"8": 700, "1": 290, "2": 10 if i % 5 == 0 else 0},
+        }
+        for i in range(50)
+    ]
+    iv = plots._gantt_intervals(tr)
+    assert set(iv) == {1, 2, 8}  # monitor-like task 2 shows up despite never being point-sampled
+    assert len(iv[2]) == 10
+    assert iv[8][0][2] == pytest.approx(0.7)
+    del tr[3]["task_cycles"]  # fallback per sample
+    assert plots._gantt_intervals(tr)[8][3][2] == 1.0
+    plots.plot_gantt(tr, str(tmp_path / "g.png"), names={8: "k_idle"})
+    assert (tmp_path / "g.png").stat().st_size > 5000
+
+
 def test_wilson():
     p, lo, hi = plots.wilson(5, 10)
     assert p == 0.5 and lo < 0.5 < hi
