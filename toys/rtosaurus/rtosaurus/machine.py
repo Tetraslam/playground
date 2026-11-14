@@ -173,6 +173,10 @@ class Machine:
         dt = self.sample_cycles / isa.CLOCK_HZ
         for h in self.hooks:
             h(self, dt)
+        pop = getattr(self.plant, "pop_events", None)
+        if pop is not None:
+            for e in pop():
+                self.event(e)
         if self.cpu.halted and not any(e.startswith("halt") for _, e in self.event_log[-3:]):
             self.event("halt (double fault)" if self.cpu.double_fault else "halt")
         st = self.plant.state()
