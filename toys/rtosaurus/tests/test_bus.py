@@ -173,25 +173,27 @@ def test_plant_time_advances_with_cycles():
     assert p.dt_total == pytest.approx(1.0, abs=0.002)
 
 
-def test_watchdog():
+def test_watchdog_is_nmi():
     b = Bus()
     b.write(isa.MMIO_WDOG_TIMEOUT, 4)  # 1024 cycles
     b.tick(1000)
     b.write(isa.MMIO_WDOG_KICK, 0)
     b.tick(1000)
-    assert b.pending_irq() is None
+    assert not b.pending_nmi()
     b.tick(24)
-    assert b.pending_irq() == isa.VEC_WDOG
+    assert b.pending_nmi()
+    assert b.pending_irq() is None  # never on the maskable line
     b.ack_irq(isa.VEC_WDOG)
+    assert not b.pending_nmi()
     b.tick(10_000)
-    assert b.pending_irq() is None  # fires once until re-armed
+    assert not b.pending_nmi()  # disarmed until kicked / TIMEOUT rewritten
     b.write(isa.MMIO_WDOG_KICK, 0)
     b.tick(1024)
-    assert b.pending_irq() == isa.VEC_WDOG
+    assert b.pending_nmi()
     b.ack_irq(isa.VEC_WDOG)
     b.write(isa.MMIO_WDOG_TIMEOUT, 0)  # disabled
     b.tick(100_000)
-    assert b.pending_irq() is None
+    assert not b.pending_nmi()
 
 
 def test_irq_priority_and_forced():

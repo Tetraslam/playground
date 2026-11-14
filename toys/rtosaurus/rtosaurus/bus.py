@@ -17,7 +17,10 @@ Peripherals, all advanced by `tick(cycles)`:
 - PWM: heater / fan duty 0..255 (written value read as signed, clamped), pushed
   into the plant as duty/255
 - watchdog: if TIMEOUT != 0 and nobody writes KICK within TIMEOUT*256 cycles,
-  latch VEC_WDOG once (re-armed by a kick or a TIMEOUT write)
+  latch the NMI once. `pending_nmi()` reports it (never `pending_irq()`); the CPU
+  takes VEC_WDOG regardless of I and calls `ack_irq(VEC_WDOG)`, which clears the
+  latch and leaves the watchdog disarmed until firmware kicks it or rewrites
+  TIMEOUT (the kernel's reset path does), so a dead firmware can't NMI-storm
 
 Speed: `tick()` is one add and one compare against the nearest deadline (timer,
 watchdog, next plant step); peripheral work only happens when one is crossed.
@@ -315,14 +318,16 @@ class Bus:
             v = isa.VEC_UART
         elif self._gpio_edge & self.gpio_irqen:
             v = isa.VEC_GPIO
-        elif self._wdog_pending:
-            v = isa.VEC_WDOG
         else:
             v = None
         if self.forced:
             f = min(self.forced)
             v = f if v is None else min(v, f)
         self.irq = v
+
+    def pending_nmi(self) -> bool:
+        """Watchdog expired: CPU takes VEC_WDOG even with I clear."""
+        return self._wdog_pending
 
     def pending_irq(self) -> int | None:
         """Lowest pending vector among enabled sources (CPU checks the I flag)."""
@@ -377,6 +382,7 @@ class Bus:
             "fan": self.pwm_fan,
             "setpoint": self.setpoint,
             "wdog_timeout": self.wdog_timeout,
+            "wdog_nmi": self._wdog_pending,
             "wdog_left": None if self._wdog_next == NEVER else self._wdog_next - self.cycles,
             "uart_rx_pending": len(self.uart_rx),
             "irq_taken": dict(self.irq_taken),
