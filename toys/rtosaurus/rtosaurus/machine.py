@@ -32,7 +32,9 @@ class Machine:
         trace_limit: int = 200_000,
         safety: bool = True,
         hw_watchdog: bool = True,
+        account_tasks: bool = True,
     ):
+        self.account_tasks = account_tasks  # exact per-task cycles (gantt); off = ~2x faster
         self.hw_watchdog = hw_watchdog  # watchdog can reset a halted CPU
         self.image = image if image is not None else build_firmware()
         self.seed = seed
@@ -127,9 +129,8 @@ class Machine:
         while bus.cycles < end and not cpu.halted:
             # inner loop without sampling checks, up to the next sample point
             stop = min(end, self._next_sample)
-            if kc is None:
-                while bus.cycles < stop and not cpu.halted:
-                    bus.tick(cpu.step())
+            if kc is None or not self.account_tasks:
+                cpu.run(stop - bus.cycles)  # fast path: cpu ticks the bus itself
             else:  # also account cycles to the running task (exact gantt, no aliasing)
                 while bus.cycles < stop and not cpu.halted:
                     cur = mem[kc]

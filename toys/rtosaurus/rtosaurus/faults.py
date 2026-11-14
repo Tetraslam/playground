@@ -169,7 +169,14 @@ def one_run(args: tuple) -> dict:
     kind, rate, seed, seconds, settle, safety, hw_wdog = args
     from rtosaurus.machine import Machine, build_firmware
 
-    m = Machine(build_firmware(), seed=seed, sample_cycles=2000, safety=safety, hw_watchdog=hw_wdog)
+    m = Machine(
+        build_firmware(),
+        seed=seed,
+        sample_cycles=2000,
+        safety=safety,
+        hw_watchdog=hw_wdog,
+        account_tasks=False,
+    )
     if rate > 0:
         m.hooks.append(FaultSchedule([Injector(kind, rate)], seed=seed, start=settle))
     m.run_seconds(seconds)

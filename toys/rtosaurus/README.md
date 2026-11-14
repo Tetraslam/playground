@@ -59,13 +59,13 @@ A campaign runs every (fault kind, rate, seed) for 40 sim seconds with the
 setpoint at 45 °C, starting injections after 10 s. A run **survives** if the
 tank never boils, the CPU is running at the end, and the temperature is within
 5 °C of setpoint. Below: 8 seeds per cell, 576 runs per configuration, about
-1 minute of wall time each. The last two columns each turn off one defense.
+about 20 seconds of wall time each on 16 cores. The last two columns each turn off one defense.
 
 | fault (rate/s: 0.1 · 0.3 · 1) | full firmware | `--no-safety` (no sensor checks) | `--no-hw-watchdog` |
 |---|---|---|---|
-| stuck-sensor | 100 · 100 · 75 | **25 · 0 · 0** | 100 · 100 · 75 |
-| reg-flip | 100 · 100 · 88 | 100 · 100 · 88 | **100 · 75 · 50** |
-| data-flip | 100 · 100 · 75 | 100 · 100 · 75 | **75 · 75 · 62** |
+| stuck-sensor | 100 · 100 · 88 | **25 · 0 · 0** | 100 · 100 · 88 |
+| reg-flip | 100 · 100 · 88 | 100 · 88 · 88 | **100 · 62 · 38** |
+| data-flip | 100 · 100 · 88 | 100 · 100 · 88 | **75 · 75 · 62** |
 | stack-flip | 100 · 100 · 100 | 100 · 100 · 100 | 100 · 100 · 100 |
 | irq-storm | 100 · 100 · 100 | 100 · 100 · 100 | 100 · 100 · 100 |
 | code-flip | 75 · 50 · 0 | 75 · 62 · 0 | 75 · 50 · 0 |
@@ -82,7 +82,7 @@ Each defense covers a different fault class, and the campaign shows it:
   the vector table decodes as `HALT`. The board stops dead, sometimes with
   the heater latched at 255. The watchdog is independent hardware, so it
   still bites, resets the chip, and the firmware reboots and re-converges.
-  Turn it off and survival under register flips at 1/s drops from 88% to 50%.
+  Turn it off and survival under register flips at 1/s drops from 88% to 38%.
 - **Nothing saves you from corrupted code.** Program memory here is RAM and
   survives resets, like a bad flash cell. The board boots into broken code
   forever, and the watchdog can only keep restarting it. Real systems answer
