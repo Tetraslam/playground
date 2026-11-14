@@ -97,7 +97,20 @@ class Machine:
     def tasks(self) -> list[dict]              # decoded kernel TCBs via image.symbols["k_tcb"]
     trace: list[dict]                          # periodic samples: t, temp, setpoint, heater, fan, task, events
     def uart_text(self) -> str
+    uart_lines: list[str]                      # completed UART lines
+    event_log: list[tuple[float, str]]         # (sim t, "fault t1 ..." | "wdog" | "inject ..." | "uart> s45" | "knob 50C")
+    def send(self, text: str) -> None          # type into UART (include "\n")
+    def set_setpoint(self, degc: float) -> None
+    def run_seconds(self, s: float) -> None; t: float  # sim seconds
+    def current_task(self) -> int | None; def symbol_at(self, addr) -> str | None
+    hooks: list[Callable[[Machine, float], None]]      # called at every trace sample (faults use this)
+    def summary(self) -> dict                  # boiled, max_temp, mean_abs_err, halted, task_faults, wdog_resets...
 def build_firmware() -> Image                  # assembles firmware/main.s
+
+# dash.py (agent 8) — entry point the CLI calls:
+def run(machine: Machine) -> None              # textual app: regs/pc+disasm, task table, temp sparkline/plot,
+                                               # UART console with input line, LEDs, keys: +/- setpoint,
+                                               # f = inject a fault now, p = pause, q = quit
 ```
 
 ## Assembler syntax (agent 3 implements, agents 6/7 write against it)
