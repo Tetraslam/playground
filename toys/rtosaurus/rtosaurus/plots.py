@@ -34,7 +34,13 @@ EVENT_COLORS = {
     "inject": "#c77dff",
     "door": "#8d99ae",
     "boiled": "#ff0000",
+    "halt": "#ff0000",
+    "boot": "#a3be8c",
+    "stuck": "#c77dff",
+    "sensor": "#06d6a0",  # firmware's own detection, e.g. "sensor failed: heater off"
 }
+# chatter that the trace already shows (setpoint line) or that would only clutter
+SKIP_EVENT_PREFIXES = ("uart>", "knob", "button", "sensor recovered")
 TASK_COLORS = [
     "#ff8c42",
     "#7fdbca",
@@ -72,8 +78,24 @@ def _events(trace: list[dict]) -> list[tuple[float, str, str]]:
     out = []
     for s in trace:
         for ev in s.get("events") or []:
-            out.append((s["t"], ev, _event_kind(ev)))
+            if not ev.startswith(SKIP_EVENT_PREFIXES):
+                out.append((s["t"], ev, _event_kind(ev)))
     return out
+
+
+def _stuck_spans(trace: list[dict]) -> list[tuple[float, float]]:
+    """Stuck-sensor windows: 'inject stuck-sensor ...' until 'sensor recovered'."""
+    spans, start = [], None
+    for s in trace:
+        for ev in s.get("events") or []:
+            if ev.startswith("inject stuck-sensor") and start is None:
+                start = s["t"]
+            elif ev.startswith("sensor recovered") and start is not None:
+                spans.append((start, s["t"]))
+                start = None
+    if start is not None and trace:
+        spans.append((start, trace[-1]["t"]))
+    return spans
 
 
 def _door_spans(trace: list[dict]) -> list[tuple[float, float]]:
@@ -113,6 +135,9 @@ def plot_run(trace: list[dict], out_png: str, title: str = "") -> None:
     for a, b in _door_spans(trace):
         for ax in (ax1, ax2):
             ax.axvspan(a, b, color=EVENT_COLORS["door"], alpha=0.15, lw=0)
+    stuck = _stuck_spans(trace)
+    for a, b in stuck:
+        ax1.axvspan(a, b, color=EVENT_COLORS["stuck"], alpha=0.12, lw=0)
     if any("ambient" in s for s in trace):
         ax1.plot(t, [s.get("ambient", math.nan) for s in trace], color=C_AMB, lw=1, label="ambient")
     ax1.step(
@@ -149,6 +174,10 @@ def plot_run(trace: list[dict], out_png: str, title: str = "") -> None:
         ax2.axvline(te, color=c, lw=0.9, alpha=0.8)
     if _door_spans(trace):
         ax1.axvspan(math.nan, math.nan, color=EVENT_COLORS["door"], alpha=0.3, label="door open")
+    if stuck:
+        ax1.axvspan(
+            math.nan, math.nan, color=EVENT_COLORS["stuck"], alpha=0.25, label="sensor stuck"
+        )
     ax1.set_ylim(lo, hi)
 
     for ax in (ax1, ax2):
