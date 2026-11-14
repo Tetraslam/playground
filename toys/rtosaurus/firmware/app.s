@@ -11,8 +11,8 @@
 ; LEDs: 0 heartbeat, 1 fan on, 2 sensor fault, 7 overheat (> 90 C, heater off).
 ;
 ; Safety logic lives in the control task: a sensor that returns the exact same
-; Q8.8 reading 15 times in a row (real readings carry ~0.08 C of noise) or an
-; implausible value is declared failed -> heater off until it recovers. Over
+; Q8.8 reading 15 times in a row (real readings carry ~0.08 C of noise), jumps
+; more than 5 C in one 0.1 s step, or reads outside -20..120 C is declared failed -> heater off until it recovers. Over
 ; 90 C latches an overheat alarm (heater off, fan on) until it cools below 85 C.
 ; The time-critical tasks (monitor, control) never print or take locks; they
 ; raise event bits that the logger reports.
@@ -32,6 +32,7 @@
 .equ APP_HB_PERIOD, 50          ; heartbeat toggle (0.5 s)
 .equ APP_WDOG_TIMEOUT, 196      ; *256 cycles ~ 0.5 s
 .equ APP_STUCK_LIMIT, 15        ; identical readings before the sensor is failed
+.equ APP_JUMP_Q, 5 * 256        ; max plausible change per control step
 
 .equ APP_Q_TELEM, 0
 .equ APP_Q_UART, 7
@@ -222,6 +223,24 @@ app_ctl_step:
     JZ app_ctl_hot
     LD r3, [app_last_raw]
     ST [app_last_raw], r1
+    LD r0, [app_have_raw]
+    CMPI r0, 0
+    JZ app_ctl_first_raw
+    MOV r0, r1
+    SUB r0, r3                  ; change since the last sample (0.1 s)
+    CMPI r0, APP_JUMP_Q
+    JGT app_ctl_jump
+    CMPI r0, -APP_JUMP_Q
+    JLT app_ctl_jump
+    JMP app_ctl_same
+app_ctl_jump:
+    LDI r3, 0                   ; water can't move 5 C in 0.1 s: sensor lies
+    ST [app_stuck_n], r3
+    JMP app_ctl_badsensor
+app_ctl_first_raw:
+    LDI r0, 1
+    ST [app_have_raw], r0
+app_ctl_same:
     CMP r1, r3
     JNZ app_ctl_fresh
     LD r3, [app_stuck_n]
@@ -741,6 +760,7 @@ app_flags:      .word 0
 app_events:     .word 0
 app_stuck_n:    .word 0
 app_last_raw:   .word 0
+app_have_raw:   .word 0
 app_telem_n:    .word 0
 app_line:       .zero APP_LINE_MAX
 app_vars_end:
