@@ -37,6 +37,7 @@ class Machine:
         self.bus = Bus(self.plant, seed=seed)
         self.bus.load(self.image.words)
         self.cpu = CPU(self.bus)
+        self.cpu.reset()  # pc = mem[VEC_RESET], after the image is loaded
         self.sample_cycles = sample_cycles
         self.trace_limit = trace_limit
         self.trace: list[dict] = []
