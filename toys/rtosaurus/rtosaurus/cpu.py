@@ -89,6 +89,7 @@ class CPU:
         self.last: tuple[int, str] | None = None  # (pc, mnemonic | "IRQn" | "NMI" | "FAULT")
         self._cache: list = [None] * 0x10000
         self._bound = (None, None)  # (regs, mem) the cached closures were compiled against
+        self.reset()  # pc = mem[VEC_RESET]; call reset() again after loading an image
 
     # ---- lifecycle ---------------------------------------------------
 
