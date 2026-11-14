@@ -1,6 +1,6 @@
 """rtosaurus CLI (owner: agent 1).
 
-    uv run python -m rtosaurus run [--seconds 30] [--inject ram-flip:0.5] [--at 10:s60] [--plot run.png]
+    uv run python -m rtosaurus run [--seconds 30] [--inject data-flip:0.5] [--at 10:s60] [--plot run.png]
     uv run python -m rtosaurus dash [--inject ...]
     uv run python -m rtosaurus campaign [--kinds ...] [--rates 0,0.5,1,2] [--seeds 6] [--plot c.png]
     uv run python -m rtosaurus asm [file.s] [--listing]
@@ -45,7 +45,7 @@ def cmd_run(a) -> int:
     t0 = time.time()
     shown = 0
     step = 0.25
-    while m.t < a.seconds and not m.halted:
+    while m.t < a.seconds - 1e-9:
         while script and script[0][0] <= m.t:
             _, what = script.pop(0)
             if what.startswith("knob="):
@@ -160,7 +160,7 @@ def main(argv: list[str] | None = None) -> int:
     def machine_args(p):
         p.add_argument("--seed", type=int, default=0)
         p.add_argument("--firmware", help="top-level .s (default firmware/main.s)")
-        p.add_argument("--inject", help="fault spec, e.g. ram-flip:0.5,stuck-sensor:0.1 (events per sim second)")
+        p.add_argument("--inject", help="fault spec, e.g. data-flip:0.5,stuck-sensor:0.1 (events per sim second)")
         p.add_argument("--settle", type=float, default=10.0, help="no injections before this sim time")
         p.add_argument("--setpoint", type=float, help="initial setpoint knob (degC)")
 
@@ -181,7 +181,7 @@ def main(argv: list[str] | None = None) -> int:
     p.set_defaults(fn=cmd_dash)
 
     p = sub.add_parser("campaign", help="many seeded fault runs -> survival table")
-    p.add_argument("--kinds", default="ram-flip,stack-flip,reg-flip,stuck-sensor,irq-storm")
+    p.add_argument("--kinds", default="data-flip,code-flip,stack-flip,reg-flip,stuck-sensor,irq-storm")
     p.add_argument("--rates", default="0,0.25,1,4")
     p.add_argument("--seeds", type=int, default=4)
     p.add_argument("--seconds", type=float, default=40.0)

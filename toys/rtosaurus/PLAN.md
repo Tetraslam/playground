@@ -203,7 +203,7 @@ time + fault/event markers), `plot_gantt(trace, out_png)` (which task ran
 when), `plot_campaign(results, out_png)` (survival vs fault rate). Matplotlib.
 Trace sample dict keys: `t` (sim s), `plant_t` (plant s), `temp`, `setpoint`,
 `heater`, `fan`, `task` (k_current or None), `events` (list of str, e.g.
-`"fault t1"`, `"wdog"`, `"inject ram-flip 0x0123"`).
+`"fault t1"`, `"wdog"`, `"inject data-flip 0x0123"`).
 
 ## Faults + CLI (agent 1)
 

@@ -52,6 +52,7 @@ class Machine:
         self._k_tcb = sym.get("k_tcb")
         self._k_current = sym.get("k_current")
         self._k_ticks = sym.get("k_ticks")
+        self._task_cycles: dict[int, int] = {}  # task id -> cycles since last sample
 
     # ---- time ----------------------------------------------------------
     @property
@@ -65,25 +66,40 @@ class Machine:
     def step(self) -> int:
         if self.cpu.halted:
             return 0
+        cur = self.current_task()
         c = self.cpu.step()
         self.bus.tick(c)
+        if cur is not None:
+            self._task_cycles[cur] = self._task_cycles.get(cur, 0) + c
         if self.bus.cycles >= self._next_sample:
             self._sample()
         return c
 
     def run(self, cycles: int) -> None:
-        """Run for `cycles` more cycles (or until halt)."""
+        """Advance `cycles` cycles. If the CPU halts, the plant keeps running (outputs latched)."""
         end = self.bus.cycles + cycles
         cpu, bus = self.cpu, self.bus
+        mem, kc, acc = bus.mem, self._k_current, self._task_cycles
         while bus.cycles < end and not cpu.halted:
             # inner loop without sampling checks, up to the next sample point
             stop = min(end, self._next_sample)
-            while bus.cycles < stop and not cpu.halted:
-                bus.tick(cpu.step())
+            if kc is None:
+                while bus.cycles < stop and not cpu.halted:
+                    bus.tick(cpu.step())
+            else:  # also account cycles to the running task (exact gantt, no aliasing)
+                while bus.cycles < stop and not cpu.halted:
+                    cur = mem[kc]
+                    c = cpu.step()
+                    bus.tick(c)
+                    acc[cur] = acc.get(cur, 0) + c
             if bus.cycles >= self._next_sample:
                 self._sample()
         if cpu.halted:
-            self._sample()
+            # a dead CPU doesn't stop physics: PWM outputs stay latched, the plant keeps going
+            while bus.cycles < end:
+                bus.tick(min(self._next_sample, end) - bus.cycles)
+                if bus.cycles >= self._next_sample:
+                    self._sample()
 
     def run_seconds(self, seconds: float) -> None:
         self.run(int(seconds * isa.CLOCK_HZ))
@@ -192,10 +208,13 @@ class Machine:
                 "ambient": st.get("ambient"),
                 "door_open": st.get("door_open"),
                 "task": self.current_task(),
+                # every task that ran since the previous sample -> cycles it used
+                "task_cycles": dict(sorted(self._task_cycles.items())),
                 "events": self.events,
             }
         )
         self.events = []
+        self._task_cycles.clear()  # in place: run() holds a reference
         if len(self.trace) > self.trace_limit:
             del self.trace[: len(self.trace) - self.trace_limit]
 

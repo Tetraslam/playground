@@ -53,8 +53,8 @@ def test_inject_now_logs_and_recovers():
 
 
 def test_parse_spec():
-    inj = parse_spec("ram-flip:0.5,stuck-sensor")
-    assert [(i.kind, i.rate) for i in inj] == [("ram-flip", 0.5), ("stuck-sensor", 1.0)]
+    inj = parse_spec("data-flip:0.5,stuck-sensor")
+    assert [(i.kind, i.rate) for i in inj] == [("data-flip", 0.5), ("stuck-sensor", 1.0)]
     with pytest.raises(ValueError):
         parse_spec("gremlins:3")
 

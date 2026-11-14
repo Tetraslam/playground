@@ -3,7 +3,9 @@
 Injectors fire as Poisson processes (rate = expected events per sim second),
 driven from Machine sample hooks, all from one seeded RNG so runs replay exactly.
 
-    ram-flip      flip one bit in a random firmware word (code or data)
+    data-flip     flip one bit in a random firmware data word (RAM variables, tables, kernel state)
+    code-flip     flip one bit in a random instruction word (corrupted program memory: brutal,
+                  and it survives watchdog resets, like a bad flash cell)
     stack-flip    flip one bit in the task stack region (just below RAM_TOP)
     reg-flip      flip one bit in a random CPU register (r0..r7, incl. sp)
     stuck-sensor  temperature sensor freezes at a plausible-but-wrong value for a while
@@ -17,7 +19,7 @@ from dataclasses import dataclass, field
 
 from rtosaurus import isa
 
-KINDS = ["ram-flip", "stack-flip", "reg-flip", "stuck-sensor", "irq-storm"]
+KINDS = ["data-flip", "code-flip", "stack-flip", "reg-flip", "stuck-sensor", "irq-storm"]
 STACK_SPAN = 0x400  # words below RAM_TOP treated as "stack"
 
 
@@ -29,11 +31,11 @@ class Injector:
 
     def fire(self, m, rng: random.Random) -> str | None:
         k = self.kind
-        if k == "ram-flip":
-            addr = rng.choice(_image_addrs(m))
+        if k in ("data-flip", "code-flip"):
+            addr = rng.choice(_image_addrs(m, code=k == "code-flip"))
             bit = rng.randrange(16)
             m.bus.mem[addr] ^= 1 << bit
-            return f"inject ram-flip {_where(m, addr)} b{bit}"
+            return f"inject {k} {_where(m, addr)} b{bit}"
         if k == "stack-flip":
             addr = isa.RAM_TOP - rng.randrange(STACK_SPAN)
             bit = rng.randrange(16)
@@ -65,10 +67,16 @@ class Injector:
         return None
 
 
-def _image_addrs(m) -> list[int]:
+def _image_addrs(m, code: bool) -> list[int]:
+    """Instruction words (both words of each instr) or everything else in the image."""
     if not hasattr(m, "_fault_addrs"):
-        m._fault_addrs = sorted(a for a in m.image.words if a >= isa.NUM_VECTORS)
-    return m._fault_addrs
+        instr = {a + i for a in m.image.lines for i in (0, 1)}
+        words = [a for a in m.image.words if a >= isa.NUM_VECTORS]
+        m._fault_addrs = {
+            True: sorted(a for a in words if a in instr),
+            False: sorted(a for a in words if a not in instr),
+        }
+    return m._fault_addrs[code]
 
 
 def _where(m, addr: int) -> str:
@@ -129,7 +137,7 @@ def inject_now(m, kind: str, rng: random.Random | None = None) -> str | None:
 
 
 def parse_spec(spec: str) -> list[Injector]:
-    """'ram-flip:0.5,stuck-sensor:0.1' -> injectors."""
+    """'data-flip:0.5,stuck-sensor:0.1' -> injectors."""
     out = []
     for part in filter(None, (p.strip() for p in spec.split(","))):
         kind, _, rate = part.partition(":")
