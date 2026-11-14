@@ -141,6 +141,30 @@ echo:   LDI r0, 5
     assert m.uart_text() == "!boot\nHELLO"
 
 
+def test_uart_burst_larger_than_queue_is_not_dropped():
+    m = boot(
+        """
+app_init: RET
+task_table:
+    .word echo, 1, 16
+    .word 0
+echo:   LDI r0, 5
+        LDI r1, 7
+        TRAP 0
+        MOV r1, r0
+        LDI r0, 3
+        TRAP 0
+        JMP echo
+"""
+    )
+    m.run(3 * TICK)
+    burst = "zz\ns\nkx3\ns52.5\nthe quick brown fox\n"
+    m.send(burst)
+    m.run(40 * TICK)
+    assert m.uart_text() == "!boot\n" + burst
+    assert word(m, "k_uart_drops") == 0
+
+
 def test_fault_kills_only_the_faulting_task():
     m = boot(
         """

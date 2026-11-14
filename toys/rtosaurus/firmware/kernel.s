@@ -354,7 +354,10 @@ k_tm_next:
         JNZ k_tm_loop
         JMP k_resched_rr
 
-; ---- uart rx: drain into queue 7 ------------------------------------------------------
+; ---- uart rx: move bytes from the bus fifo into queue 7 ---------------------------
+; Bytes are never dropped: when queue 7 is full the rx irq is masked (it is
+; level-triggered, so leaving it on would re-enter forever) and the rest wait in
+; the bus fifo. recv(7) refills the queue from the fifo and unmasks the irq.
 k_uart:
         PUSH r0
         PUSH r1
@@ -365,16 +368,25 @@ k_uart:
         PUSH r6
         MOV r6, sp
         CALL k_enter
+        CALL k_ua_fill
+        LDI r1, 7
+        LDI r2, S_BRECV
+        CALL k_wake
+        JMP k_resched_woke
+
+; k_ua_fill: fifo -> queue 7 until one is full/empty; sets the rx irq mask.
+; clobbers r0..r4.
+k_ua_fill:
         LDI r3, k_queues + 7 * K_QWORDS
-k_ua_loop:
+k_uf_loop:
+        LD r4, [r3+1]
+        CMPI r4, K_QDEPTH
+        JNC k_uf_full
         LD r0, [MMIO_UART_STATUS]
         LDI r1, 1
         AND r0, r1
-        JZ k_ua_done
+        JZ k_uf_on
         LD r2, [MMIO_UART_RX]
-        LD r4, [r3+1]
-        CMPI r4, K_QDEPTH
-        JNC k_ua_drop
         LD r0, [r3]
         ADD r0, r4
         LDI r1, K_QDEPTH - 1
@@ -383,17 +395,15 @@ k_ua_loop:
         ST [r0+2], r2
         ADDI r4, 1
         ST [r3+1], r4
-        JMP k_ua_loop
-k_ua_drop:
-        LD r0, [k_uart_drops]
-        ADDI r0, 1
-        ST [k_uart_drops], r0
-        JMP k_ua_loop
-k_ua_done:
-        LDI r1, 7
-        LDI r2, S_BRECV
-        CALL k_wake
-        JMP k_resched_woke
+        JMP k_uf_loop
+k_uf_full:
+        LDI r0, 0
+        ST [MMIO_UART_CTRL], r0
+        RET
+k_uf_on:
+        LDI r0, 1
+        ST [MMIO_UART_CTRL], r0
+        RET
 
 ; ---- spurious / unused vectors ---------------------------------------------------------
 k_ignore:
@@ -505,6 +515,11 @@ k_sys_recv:
         ST [r3], r0
         ADDI r4, -1
         ST [r3+1], r4
+        CMPI r1, 7
+        JNZ k_recv_wake
+        CALL k_ua_fill                  ; room again: pull waiting uart bytes
+        LDI r1, 7
+k_recv_wake:
         LDI r2, S_BSEND
         CALL k_wake
         JMP k_resched_woke
@@ -632,7 +647,7 @@ k_ticks:      .word 0
 k_in_kernel:  .word 0
 k_switches:   .word 0
 k_faults:     .word 0
-k_uart_drops: .word 0
+k_uart_drops: .word 0                   ; kept for compatibility; rx no longer drops
 k_woke:       .word 0
 k_stack_low:  .word 0                   ; lowest task stack address handed out
 k_tcb:        .zero K_NTASKS * K_TCB_WORDS
